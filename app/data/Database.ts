@@ -1,5 +1,7 @@
 import { openDB, deleteDB, wrap, unwrap } from 'idb';
 import { HistoryEntry } from './model/HistoryEntry';
+import { list } from 'postcss';
+import { assert } from 'console';
 
 export const DATABASE_NAME = "spotify-data-explorer"
 export const LISTENS_STORE_NAME = "listens"
@@ -51,9 +53,11 @@ export function saveListens(listens: HistoryEntry[]) {
             db.clear(LISTENS_STORE_NAME)
             return db
         })
-        .then(db => {
-            listens.slice(0, 50000).forEach(e => db.put(LISTENS_STORE_NAME, e))
-            db.transaction(LISTENS_STORE_NAME).commit()
+        .then(async db => {
+            const transaction = db.transaction(LISTENS_STORE_NAME, "readwrite")
+            const store = transaction.objectStore(LISTENS_STORE_NAME)
+            listens.forEach(async l => await store.put(l))
+            transaction.commit()
         })
         .then(_ => {
             console.log(`saving entries took ${(Date.now() - start)}ms`)

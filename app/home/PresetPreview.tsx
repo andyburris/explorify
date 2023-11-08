@@ -31,7 +31,7 @@ export function PresetPreview({ preset, listens }: { preset: Preset, listens: Hi
                     </div>
                 ) : (
                     <div className="flex flex-col p-4 gap-3">
-                        {previewItems.map((c, i) => <PreviewItem combination={c} index={i}/>)}
+                        {previewItems.map((c, i) => <PreviewItem combination={c} index={i} key={i}/>)}
                     </div>
                 )}
         </Link>
