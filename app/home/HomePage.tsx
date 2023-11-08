@@ -1,4 +1,4 @@
-import { ArrowCounterClockwise, DotsThreeVertical } from "phosphor-react-sc";
+import { ArrowCounterClockwise, DotsThreeVertical, Moon } from "phosphor-react-sc";
 import { Container } from "../common/Container";
 import { Header } from "../common/Header";
 import { Logo } from "../common/Logo";
@@ -25,16 +25,21 @@ export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClea
                             trigger={<StaticButton text={undefined} icon={<DotsThreeVertical size="24px"/>}/>}
                             menuItems={[
                                 {
-                                    icon: <ArrowCounterClockwise/>,
+                                    icon: <ArrowCounterClockwise color="rgba(0, 0, 0, 0.5)" size="24px"/>,
                                     title: "Upload new listens",
                                     onClick: () => onClear()
+                                },
+                                {
+                                    icon: <Moon color="rgba(0, 0, 0, 0.5)" size="24px"/>,
+                                    title: "Toggle dark mode",
+                                    onClick: () => {}
                                 }
                             ]}
                         />
                     </div>
                 }
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8">
                 {defaultPresets.map((preset) => <PresetPreview key={preset.name} preset={preset} listens={listens} />)}
             </div>
         </Container>

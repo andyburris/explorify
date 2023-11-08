@@ -21,7 +21,7 @@ export function LazyList<T>({ items, itemContent, estimateSize }: { items: T[], 
       {/* The scrollable element for your list */}
       <div
         ref={listRef}
-        className=" w-full h-full overflow-auto"
+        className=" w-full h-full"
         // style={{ marginTop: -(listRef.current?.offsetTop ?? 0) }}
       >
         {/* The large inner element to hold all of the items */}

@@ -4,12 +4,12 @@ import { Container } from "@/app/common/Container"
 import { Dropdown } from "@/app/common/Dropdown"
 import { Header } from "@/app/common/Header"
 import { Logo } from "@/app/common/Logo"
-import { StaticButton } from "@/app/common/button/Button"
+import { LinkButton, StaticButton } from "@/app/common/button/Button"
 import { DATABASE_NAME, getListens } from "@/app/data/Database"
 import { defaultPresets } from "@/app/data/Defaults"
 import { HistoryEntry } from "@/app/data/model/HistoryEntry"
 import { deleteDB } from "idb"
-import { ArrowCounterClockwise, DotsThreeVertical } from "phosphor-react-sc"
+import { ArrowCounterClockwise, ArrowLeft, DotsThreeVertical, Pencil, PencilSimple, Share } from "phosphor-react-sc"
 import { useEffect, useState } from "react"
 import { DataTable } from "./DataTable"
 import { applyFilters } from "@/app/data/Filtering"
@@ -31,6 +31,9 @@ export default function ViewPage({ params }: { params: { id: string } }) {
     if(preset === undefined) return (<p>Can't find preset with id = "{params.id}"</p>)
     else return (
         <Container>
+            <div className="w-full flex -ml-4 pb-8">
+                <LinkButton linkPath="/" className="shadow-none hover:bg-stone-100" text="Home" icon={<ArrowLeft/>}/>
+            </div>
             <Header 
                 icon={<Logo/>} 
                 title={preset.name}
@@ -46,10 +49,15 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                             trigger={<StaticButton text={undefined} icon={<DotsThreeVertical size="24px"/>}/>}
                             menuItems={[
                                 {
-                                    icon: <ArrowCounterClockwise/>,
-                                    title: "Upload new listens",
-                                    onClick: () => { deleteDB(DATABASE_NAME) }
-                                }
+                                    icon: <Share/>,
+                                    title: "Share preset",
+                                    onClick: () => {  }
+                                },
+                                {
+                                    icon: <PencilSimple/>,
+                                    title: "Customize",
+                                    onClick: () => {  }
+                                },
                             ]}
                         />
                     </div>

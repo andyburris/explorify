@@ -1,10 +1,10 @@
-import { IconBase } from "phosphor-react-sc";
 import { HistoryEntry } from "../data/model/HistoryEntry";
 import { Preset } from "../data/model/Preset";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArtistCombination, Combination, Group, TrackCombination } from "../data/model/Group";
 import { applyFilters } from "../data/Filtering";
+import { PickedIcon } from "../common/PickedIcon";
 
 export function PresetPreview({ preset, listens }: { preset: Preset, listens: HistoryEntry[] }) {
     const [previewItems, setPreviewItems] = useState<Combination[] | null>(null)
@@ -15,7 +15,8 @@ export function PresetPreview({ preset, listens }: { preset: Preset, listens: Hi
 
     return (
         <Link href={`/view/${preset.id}`} className="flex flex-col rounded-2xl shadow-outset bg-white overflow-hidden cursor-pointer">
-            <div className="flex flex-col gap-3 p-4 bg-green-600 text-green-50 h-44 justify-end">
+            <div className="flex flex-col gap-3 p-4 bg-green-600 text-green-50 pt-12 justify-end flex-grow">
+                <PickedIcon iconName={preset.icon} size="24px"/>
                 <div className="flex flex-col">
                     <p className="font-semibold">{preset.name}</p>
                     <p className="text-green-200">{preset.description}</p>

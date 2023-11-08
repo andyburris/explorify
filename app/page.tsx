@@ -22,7 +22,10 @@ export default function Home() {
     )
   } else {
     return (
-      <HomePage listens={loadedEntries} onClear={() => { clearListens() }}/>
+      <HomePage listens={loadedEntries} onClear={() => { 
+        // clearListens()
+        setLoadedEntries([])
+      }}/>
     )
   }
 

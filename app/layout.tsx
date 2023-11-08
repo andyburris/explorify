@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
+import { Favicon } from './common/Favicon'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -25,6 +26,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${libreCaslonCondensed.variable}`}>
+      <head>
+        <Favicon />
+      </head>
       <body className={`text-lg/6 font-sans text-stone-900 dark:bg-stone-50`}>{children}</body>
     </html>
   )

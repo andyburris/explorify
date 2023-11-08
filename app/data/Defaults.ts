@@ -6,6 +6,7 @@ export const defaultPresets: Preset[] = [
     {
         id: "top-songs",
         name: "Top Songs",
+        icon: "musicnote",
         description: "The songs you’ve listened to the most",
         filters: {
             group: {
@@ -25,6 +26,7 @@ export const defaultPresets: Preset[] = [
     {
         id: "top-artists",
         name: "Top Artists",
+        icon: "users",
         description: "The artists you’ve listened to the most",
         filters: {
             group: {
@@ -44,6 +46,7 @@ export const defaultPresets: Preset[] = [
     {
         id: "most-skipped",
         name: "Most Skipped",
+        icon: "skipforward",
         description: "The songs you’ve skipped the most",
         filters: {
             group: {
@@ -63,6 +66,7 @@ export const defaultPresets: Preset[] = [
     {
         id: "listening-history",
         name: "Listening History",
+        icon: "headphones",
         description: "Every song you’ve ever played",
         filters: {
             group: {
@@ -82,6 +86,7 @@ export const defaultPresets: Preset[] = [
     {
         id: "discovery-history",
         name: "Discovery History",
+        icon: "headphones",
         description: "When you first listened to every song",
         filters: {
             group: {
@@ -101,6 +106,7 @@ export const defaultPresets: Preset[] = [
     {
         id: "best-discovery-days",
         name: "Best Discovery Days",
+        icon: "calendarplus",
         description: "What days did you discover the music you listen to the most?",
         filters: {
             group: {

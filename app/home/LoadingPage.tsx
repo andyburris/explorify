@@ -15,7 +15,7 @@ export function LoadingPage() {
                     </div>
                 }
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8">
                 <div className="bg-stone-100 rounded-2xl w-full h-44"></div>
                 <div className="bg-stone-100 rounded-2xl w-full h-44"></div>
                 <div className="bg-stone-100 rounded-2xl w-full h-44"></div>

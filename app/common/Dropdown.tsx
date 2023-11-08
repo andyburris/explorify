@@ -8,16 +8,16 @@ export interface DropdownItem {
 export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, menuItems: DropdownItem[] }) {
     return (
         <DropdownMenu.Root>
-        <DropdownMenu.Trigger >
+        <DropdownMenu.Trigger className='rounded-full'>
             {trigger}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
-            <DropdownMenu.Content className="bg-white shadow-outset py-2 rounded-2xl" align='end' sideOffset={8}>
+            <DropdownMenu.Content className="bg-white shadow-outset py-2 rounded-2xl w-64 overflow-hidden" align='end' sideOffset={8}>
                 {menuItems.map((item) => 
                     <DropdownMenu.Item 
                         key={item.title} 
                         onClick={() => item.onClick()}
-                        className="flex gap-3 px-4 py-3 items-center hover:bg-stone-100 focus:bg-stone-200 cursor-pointer"
+                        className="flex gap-3 px-4 py-3 items-center hover:bg-stone-100 focus:bg-stone-100 cursor-pointer outline-none"
                     >
                         {item.icon}
                         {item.title}
