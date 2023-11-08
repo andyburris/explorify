@@ -12,6 +12,8 @@ import { deleteDB } from "idb"
 import { ArrowCounterClockwise, DotsThreeVertical } from "phosphor-react-sc"
 import { useEffect, useState } from "react"
 import { DataTable } from "./DataTable"
+import { applyFilters } from "@/app/data/Filtering"
+import { LazyList } from "./LazyList"
 
 export default function ViewPage({ params }: { params: { id: string } }) {
     const preset = defaultPresets.find(p => p.id == params.id)
@@ -23,6 +25,8 @@ export default function ViewPage({ params }: { params: { id: string } }) {
             setLoadedEntries(sorted)
         })
     }, [])
+
+    const filtered = (loadedEntries === undefined || preset === undefined) ? undefined : applyFilters(loadedEntries, preset.filters);
 
     if(preset === undefined) return (<p>Can't find preset with id = "{params.id}"</p>)
     else return (
@@ -50,7 +54,10 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                         />
                     </div>
                 }/>
-            { loadedEntries ? <DataTable listens={loadedEntries}/> : <></> }
+            { filtered 
+                ? <DataTable groups={filtered}/> 
+                : <LazyList items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-stone-100 my-2"></div>}/>
+            }
         </Container>
     )
 }

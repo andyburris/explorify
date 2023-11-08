@@ -3,56 +3,32 @@
 import { HistoryEntry } from '@/app/data/model/HistoryEntry'
 import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import React from 'react'
-import { ListenItem } from './CombinationItem'
+import { ArtistCombinationItem, ListenItem, TrackCombinationItem } from './CombinationItem'
+import { ArtistCombination, Combination, Group, TrackCombination } from '@/app/data/model/Group'
+import { LazyList } from './LazyList'
+import { GroupHeader } from './GroupHeaderItem'
 
-export function DataTable({ listens }: { listens: HistoryEntry[] }) {
-  // The scrollable element for your list
-  const listRef = React.useRef<HTMLDivElement | null>(null)
+class GroupData {
+  constructor(public group: Group) {}
+}
+type ListItem = Combination | GroupData
 
-  // The virtualizer
-  const rowVirtualizer = useWindowVirtualizer({
-    count: listens.length,
-    // getScrollElement: () => listRef.current,
-    estimateSize: () => 35,
-    overscan: 10,
-    // scrollMargin: listRef.current?.offsetTop ?? 0,
-  })
+export function DataTable({ groups }: { groups: Group[] }) {
+  const flattened: ListItem[] = groups.flatMap((g) => [new GroupData(g), ...g.combinations] )
 
   return (
-    <>
-      {/* The scrollable element for your list */}
-      <div
-        ref={listRef}
-        className=" w-full h-full overflow-auto"
-        // style={{ marginTop: -(listRef.current?.offsetTop ?? 0) }}
-      >
-        {/* The large inner element to hold all of the items */}
-        <div
-            className="w-full relative"
-            style={{
-                height: `${rowVirtualizer.getTotalSize()}px`,
-            }}
-        >
-          {/* Only the visible items in the virtualizer, manually positioned to be in view */}
-          {rowVirtualizer.getVirtualItems().map((virtualItem) => (
-            <div
-              key={virtualItem.key}
-              data-index={virtualItem.index}
-              ref={rowVirtualizer.measureElement}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                transform: `translateY(${virtualItem.start}px)`,
-              }}
-            >
-              <ListenItem listen={listens[virtualItem.index]}/>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
+    <LazyList 
+      items={flattened} 
+      itemContent={(index) => {
+        const listItem = flattened[index]
+        if(listItem instanceof GroupData) {
+          return <GroupHeader group={listItem.group} />
+        } else if(listItem instanceof TrackCombination) {
+          return <TrackCombinationItem trackCombination={listItem}/>
+        } else {
+          return <ArtistCombinationItem artistCombination={listItem as ArtistCombination}/>
+        }
+      }}/>
   )
 
 }

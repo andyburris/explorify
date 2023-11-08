@@ -1,3 +1,5 @@
+import { CombineInto, CombineType, GroupSortType, ItemSortType } from "./model/Filters";
+import { GroupType } from "./model/Group";
 import { Preset } from "./model/Preset";
 
 export const defaultPresets: Preset[] = [
@@ -5,30 +7,114 @@ export const defaultPresets: Preset[] = [
         id: "top-songs",
         name: "Top Songs",
         description: "The songs you’ve listened to the most",
-        filters: {},
+        filters: {
+            group: {
+                groupBy: GroupType.None,
+                combineBy: CombineType.SameSong,
+                combineInto: CombineInto.EarliestPlay,
+                combineAcrossGroups: false,
+            },
+            sort: {
+                sortGroupsBy: GroupSortType.Date,
+                sortGroupsAscending: true,
+                sortItemsBy: ItemSortType.Plays,
+                sortItemsAscending: false,
+            },
+        },
     },
     {
         id: "top-artists",
         name: "Top Artists",
         description: "The artists you’ve listened to the most",
-        filters: {},
+        filters: {
+            group: {
+                groupBy: GroupType.None,
+                combineBy: CombineType.SameArtist,
+                combineInto: CombineInto.EarliestPlay,
+                combineAcrossGroups: false,
+            },
+            sort: {
+                sortGroupsBy: GroupSortType.Date,
+                sortGroupsAscending: true,
+                sortItemsBy: ItemSortType.Plays,
+                sortItemsAscending: false,
+            },
+        },
     },
     {
         id: "most-skipped",
         name: "Most Skipped",
         description: "The songs you’ve skipped the most",
-        filters: {},
+        filters: {
+            group: {
+                groupBy: GroupType.None,
+                combineBy: CombineType.SameSong,
+                combineInto: CombineInto.EarliestPlay,
+                combineAcrossGroups: false,
+            },
+            sort: {
+                sortGroupsBy: GroupSortType.Date,
+                sortGroupsAscending: true,
+                sortItemsBy: ItemSortType.Plays,
+                sortItemsAscending: false,
+            },
+        },
     },
     {
         id: "listening-history",
         name: "Listening History",
         description: "Every song you’ve ever played",
-        filters: {},
+        filters: {
+            group: {
+                groupBy: GroupType.Day,
+                combineBy: CombineType.None,
+                combineInto: CombineInto.EarliestPlay,
+                combineAcrossGroups: false,
+            },
+            sort: {
+                sortGroupsBy: GroupSortType.Date,
+                sortGroupsAscending: true,
+                sortItemsBy: ItemSortType.Date,
+                sortItemsAscending: true,
+            },
+        },
     },
     {
         id: "discovery-history",
         name: "Discovery History",
         description: "When you first listened to every song",
-        filters: {},
+        filters: {
+            group: {
+                groupBy: GroupType.Day,
+                combineBy: CombineType.SameSong,
+                combineInto: CombineInto.EarliestPlay,
+                combineAcrossGroups: true,
+            },
+            sort: {
+                sortGroupsBy: GroupSortType.Date,
+                sortGroupsAscending: true,
+                sortItemsBy: ItemSortType.Date,
+                sortItemsAscending: true,
+            },
+        },
+    },
+    {
+        id: "best-discovery-days",
+        name: "Best Discovery Days",
+        description: "What days did you discover the music you listen to the most?",
+        filters: {
+            group: {
+                groupBy: GroupType.Day,
+                combineBy: CombineType.SameSong,
+                combineInto: CombineInto.EarliestPlay,
+                combineAcrossGroups: true,
+            },
+            sort: {
+                sortGroupsBy: GroupSortType.Plays,
+                sortGroupsAscending: false,
+                sortItemsBy: ItemSortType.Plays,
+                sortItemsAscending: false,
+            },
+        },
     },
 ]

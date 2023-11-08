@@ -12,7 +12,7 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
             {trigger}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
-            <DropdownMenu.Content className="bg-white shadow-outset py-3 rounded-2xl" align='end' sideOffset={8}>
+            <DropdownMenu.Content className="bg-white shadow-outset py-2 rounded-2xl" align='end' sideOffset={8}>
                 {menuItems.map((item) => 
                     <DropdownMenu.Item 
                         key={item.title} 

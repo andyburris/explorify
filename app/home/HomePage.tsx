@@ -7,7 +7,7 @@ import { Button, StaticButton } from "../common/button/Button";
 import { HistoryEntry } from "../data/model/HistoryEntry";
 import { Dropdown } from "../common/Dropdown";
 import { defaultPresets } from "../data/Defaults";
-import { PresetPreview } from "./PresetPreivew";
+import { PresetPreview } from "./PresetPreview";
 
 export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClear: () => void }) {
     return (
