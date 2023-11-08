@@ -1,6 +1,9 @@
 # dependencies
 /node_modules
 
+# localhost https
+/certificates
+
 # testing
 /coverage
 
@@ -26,3 +29,4 @@ yarn-error.log*
 .env.production.local
 
 # Vercel
+certificates

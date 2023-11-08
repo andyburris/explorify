@@ -8,8 +8,8 @@ const config: Config = {
   ],
   theme: {
     fontFamily: {
-      sans: ['Inter', 'sans-serif'],
-      serif: ['Libre Caslon Condensed', 'serif'],
+      sans: ['var(--inter)', 'sans-serif'],
+      serif: ['var(--libre-caslon-condensed)', 'serif'],
     },
     extend: {
       boxShadow: {

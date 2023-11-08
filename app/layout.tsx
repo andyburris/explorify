@@ -3,7 +3,10 @@ import { Inter } from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: "--inter"
+ })
 const libreCaslonCondensed = localFont({
   src: './theme/fonts/LibreCaslonCondensed.ttf',
   display: 'swap',
@@ -21,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.className} ${libreCaslonCondensed.className}`}>
+    <html lang="en" className={`${inter.variable} ${libreCaslonCondensed.variable}`}>
       <body className={`text-lg/6 font-sans text-stone-900 dark:bg-stone-50`}>{children}</body>
     </html>
   )
