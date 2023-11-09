@@ -6,9 +6,9 @@ export function ActionButton({ onClick, text, icon, className }: { onClick: () =
     return (
         <a 
         onClick={() => onClick()}
-        className={buttonClassName(text === undefined, className) + " cursor-pointer"}>
+        className={buttonClassName(text === undefined, true, className) + " cursor-pointer"}>
             {icon && icon}
-            {text && (<span className="text-base">{text}</span>)}
+            {text && (<span className="text-base font-medium">{text}</span>)}
         </a>
     )
 }

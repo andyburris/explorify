@@ -32,7 +32,7 @@ export default function ViewPage({ params }: { params: { id: string } }) {
     else return (
         <Container>
             <div className="w-full flex -ml-4 pb-8">
-                <LinkButton linkPath="/" className="shadow-none hover:bg-stone-100" text="Home" icon={<ArrowLeft/>}/>
+                <LinkButton linkPath="/" className="hover:bg-neutral-100" text="Home" icon={<ArrowLeft/>} hideShadow/>
             </div>
             <Header 
                 icon={<Logo/>} 
@@ -40,7 +40,7 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                 description={preset.description}
                 actions={
                     <div className="flex gap-3">
-                        <div className="px-3 py-2 text-stone-500 border border-stone-300 rounded-full">
+                        <div className="px-3 py-2 text-neutral-500 border border-neutral-300 rounded-full">
                             { loadedEntries === undefined
                                 ? <p>Loading...</p>
                                 : <p>{`${loadedEntries.length.toLocaleString()} play${loadedEntries.length == 0 ? "" : "s"}`}</p> }
@@ -64,7 +64,7 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                 }/>
             { filtered 
                 ? <DataTable groups={filtered}/> 
-                : <LazyList items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-stone-100 my-2"></div>}/>
+                : <LazyList items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
             }
         </Container>
     )

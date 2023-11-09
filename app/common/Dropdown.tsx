@@ -17,9 +17,11 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
                     <DropdownMenu.Item 
                         key={item.title} 
                         onClick={() => item.onClick()}
-                        className="flex gap-3 px-4 py-3 items-center hover:bg-stone-100 focus:bg-stone-100 cursor-pointer outline-none"
+                        className="flex gap-3 px-4 py-3 items-center hover:bg-neutral-100 focus:bg-neutral-100 cursor-pointer outline-none"
                     >
-                        {item.icon}
+                        <div className="text-2xl text-neutral-500">
+                            {item.icon}
+                        </div>
                         {item.title}
                     </DropdownMenu.Item>
                 )}

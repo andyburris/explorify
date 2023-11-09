@@ -25,10 +25,10 @@ export function PresetPreview({ preset, listens }: { preset: Preset, listens: Hi
             { previewItems == null
                 ? (
                     <div className="flex flex-col p-4 gap-3">
-                        <div className="w-full h-3 rounded-full bg-stone-100"></div>
-                        <div className="w-full h-3 rounded-full bg-stone-100"></div>
-                        <div className="w-full h-3 rounded-full bg-stone-100"></div>
-                        <div className="w-full h-3 rounded-full bg-stone-100"></div>
+                        <div className="w-full h-3 rounded-full bg-neutral-100"></div>
+                        <div className="w-full h-3 rounded-full bg-neutral-100"></div>
+                        <div className="w-full h-3 rounded-full bg-neutral-100"></div>
+                        <div className="w-full h-3 rounded-full bg-neutral-100"></div>
                     </div>
                 ) : (
                     <div className="flex flex-col p-4 gap-3">

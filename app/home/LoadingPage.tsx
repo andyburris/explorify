@@ -10,17 +10,17 @@ export function LoadingPage() {
                 title="Spotify Data Explorer"
                 description="by Lyrical"
                 actions={
-                    <div className="px-3 py-2 text-stone-500 border border-stone-300 rounded-full">
+                    <div className="px-3 py-2 text-neutral-500 border border-neutral-300 rounded-full">
                         <p>Loading...</p>
                     </div>
                 }
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8">
-                <div className="bg-stone-100 rounded-2xl w-full h-44"></div>
-                <div className="bg-stone-100 rounded-2xl w-full h-44"></div>
-                <div className="bg-stone-100 rounded-2xl w-full h-44"></div>
-                <div className="bg-stone-100 rounded-2xl w-full h-44"></div>
-                <div className="bg-stone-100 rounded-2xl w-full h-44"></div>
+                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
+                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
+                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
+                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
+                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
             </div>
         </Container>
     )

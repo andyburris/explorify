@@ -18,7 +18,7 @@ export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClea
                 description="by Lyrical"
                 actions={
                     <div className="flex gap-3">
-                        <div className="px-3 py-2 text-stone-500 border border-stone-300 rounded-full">
+                        <div className="px-3 py-2 text-neutral-500 border border-neutral-300 rounded-full">
                             <p>{`${listens.length.toLocaleString()} play${listens.length == 0 ? "" : "s"}`}</p>
                         </div>
                         <Dropdown

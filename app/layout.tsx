@@ -29,7 +29,7 @@ export default function RootLayout({
       <head>
         <Favicon />
       </head>
-      <body className={`text-lg/6 font-sans text-stone-900 dark:bg-stone-50`}>{children}</body>
+      <body className={`text-lg/6 font-sans text-neutral-900 dark:bg-neutral-50`}>{children}</body>
     </html>
   )
 }

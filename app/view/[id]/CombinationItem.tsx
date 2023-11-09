@@ -7,10 +7,10 @@ export function TrackCombinationItem({ trackCombination }: { trackCombination: T
         <div className="flex justify-between items-center py-2 gap-4">
             <div className="flex flex-col">
                 <p className="font-semibold">{firstListen.trackName}</p>
-                <p className="text-stone-500">{firstListen.artistName}</p>
+                <p className="text-neutral-500">{firstListen.artistName}</p>
             </div>
             <div className="flex gap-3 flex-shrink-0 items-center">
-                <p className="text-stone-500">
+                <p className="text-neutral-500">
                     {firstListen.timestamp.toLocaleDateString('en-US', {
                         day: "numeric",
                         month: "numeric",
@@ -19,10 +19,10 @@ export function TrackCombinationItem({ trackCombination }: { trackCombination: T
                         minute: "2-digit"
                     })}
                 </p>
-                <div className="px-3 py-1.5 bg-stone-100 rounded-full items-center">
+                <div className="px-3 py-1.5 bg-neutral-100 rounded-full items-center">
                     <p>
                     <span className="font-semibold">{trackCombination.listens.length}</span>
-                    <span className="text-stone-500">{trackCombination.listens.length == 1 ? " play" : " plays"}</span>
+                    <span className="text-neutral-500">{trackCombination.listens.length == 1 ? " play" : " plays"}</span>
                     </p>
                 </div>
             </div>
@@ -38,7 +38,7 @@ export function ArtistCombinationItem({ artistCombination }: { artistCombination
                 <p className="font-semibold">{firstListen.artistName}</p>
             </div>
             <div className="flex gap-3 flex-shrink-0 items-center">
-                <p className="text-stone-500">
+                <p className="text-neutral-500">
                     {firstListen.timestamp.toLocaleDateString('en-US', {
                         day: "numeric",
                         month: "numeric",
@@ -47,10 +47,10 @@ export function ArtistCombinationItem({ artistCombination }: { artistCombination
                         minute: "2-digit"
                     })}
                 </p>
-                <div className="px-3 py-1.5 bg-stone-100 rounded-full items-center">
+                <div className="px-3 py-1.5 bg-neutral-100 rounded-full items-center">
                     <p>
                     <span className="font-semibold">{artistCombination.listens.length}</span>
-                    <span className="text-stone-500">{artistCombination.listens.length == 1 ? " play" : " plays"}</span>
+                    <span className="text-neutral-500">{artistCombination.listens.length == 1 ? " play" : " plays"}</span>
                     </p>
                 </div>
             </div>
@@ -64,9 +64,9 @@ export function ListenItem({ listen }: { listen: HistoryEntry }) {
         <div className="flex justify-between items-center py-2">
             <div className="flex flex-col">
                 <p className="font-semibold">{listen.trackName}</p>
-                <p className="text-stone-500">{listen.artistName}</p>
+                <p className="text-neutral-500">{listen.artistName}</p>
             </div>
-            <p className="text-stone-500 flex-shrink-0">
+            <p className="text-neutral-500 flex-shrink-0">
                 {listen.timestamp.toLocaleDateString('en-US', {
                     day: "numeric",
                     month: "numeric",
