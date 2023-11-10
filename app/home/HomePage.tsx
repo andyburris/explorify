@@ -15,7 +15,7 @@ export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClea
             <Header
                 icon={<Logo/>}
                 title="Spotify Data Explorer"
-                description="by Lyrical"
+                // description="by Lyrical"
                 actions={
                     <div className="flex gap-3">
                         <div className="px-3 py-2 text-neutral-500 border border-neutral-300 rounded-full">

@@ -20,7 +20,11 @@ export function UploadPage({ onUpload }: { onUpload: (entries: HistoryEntry[], r
     return (
         <Container>
             <div className="flex flex-col gap-6">
-                <Header icon={<Logo/>} title="Spotify Data Explorer" description="by Lyrical"/>
+                <Header 
+                    icon={<Logo/>} 
+                    title="Spotify Data Explorer" 
+                    // description="by Lyrical"
+                />
                 <p>Don’t have your extended data yet? Go to <a href="https://www.spotify.com/us/account/privacy/" target="_blank">https://www.spotify.com/us/account/privacy/</a> and request your extended streaming history. It usually takes ~2 weeks to receive your data.</p>
             </div>
             <input type="file" id="file-upload" className="hidden" onChange={(e) => setFile(e.target.files?.[0])}/>

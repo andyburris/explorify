@@ -5,8 +5,8 @@ export function GroupHeader({ group }: { group: Group }) {
         ? "All Time"
         : group.date.toLocaleDateString('en-US', {
             hour: (group.type == GroupType.Hour) ? "numeric" : undefined,
-            month: (group.type == GroupType.Hour || GroupType.Day || GroupType.Month) ? "long" : undefined,
-            day: (group.type == GroupType.Hour || GroupType.Day) ? "numeric" : undefined,
+            month: (group.type == GroupType.Hour || group.type == GroupType.Day || group.type == GroupType.Month) ? "long" : undefined,
+            day: (group.type == GroupType.Hour || group.type == GroupType.Day) ? "numeric" : undefined,
             year: "numeric"
         })
     return (

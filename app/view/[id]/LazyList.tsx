@@ -3,7 +3,7 @@
 import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import React from 'react'
 
-export function LazyList<T>({ items, itemContent, estimateSize }: { items: T[], itemContent: (index: number) => React.ReactNode, estimateSize?: number }) {
+export function LazyList<T>({ items, itemContent, estimateSize, className }: { items: T[], itemContent: (index: number) => React.ReactNode, estimateSize?: number, className?: string }) {
   // The scrollable element for your list
   const listRef = React.useRef<HTMLDivElement | null>(null)
 
@@ -21,7 +21,7 @@ export function LazyList<T>({ items, itemContent, estimateSize }: { items: T[], 
       {/* The scrollable element for your list */}
       <div
         ref={listRef}
-        className=" w-full h-full"
+        className={"w-full h-full" + (className ? ` ${className}` : ``)}
         // style={{ marginTop: -(listRef.current?.offsetTop ?? 0) }}
       >
         {/* The large inner element to hold all of the items */}

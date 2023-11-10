@@ -30,10 +30,10 @@ export function LinkButton({ linkPath, text, icon, className, hideShadow }: { li
     )
 }
 
-export function StaticButton({ text, icon, className }: { text?: string, icon?: React.ReactNode, className?: string }) {
+export function StaticButton({ text, icon, className, hideShadow }: { text?: string, icon?: React.ReactNode, className?: string, hideShadow?: boolean, }) {
     return (
         <a 
-        className={buttonClassName(text === undefined, true, className) + " cursor-pointer"}>
+        className={buttonClassName(text === undefined, !(hideShadow ?? false), className) + " cursor-pointer"}>
             {icon && icon}
             {text && (<span className="text-base font-medium">{text}</span>)}
         </a>

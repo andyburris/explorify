@@ -3,7 +3,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 export interface DropdownItem {
     icon: React.ReactNode,
     title: string,
-    onClick: () => void
+    onClick?: () => void
 }
 export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, menuItems: DropdownItem[] }) {
     return (
@@ -16,13 +16,16 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
                 {menuItems.map((item) => 
                     <DropdownMenu.Item 
                         key={item.title} 
-                        onClick={() => item.onClick()}
-                        className="flex gap-3 px-4 py-3 items-center hover:bg-neutral-100 focus:bg-neutral-100 cursor-pointer outline-none"
+                        onClick={item.onClick !== undefined ? () => item.onClick?.() : undefined}
+                        disabled={item.onClick === undefined}
+                        className={"flex gap-3 px-4 py-3 items-center outline-none" + (item.onClick === undefined ? "" : " hover:bg-neutral-100 focus:bg-neutral-100 cursor-pointer")}
                     >
                         <div className="text-2xl text-neutral-500">
                             {item.icon}
                         </div>
-                        {item.title}
+                        <p className={`` + (item.onClick === undefined ? "text-neutral-500" : "")}>
+                            {item.title}
+                        </p>
                     </DropdownMenu.Item>
                 )}
             </DropdownMenu.Content>
