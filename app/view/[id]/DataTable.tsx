@@ -3,18 +3,24 @@
 import { HistoryEntry } from '@/app/data/model/HistoryEntry'
 import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import React from 'react'
-import { ArtistCombinationItem, ListenItem, TrackCombinationItem } from './CombinationItem'
+import { CombinationItem } from './CombinationItem'
 import { ArtistCombination, Combination, Group, TrackCombination } from '@/app/data/model/Group'
 import { LazyList } from './LazyList'
 import { GroupHeader } from './GroupHeaderItem'
+import { ViewOptions } from '@/app/data/model/ViewOptions'
 
 class GroupData {
   constructor(public group: Group) {}
 }
-type ListItem = Combination | GroupData
+type ListItem = IndexedCombination | GroupData
+interface IndexedCombination { index: number, combination: Combination }
 
-export function DataTable({ groups }: { groups: Group[] }) {
-  const flattened: ListItem[] = groups.flatMap((g) => [new GroupData(g), ...g.combinations] )
+export function DataTable({ groups, viewOptions }: { groups: Group[], viewOptions: ViewOptions }) {
+  const flattened: ListItem[] = groups.flatMap((g) => {
+    const groupData = new GroupData(g)
+    const indexedCombinations = viewOptions.showItems ? g.combinations.map((c, i) => { return { index: i, combination: c } }) : []
+    return [groupData, ...indexedCombinations]
+   } )
 
   return (
     <LazyList 
@@ -22,11 +28,9 @@ export function DataTable({ groups }: { groups: Group[] }) {
       itemContent={(index) => {
         const listItem = flattened[index]
         if(listItem instanceof GroupData) {
-          return <GroupHeader group={listItem.group} />
-        } else if(listItem instanceof TrackCombination) {
-          return <TrackCombinationItem trackCombination={listItem}/>
+          return <GroupHeader group={listItem.group} viewOptions={viewOptions}/>
         } else {
-          return <ArtistCombinationItem artistCombination={listItem as ArtistCombination}/>
+          return <CombinationItem combination={listItem.combination} indexInGroup={listItem.index} viewOptions={viewOptions}/>
         }
       }}/>
   )

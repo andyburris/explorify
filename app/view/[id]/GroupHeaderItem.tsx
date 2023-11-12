@@ -1,6 +1,7 @@
 import { Group, GroupType } from "@/app/data/model/Group";
+import { ViewOptions } from "@/app/data/model/ViewOptions";
 
-export function GroupHeader({ group }: { group: Group }) {
+export function GroupHeader({ group, viewOptions }: { group: Group, viewOptions: ViewOptions }) {
     const dateString = (group.type == GroupType.None)
         ? "All Time"
         : group.date.toLocaleDateString('en-US', {
@@ -15,9 +16,11 @@ export function GroupHeader({ group }: { group: Group }) {
                 <div className="h-6 w-1 rounded-full bg-green-600"></div>
                 <p className="font-serif tracking-tight text-4xl font-bold">{dateString}</p>
             </div>
-            <div className="px-3 py-2 text-neutral-500 border border-neutral-300 rounded-full">
-                <p>{`${group.totalPlays.toLocaleString()} play${group.totalPlays == 0 ? "" : "s"}`}</p>
-            </div>
+            { viewOptions.showGroupSum &&
+                <div className="px-3 py-1.5 text-neutral-500 border border-neutral-300 rounded-full">
+                    <p>{`${group.totalPlays.toLocaleString()} play${group.totalPlays == 0 ? "" : "s"}`}</p>
+                </div>
+            }
         </div>
     )
 }

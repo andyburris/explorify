@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ArtistCombination, Combination, Group, TrackCombination } from "../data/model/Group";
 import { applyFilters } from "../data/Filtering";
 import { PickedIcon } from "../common/PickedIcon";
+import { ViewInfoType, ViewOptions } from "../data/model/ViewOptions";
 
 export function PresetPreview({ preset, listens }: { preset: Preset, listens: HistoryEntry[] }) {
     const [previewItems, setPreviewItems] = useState<Combination[] | null>(null)
@@ -32,19 +33,29 @@ export function PresetPreview({ preset, listens }: { preset: Preset, listens: Hi
                     </div>
                 ) : (
                     <div className="flex flex-col p-4 gap-3">
-                        {previewItems.map((c, i) => <PreviewItem combination={c} index={i} key={i}/>)}
+                        {previewItems.map((c, i) => <PreviewItem combination={c} index={i} key={i} viewOptions={preset.filters.viewOptions}/>)}
                     </div>
                 )}
         </Link>
     )
 }
 
-function PreviewItem({ combination, index }: { combination: Combination, index: number }) {
+const formatOptions: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "numeric",
+    year: "2-digit",
+}
+function PreviewItem({ combination, index, viewOptions }: { combination: Combination, index: number, viewOptions: ViewOptions }) {
     return (
         <div className="flex gap-2 w-full last:opacity-25 last:h-0">
-            <p className="w-3 text-right text-green-700">{index + 1}.</p>
+            { viewOptions.showItemRanks &&
+                <p className=" tabular-nums text-green-700">{index + 1}.</p>
+            }
             <p className="text-green-900 flex-grow overflow-hidden truncate h-fit">{(combination instanceof TrackCombination) ? combination.trackName : (combination as ArtistCombination).artistName}</p>
-            <p className="text-green-700">{combination.listens.length}</p>
+            { viewOptions.primaryInfo == ViewInfoType.Date
+                ? <p className="text-green-700">{combination.listens[0].timestamp.toLocaleDateString('en-US', formatOptions)}</p>
+                : <p className="text-green-700">{combination.listens.length}</p>
+            }
         </div>
     )
 }

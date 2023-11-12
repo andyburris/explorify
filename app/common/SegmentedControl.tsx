@@ -21,6 +21,7 @@ export function SegmentedControl<T>({ items, selectedItem, onSelect }: { items: 
       >
         {items.map((item) => {
             return <ToggleGroup.Item 
+                key={item.key ?? item.title}
                 className={toggleGroupItemClasses} 
                 value={item.key ?? item.title} 
                 aria-label="Left aligned"

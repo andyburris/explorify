@@ -1,4 +1,5 @@
 import { Filters } from "./Filters";
+import { ViewOptions } from "./ViewOptions";
 
 export interface Preset {
     id: string,

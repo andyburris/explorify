@@ -18,8 +18,8 @@ export function SortFilterSelector({ currentFilter, hasGroups, onChangeFilter }:
                     />
                     <SegmentedControl 
                         items={[
-                            { item: false, title: (currentFilter.sortGroupsBy == GroupSortType.Date) ? "Most to least recent" : "Most to least plays", icon: <SortDescending/> },
-                            { item: true, title: (currentFilter.sortGroupsBy == GroupSortType.Date) ? "Least to most recent" : "Least to most plays", icon: <SortAscending/> },
+                            { item: false, title: (currentFilter.sortGroupsBy == GroupSortType.Date) ? "Earliest to latest" : "Most to least plays", icon: <SortDescending/> },
+                            { item: true, title: (currentFilter.sortGroupsBy == GroupSortType.Date) ? "Latest to earliest" : "Least to most plays", icon: <SortAscending/> },
                         ]} 
                         selectedItem={currentFilter.sortGroupsAscending}
                         onSelect={(n) => onChangeFilter({ ...currentFilter, sortGroupsAscending: n})}
@@ -42,7 +42,7 @@ export function SortFilterSelector({ currentFilter, hasGroups, onChangeFilter }:
                         { 
                             item: false, 
                             title: (currentFilter.sortItemsBy == ItemSortType.Date) 
-                                ? "Most to least recent" 
+                                ? "Earliest to latest" 
                                 : (currentFilter.sortItemsBy == ItemSortType.Plays)
                                 ? "Most to least plays"
                                 : "Z-A", 
@@ -51,7 +51,7 @@ export function SortFilterSelector({ currentFilter, hasGroups, onChangeFilter }:
                         { 
                             item: true, 
                             title: (currentFilter.sortItemsBy == ItemSortType.Date) 
-                                ? "Least to most recent" 
+                                ? "Latest to earliest" 
                                 : (currentFilter.sortItemsBy == ItemSortType.Plays)
                                 ? "Least to most plays"
                                 : "A-Z", 

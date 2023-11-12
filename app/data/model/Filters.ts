@@ -1,8 +1,10 @@
 import { GroupType } from "./Group";
+import { ViewOptions } from "./ViewOptions";
 
 export interface Filters {
     group: GroupFilter,
     sort: SortFilter,
+    viewOptions: ViewOptions,
 }
 
 export enum CombineType { None, SameSong, SameArtist }

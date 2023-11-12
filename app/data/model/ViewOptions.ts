@@ -6,8 +6,8 @@ export enum ViewInfoType {
 export interface ViewOptions {
     showGroupSum: boolean,
     showItems: boolean,
-    showRanks: boolean,
+    showItemRanks: boolean,
     previewGroups: boolean, 
     primaryInfo: ViewInfoType,
-    secondaryInfo: ViewInfoType,
+    secondaryInfo: ViewInfoType | null,
 }

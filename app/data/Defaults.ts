@@ -1,6 +1,7 @@
 import { CombineInto, CombineType, GroupSortType, ItemSortType } from "./model/Filters";
 import { GroupType } from "./model/Group";
 import { Preset } from "./model/Preset";
+import { ViewInfoType } from "./model/ViewOptions";
 
 export const defaultPresets: Preset[] = [
     {
@@ -20,6 +21,14 @@ export const defaultPresets: Preset[] = [
                 sortGroupsAscending: true,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
+            },
+            viewOptions: {
+                showGroupSum: true,
+                showItems: true,
+                showItemRanks: true,
+                previewGroups: false,
+                primaryInfo: ViewInfoType.Plays,
+                secondaryInfo: null,
             },
         },
     },
@@ -41,6 +50,14 @@ export const defaultPresets: Preset[] = [
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
             },
+            viewOptions: {
+                showGroupSum: true,
+                showItems: true,
+                showItemRanks: true,
+                previewGroups: false,
+                primaryInfo: ViewInfoType.Plays,
+                secondaryInfo: null,
+            },
         },
     },
     {
@@ -60,6 +77,14 @@ export const defaultPresets: Preset[] = [
                 sortGroupsAscending: true,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
+            },
+            viewOptions: {
+                showGroupSum: false,
+                showItems: true,
+                showItemRanks: true,
+                previewGroups: false,
+                primaryInfo: ViewInfoType.Plays,
+                secondaryInfo: null,
             },
         },
     },
@@ -81,6 +106,14 @@ export const defaultPresets: Preset[] = [
                 sortItemsBy: ItemSortType.Date,
                 sortItemsAscending: true,
             },
+            viewOptions: {
+                showGroupSum: true,
+                showItems: true,
+                showItemRanks: false,
+                previewGroups: false,
+                primaryInfo: ViewInfoType.Date,
+                secondaryInfo: null,
+            },
         },
     },
     {
@@ -101,6 +134,14 @@ export const defaultPresets: Preset[] = [
                 sortItemsBy: ItemSortType.Date,
                 sortItemsAscending: true,
             },
+            viewOptions: {
+                showGroupSum: true,
+                showItems: true,
+                showItemRanks: false,
+                previewGroups: false,
+                primaryInfo: ViewInfoType.Date,
+                secondaryInfo: ViewInfoType.Plays,
+            },
         },
     },
     {
@@ -120,6 +161,14 @@ export const defaultPresets: Preset[] = [
                 sortGroupsAscending: false,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
+            },
+            viewOptions: {
+                showGroupSum: true,
+                showItems: true,
+                showItemRanks: true,
+                previewGroups: true,
+                primaryInfo: ViewInfoType.Plays,
+                secondaryInfo: ViewInfoType.Date,
             },
         },
     },
