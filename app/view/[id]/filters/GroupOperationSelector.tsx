@@ -1,13 +1,13 @@
 import { SegmentedControl } from "@/app/common/SegmentedControl";
-import { CombineInto, CombineType, GroupFilter } from "@/app/data/model/Filters";
+import { CombineInto, CombineType, GroupOperation } from "@/app/data/model/Operations";
 import { GroupType } from "@/app/data/model/Group";
 import { ArrowsInLineVertical, ArrowsOutLineVertical, Calendar, CalendarBlank, Clock, ClockCounterClockwise, List, MusicNote, SortAscending, SortDescending, User, Users } from "phosphor-react-sc";
-import { FilterSection } from "./FilterSelector";
+import { OperationSection } from "./OperationsSelector";
 
-export function GroupFilterSelector({ currentFilter, onChangeFilter }: { currentFilter: GroupFilter, onChangeFilter: (newFilter: GroupFilter) => void }) {
+export function GroupOperationSelector({ currentOperation, onChangeOperation }: { currentOperation: GroupOperation, onChangeOperation: (newFilter: GroupOperation) => void }) {
     return (
         <div className="flex flex-col gap-6">
-            <FilterSection title="Group by">
+            <OperationSection title="Group by">
                 <SegmentedControl 
                     items={[
                         { item: GroupType.None, title: "None", icon: <List/> },
@@ -16,39 +16,39 @@ export function GroupFilterSelector({ currentFilter, onChangeFilter }: { current
                         { item: GroupType.Month, title: "Month", icon: <Calendar/> },
                         { item: GroupType.Year, title: "Year", icon: <ClockCounterClockwise/> },
                     ]} 
-                    selectedItem={currentFilter.groupBy}
-                    onSelect={(n) => onChangeFilter({ ...currentFilter, groupBy: n})}
+                    selectedItem={currentOperation.groupBy}
+                    onSelect={(n) => onChangeOperation({ ...currentOperation, groupBy: n})}
                 />
-            </FilterSection>
-            <FilterSection title="Combine by">
+            </OperationSection>
+            <OperationSection title="Combine by">
                 <SegmentedControl 
                     items={[
                         { item: CombineType.None, title: "None", icon: <List/> },
                         { item: CombineType.SameSong, title: "Same Song", icon: <MusicNote/> },
                         { item: CombineType.SameArtist, title: "Same Artist", icon: <User/> },
                     ]} 
-                    selectedItem={currentFilter.combineBy}
-                    onSelect={(n) => onChangeFilter({ ...currentFilter, combineBy: n})}
+                    selectedItem={currentOperation.combineBy}
+                    onSelect={(n) => onChangeOperation({ ...currentOperation, combineBy: n})}
                 />
                 <SegmentedControl 
                     items={[
                         { item: CombineInto.EarliestPlay, title: "Earliest Play", icon: <SortAscending/> },
                         { item: CombineInto.LatestPlay, title: "Most Recent Play", icon: <SortDescending/> },
                     ]} 
-                    selectedItem={currentFilter.combineInto}
-                    onSelect={(n) => onChangeFilter({ ...currentFilter, combineInto: n})}
+                    selectedItem={currentOperation.combineInto}
+                    onSelect={(n) => onChangeOperation({ ...currentOperation, combineInto: n})}
                 />
-                { currentFilter.groupBy != GroupType.None && 
+                { currentOperation.groupBy != GroupType.None && 
                     <SegmentedControl 
                         items={[
                             { item: false, title: "Within Groups", icon: <ArrowsInLineVertical/> },
                             { item: true, title: "Across Groups", icon: <ArrowsOutLineVertical/> },
                         ]} 
-                        selectedItem={currentFilter.combineAcrossGroups}
-                        onSelect={(n) => onChangeFilter({ ...currentFilter, combineAcrossGroups: n})}
+                        selectedItem={currentOperation.combineAcrossGroups}
+                        onSelect={(n) => onChangeOperation({ ...currentOperation, combineAcrossGroups: n})}
                     />
                 }
-            </FilterSection>
+            </OperationSection>
         </div>
     )
 }

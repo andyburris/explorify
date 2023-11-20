@@ -1,4 +1,4 @@
-import { CombineInto, CombineType, GroupSortType, ItemSortType } from "./model/Filters";
+import { CombineInto, CombineType, GroupSortType, ItemSortType, SkipFilterType } from "./model/Operations";
 import { GroupType } from "./model/Group";
 import { Preset } from "./model/Preset";
 import { ViewInfoType } from "./model/ViewOptions";
@@ -9,12 +9,15 @@ export const defaultPresets: Preset[] = [
         name: "Top Songs",
         icon: "musicnote",
         description: "The songs you’ve listened to the most",
-        filters: {
+        operations: {
             group: {
                 groupBy: GroupType.None,
                 combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
+            },
+            filter: {
+                filterSkipsBy: SkipFilterType.NoSkips,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -37,12 +40,15 @@ export const defaultPresets: Preset[] = [
         name: "Top Artists",
         icon: "users",
         description: "The artists you’ve listened to the most",
-        filters: {
+        operations: {
             group: {
                 groupBy: GroupType.None,
                 combineBy: CombineType.SameArtist,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
+            },
+            filter: {
+                filterSkipsBy: SkipFilterType.NoSkips,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -65,12 +71,15 @@ export const defaultPresets: Preset[] = [
         name: "Most Skipped",
         icon: "skipforward",
         description: "The songs you’ve skipped the most",
-        filters: {
+        operations: {
             group: {
                 groupBy: GroupType.None,
                 combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
+            },
+            filter: {
+                filterSkipsBy: SkipFilterType.OnlySkips,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -93,12 +102,15 @@ export const defaultPresets: Preset[] = [
         name: "Listening History",
         icon: "headphones",
         description: "Every song you’ve ever played",
-        filters: {
+        operations: {
             group: {
                 groupBy: GroupType.Day,
                 combineBy: CombineType.None,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
+            },
+            filter: {
+                filterSkipsBy: SkipFilterType.All,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -121,12 +133,15 @@ export const defaultPresets: Preset[] = [
         name: "Discovery History",
         icon: "headphones",
         description: "When you first listened to every song",
-        filters: {
+        operations: {
             group: {
                 groupBy: GroupType.Day,
                 combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: true,
+            },
+            filter: {
+                filterSkipsBy: SkipFilterType.NoSkips,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -149,12 +164,15 @@ export const defaultPresets: Preset[] = [
         name: "Best Discovery Days",
         icon: "calendarplus",
         description: "What days did you discover the music you listen to the most?",
-        filters: {
+        operations: {
             group: {
                 groupBy: GroupType.Day,
                 combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: true,
+            },
+            filter: {
+                filterSkipsBy: SkipFilterType.NoSkips,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Plays,

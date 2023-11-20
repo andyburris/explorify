@@ -1,4 +1,4 @@
-import { Filters } from "./Filters";
+import { Operations } from "./Operations";
 import { ViewOptions } from "./ViewOptions";
 
 export interface Preset {
@@ -6,5 +6,5 @@ export interface Preset {
     name: string,
     description: string,
     icon: string,
-    filters: Filters,
+    operations: Operations,
 }

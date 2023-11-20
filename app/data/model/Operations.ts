@@ -1,15 +1,16 @@
 import { GroupType } from "./Group";
 import { ViewOptions } from "./ViewOptions";
 
-export interface Filters {
-    group: GroupFilter,
-    sort: SortFilter,
+export interface Operations {
+    group: GroupOperation,
+    filter: FilterOperation,
+    sort: SortOperation,
     viewOptions: ViewOptions,
 }
 
 export enum CombineType { None, SameSong, SameArtist }
 export enum CombineInto { EarliestPlay, LatestPlay }
-export interface GroupFilter {
+export interface GroupOperation {
     groupBy: GroupType,
     combineBy: CombineType,
     combineAcrossGroups: boolean,
@@ -18,9 +19,14 @@ export interface GroupFilter {
 
 export enum GroupSortType { Date, Plays }
 export enum ItemSortType { Date, Plays, Name, ArtistName }
-export interface SortFilter {
+export interface SortOperation {
     sortGroupsBy: GroupSortType,
     sortGroupsAscending: boolean,
     sortItemsBy: ItemSortType,
     sortItemsAscending: boolean,
+}
+
+export enum SkipFilterType { All, NoSkips, OnlySkips }
+export interface FilterOperation {
+    filterSkipsBy: SkipFilterType,
 }

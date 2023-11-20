@@ -7,7 +7,7 @@ export function CombinationItem({ combination, indexInGroup, viewOptions }: { co
     return (
         <div className="flex items-center py-2 gap-4 min-h-[64px]">
             { viewOptions.showItemRanks && 
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-neutral-100">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-neutral-100 -ml-1">
                     <p className="text-neutral-500 text-center text-sm font-medium">{indexInGroup + 1}</p>
                 </div>
             }

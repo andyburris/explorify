@@ -12,9 +12,9 @@ import { deleteDB } from "idb"
 import { ArrowCounterClockwise, ArrowLeft, DotsThreeVertical, Pencil, PencilSimple, Play, Share } from "phosphor-react-sc"
 import { useEffect, useState } from "react"
 import { DataTable } from "./DataTable"
-import { applyFilters } from "@/app/data/Filtering"
+import { applyOperations } from "@/app/data/Operating"
 import { LazyList } from "./LazyList"
-import { FilterSelector } from "./filters/FilterSelector"
+import { OperationsSelector } from "./filters/OperationsSelector"
 import { ActionButton } from "@/app/common/button/ActionButton"
 
 export default function ViewPage({ params }: { params: { id: string } }) {
@@ -25,9 +25,9 @@ export default function ViewPage({ params }: { params: { id: string } }) {
     useEffect(() => { getListens().then(entries => { setLoadedEntries(entries) }) }, [])
 
     const [isCustomizing, setCustomizing] = useState(false)
-    const [customizedFilters, setCustomizedFilters] = useState(preset.filters)
+    const [customizedFilters, setCustomizedFilters] = useState(preset.operations)
 
-    const filtered = (loadedEntries === undefined || preset === undefined) ? undefined : applyFilters(loadedEntries, customizedFilters);
+    const filtered = (loadedEntries === undefined || preset === undefined) ? undefined : applyOperations(loadedEntries, customizedFilters);
 
     return (
         <Container>
@@ -44,7 +44,7 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                             <ActionButton 
                                 onClick={() => { 
                                     if(isCustomizing) {
-                                        setCustomizedFilters(preset.filters)
+                                        setCustomizedFilters(preset.operations)
                                         setCustomizing(false)
                                     } else { setCustomizing(true) }
                                 }}
@@ -71,7 +71,7 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                 />
             </div>
             { isCustomizing &&
-                <FilterSelector currentFilters={customizedFilters} onChangeFilters={newFilters => setCustomizedFilters(newFilters)} />
+                <OperationsSelector currentOperations={customizedFilters} onChangeOperations={newFilters => setCustomizedFilters(newFilters)} />
             }
             { filtered 
                 ? <DataTable groups={filtered} viewOptions={customizedFilters.viewOptions}/> 
