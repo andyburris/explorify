@@ -52,8 +52,8 @@ export function rawToHistoryEntry(raw: RawHistoryEntry): HistoryEntry | undefine
         artistName: raw.master_metadata_album_artist_name!,
         albumName: raw.master_metadata_album_album_name!,
         uri: raw.spotify_track_uri!,
-        startReason: (raw.reason_start !== undefined) ? StartReason[raw.reason_start as keyof typeof StartReason] : StartReason.Unknown,
-        endReason: (raw.reason_end !== undefined) ? EndReason[raw.reason_end as keyof typeof EndReason] as EndReason : EndReason.Unknown,
+        startReason: parseStartReason(raw.reason_start),
+        endReason: parseEndReason(raw.reason_end),
         shuffle: raw.shuffle,
         skipped: raw.skipped,
         offline: raw.offline,
@@ -73,6 +73,22 @@ export enum StartReason {
     Unknown,
 }
 
+function parseStartReason(raw: string | undefined): StartReason {
+    switch(raw?.toLowerCase()) {
+        case "appload": return StartReason.AppLoad
+        case "backbutton": return StartReason.BackButton
+        case "clickrow": return StartReason.ClickRow
+        case "forwardbutton": return StartReason.ForwardButton
+        case "persisted": return StartReason.Persisted
+        case "playbutton": return StartReason.PlayButton
+        case "remote": return StartReason.Remote
+        case "trackdone": return StartReason.TrackDone
+        case "trackerror": return StartReason.TrackError
+        case "unknown": return StartReason.Unknown
+        default: return StartReason.Unknown
+    }
+}
+
 export enum EndReason {
     BackButton,
     EndPlay,
@@ -85,4 +101,21 @@ export enum EndReason {
     UnexpectedExit,
     UnexpectedExitWhilePaused,
     Unknown,
+}
+
+function parseEndReason(raw: string | undefined): EndReason {
+    switch(raw?.toLowerCase()) {
+        case "backbutton": return EndReason.BackButton
+        case "endplay": return EndReason.EndPlay
+        case "forwardbutton": return EndReason.ForwardButton
+        case "logout": return EndReason.Logout
+        case "playbutton": return EndReason.PlayButton
+        case "remote": return EndReason.Remote
+        case "trackdone": return EndReason.TrackDone
+        case "trackerror": return EndReason.TrackError
+        case "unexpectedexit": return EndReason.UnexpectedExit
+        case "unexpectedexitwhilepaused": return EndReason.UnexpectedExitWhilePaused
+        case "unknown": return EndReason.Unknown
+        default: return EndReason.Unknown
+    }
 }

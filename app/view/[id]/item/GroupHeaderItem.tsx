@@ -1,5 +1,6 @@
 import { Group, GroupType } from "@/app/data/model/Group";
 import { ViewOptions } from "@/app/data/model/ViewOptions";
+import { Play } from "phosphor-react-sc";
 
 export function GroupHeader({ group, viewOptions }: { group: Group, viewOptions: ViewOptions }) {
     const dateString = (group.type == GroupType.None)
@@ -17,8 +18,14 @@ export function GroupHeader({ group, viewOptions }: { group: Group, viewOptions:
                 <p className="font-serif tracking-tight text-4xl font-bold">{dateString}</p>
             </div>
             { viewOptions.showGroupSum &&
-                <div className="px-3 py-1.5 text-neutral-500 border border-neutral-300 rounded-full">
-                    <p>{`${group.totalPlays.toLocaleString()} play${group.totalPlays == 0 ? "" : "s"}`}</p>
+                <div className="px-3 py-1.5 border border-neutral-200 rounded-full items-center text-neutral-500">
+                    <div className="flex gap-0.5 items-center">
+                        <p>
+                            <span className="font-medium">{group.totalPlays}</span>
+                            <span className="text-neutral-500 max-sm:hidden">{group.totalPlays == 1 ? " play" : " plays"}</span>
+                        </p>
+                        <Play className="sm:hidden" size="16px" weight="bold"/>
+                    </div>
                 </div>
             }
         </div>

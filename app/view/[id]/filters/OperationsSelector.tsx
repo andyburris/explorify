@@ -11,7 +11,7 @@ import { FilterOperationSelector } from "./FilterOperationSelector";
 enum OperationType { Group="Group", Filter="Filter", Sort="Sort", View="View" }
 export function OperationsSelector({ currentOperations, onChangeOperations }: { currentOperations: Operations, onChangeOperations: (filters: Operations) => void }) {
     return (
-        <div className="flex flex-col rounded-2xl border border-neutral-300 mt-4">
+        <div className="flex flex-col rounded-2xl border border-neutral-200 mt-4">
             <p className="text-neutral-500 font-semibold px-4 pt-4 pb-2">Customize</p>
             <Tabs.Root defaultValue={OperationType.Group}>
                 <Tabs.List className="flex w-full border-b border-b-neutral-300">

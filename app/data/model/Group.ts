@@ -4,6 +4,7 @@ export enum GroupType {
     None, Hour, Day, Month, Year
 }
 export class Group {
+    public id: string = crypto.randomUUID()
     public totalPlays: number
     constructor(
         public type: GroupType,
@@ -15,6 +16,7 @@ export class Group {
 }
 
 export class TrackCombination implements Combination {
+    public id: string = crypto.randomUUID()
     constructor(
         public trackName: string,
         public artistName: string,
@@ -24,11 +26,13 @@ export class TrackCombination implements Combination {
     ) {}
 }
 export class ArtistCombination implements Combination {
+    public id: string = crypto.randomUUID()
     constructor(
         public artistName: string,
         public listens: HistoryEntry[],
     ) {}
 }
 export interface Combination {
-    listens: HistoryEntry[] ,
+    id: string,
+    listens: HistoryEntry[],
 }

@@ -10,7 +10,7 @@ export function LoadingPage() {
                 title="Spotify Data Explorer"
                 // description="by Lyrical"
                 actions={
-                    <div className="px-3 py-2 text-neutral-500 border border-neutral-300 rounded-full">
+                    <div className="px-3 py-2 text-neutral-500 border border-neutral-200 rounded-full">
                         <p>Loading...</p>
                     </div>
                 }

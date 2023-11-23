@@ -1,12 +1,14 @@
 "use client"
 
-import { buttonClassName } from "./Button"
+import { ButtonProps, buttonClassName } from "./Button"
 
-export function ActionButton({ onClick, text, icon, className }: { onClick: () => void, text?: string, icon?: React.ReactNode, className?: string }) {
+export interface ActionButtonProps extends ButtonProps { onClick: () => void, }
+export function ActionButton(props: ActionButtonProps) {
+    const { onClick, text, icon, className, hideShadow } = props
     return (
         <a 
         onClick={() => onClick()}
-        className={buttonClassName(text === undefined, true, className) + " cursor-pointer"}>
+        className={buttonClassName(props)+ " cursor-pointer"}>
             {icon && icon}
             {text && (<span className="text-base font-medium">{text}</span>)}
         </a>

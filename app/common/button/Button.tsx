@@ -1,39 +1,49 @@
 import Link from "next/link"
 
-export function buttonClassName(iconOnly: boolean, hasShadow: boolean, className?: string): string {
+export interface ButtonProps {
+    text?: string, icon?: React.ReactNode, className?: string, hideShadow?: boolean
+}
+export function buttonClassName(props: ButtonProps): string {
+    const hasShadow = !(props.hideShadow ?? false)
+    const iconOnly = props.icon !== undefined && props.text === undefined
     return "flex justify-center items-center gap-2 h-10 text-neutral-500 hover:text-neutral-900 rounded-full"
-        + (hasShadow ? " shadow-outset" : "")
-        + (iconOnly ? ` w-10` : ` px-4`) 
-        + (className ? ` ${className}` : "")
+        + (hasShadow ? " shadow-outset" : " hover:bg-neutral-100")
+        + (iconOnly ? ` w-10 text-2xl` : ` px-4`) 
+        + (props.className ? ` ${props.className}` : "")
 }
 
-export function Button({ link, text, icon, className, openInNewTab }: { link: string, text?: string, icon?: React.ReactNode, className?: string, openInNewTab?: boolean }) {
+export interface AnchorButtonProps extends ButtonProps { link: string, openInNewTab?: boolean }
+export function Button(props: AnchorButtonProps) {
+    const { link, text, icon, openInNewTab } = props
     return (
         <a 
         href={link}
         target={openInNewTab != false ? "_blank" : ""}
-        className={buttonClassName(text === undefined, true, className)}>
+        className={buttonClassName(props)}>
             {icon && icon}
             {text && (<span className="text-base font-medium">{text}</span>)}
         </a>
     )
 }
 
-export function LinkButton({ linkPath, text, icon, className, hideShadow }: { linkPath: string, text?: string, icon?: React.ReactNode, className?: string, hideShadow?: boolean, }) {
+export interface LinkButtonProps extends ButtonProps { linkPath: string }
+export function LinkButton(props: LinkButtonProps) {
+    const { linkPath, text, icon } = props
     return (
         <Link
         href={linkPath}
-        className={buttonClassName(text === undefined, !(hideShadow ?? false), className)}>
+        className={buttonClassName(props)}>
             {icon && icon}
             {text && (<span className="text-base font-medium">{text}</span>)}
         </Link>
     )
 }
 
-export function StaticButton({ text, icon, className, hideShadow }: { text?: string, icon?: React.ReactNode, className?: string, hideShadow?: boolean, }) {
+export function StaticButton(props: ButtonProps) {
+    const { text, icon } = props
     return (
         <a 
-        className={buttonClassName(text === undefined, !(hideShadow ?? false), className) + " cursor-pointer"}>
+        className={buttonClassName(props) + " cursor-pointer"}>
             {icon && icon}
             {text && (<span className="text-base font-medium">{text}</span>)}
         </a>

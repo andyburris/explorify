@@ -3,17 +3,16 @@
 import { Container } from "@/app/common/Container"
 import { Dropdown } from "@/app/common/Dropdown"
 import { Header } from "@/app/common/Header"
-import { IconLogo, Logo } from "@/app/common/Logo"
+import { IconLogo } from "@/app/common/Logo"
 import { LinkButton, StaticButton } from "@/app/common/button/Button"
-import { DATABASE_NAME, getListens } from "@/app/data/Database"
+import { getListens } from "@/app/data/Database"
 import { defaultPresets } from "@/app/data/Defaults"
 import { HistoryEntry } from "@/app/data/model/HistoryEntry"
-import { deleteDB } from "idb"
 import { ArrowCounterClockwise, ArrowLeft, DotsThreeVertical, Pencil, PencilSimple, Play, Share } from "phosphor-react-sc"
 import { useEffect, useState } from "react"
 import { DataTable } from "./DataTable"
 import { applyOperations } from "@/app/data/Operating"
-import { LazyList } from "./LazyList"
+import { LazyList } from "../../common/LazyList"
 import { OperationsSelector } from "./filters/OperationsSelector"
 import { ActionButton } from "@/app/common/button/ActionButton"
 
@@ -33,7 +32,7 @@ export default function ViewPage({ params }: { params: { id: string } }) {
         <Container>
             <div className="flex flex-col">
                 <div className="w-full flex -ml-4">
-                    <LinkButton linkPath="/" className="hover:bg-neutral-100" text="Home" icon={<ArrowLeft/>} hideShadow/>
+                    <LinkButton linkPath="/" text="Home" icon={<ArrowLeft/>} hideShadow/>
                 </div>
                 <Header 
                     icon={<IconLogo iconName={preset.icon}/>} 
@@ -53,7 +52,7 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                             />
 
                             <Dropdown
-                                trigger={<StaticButton text={undefined} icon={<DotsThreeVertical size="24px"/>}/>}
+                                trigger={<StaticButton text={undefined} icon={<DotsThreeVertical/>}/>}
                                 menuItems={[
                                     {
                                         icon: <Play/>,
