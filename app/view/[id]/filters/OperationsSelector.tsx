@@ -53,7 +53,7 @@ export function OperationsSelector({ currentOperations, onChangeOperations }: { 
 function OperationTab({ operationType, icon }: { operationType: OperationType, icon: React.ReactNode }) {
     return (
         <Tabs.Trigger 
-            className="flex gap-2 items-center justify-center py-3 px-4 text-neutral-500 hover:bg-neutral-100 rounded-t-lg data-[state=active]:text-green-900 data-[state=active]:border-b data-[state=active]:border-b-green-700 data-[state=active]:-mb-[1px]" 
+            className="flex gap-2 items-center justify-center py-3 px-4 text-neutral-500 hover:bg-neutral-100 rounded-t-lg data-[state=active]:text-green-200 dark:data-[state=active]:text-green-900 data-[state=active]:border-b data-[state=active]:border-b-green-700 data-[state=active]:-mb-[1px]" 
             value={operationType}
         >
             {icon}

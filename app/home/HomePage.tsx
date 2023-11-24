@@ -8,6 +8,7 @@ import { HistoryEntry } from "../data/model/HistoryEntry";
 import { Dropdown } from "../common/Dropdown";
 import { defaultPresets } from "../data/Defaults";
 import { PresetPreview } from "./PresetPreview";
+import nightwind from "nightwind/helper"
 
 export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClear: () => void }) {
     return (
@@ -25,14 +26,14 @@ export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClea
                             trigger={<StaticButton text={undefined} icon={<DotsThreeVertical size="24px"/>}/>}
                             menuItems={[
                                 {
-                                    icon: <ArrowCounterClockwise color="rgba(0, 0, 0, 0.5)" size="24px"/>,
+                                    icon: <ArrowCounterClockwise size="24px"/>,
                                     title: "Upload new listens",
                                     onClick: () => onClear()
                                 },
                                 {
-                                    icon: <Moon color="rgba(0, 0, 0, 0.5)" size="24px"/>,
+                                    icon: <Moon size="24px"/>,
                                     title: "Toggle dark mode",
-                                    onClick: () => {}
+                                    onClick: () => nightwind.toggle()
                                 }
                             ]}
                         />

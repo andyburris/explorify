@@ -14,7 +14,7 @@ export function GroupHeader({ group, viewOptions }: { group: Group, viewOptions:
     return (
         <div className="flex justify-between items-center pb-2 pt-12">
             <div className="flex items-center -ml-4 gap-3">
-                <div className="h-6 w-1 rounded-full bg-green-600"></div>
+                <div className="h-6 w-1 rounded-full bg-green-600 nightwind-prevent"></div>
                 <p className="font-serif tracking-tight text-4xl font-bold">{dateString}</p>
             </div>
             { viewOptions.showGroupSum &&

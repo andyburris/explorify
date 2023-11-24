@@ -16,7 +16,29 @@ const config: Config = {
         outset: "0px 1px 1px 0px rgba(255, 255, 255, 0.18) inset, 0px 0px 0px 1px rgba(255, 255, 255, 0.05) inset, 0px -0.5px 2px 0px rgba(0, 0, 0, 0.08) inset, 0px 0px 0px 0.5px rgba(0, 0, 0, 0.08), 0px 1px 3px 0px rgba(0, 0, 0, 0.05), 0px 0px 2px 0px rgba(0, 0, 0, 0.12)"
       }
     },
+    nightwind: {
+      colors: {
+        white: "neutral.900",
+        neutral: {
+          50: "neutral.900"
+        },
+        // green: {
+        //   50: "green.50",
+        //   100: "green.100",
+        //   200: "green.200",
+        //   300: "green.300",
+        //   400: "green.400",
+        //   500: "green.500",
+        //   600: "green.600",
+        //   700: "green.700",
+        //   800: "green.800",
+        //   900: "green.900",
+        //   950: "green.950",
+        // }
+        // Color mappings go here
+      },
+    },
   },
-  plugins: [],
+  plugins: [require("nightwind")],
 }
 export default config

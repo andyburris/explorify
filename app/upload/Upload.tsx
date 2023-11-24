@@ -25,7 +25,7 @@ export function UploadPage({ onUpload }: { onUpload: (entries: HistoryEntry[], r
                     title="Spotify Data Explorer" 
                     // description="by Lyrical"
                 />
-                <p>Don’t have your extended data yet? Go to <a href="https://www.spotify.com/us/account/privacy/" target="_blank">https://www.spotify.com/us/account/privacy/</a> and request your extended streaming history. It usually takes ~2 weeks to receive your data.</p>
+                <p>Don’t have your extended data yet? Go to <a className=" underline text-green-700 break-words" href="https://www.spotify.com/us/account/privacy/" target="_blank">https://www.spotify.com/us/account/privacy/</a> and request your extended streaming history. It usually takes ~2 weeks to receive your data.</p>
             </div>
             <input type="file" id="file-upload" className="hidden" onChange={(e) => setFile(e.target.files?.[0])}/>
             <label htmlFor="file-upload" className="flex flex-col gap-4 items-center justify-center px-8 py-12 border-dashed border border-neutral-200 rounded-xl cursor-pointer">

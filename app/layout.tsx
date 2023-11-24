@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
 import { Favicon } from './common/Favicon'
+import nightwind from "nightwind/helper"
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -28,8 +29,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${libreCaslonCondensed.variable}`}>
       <head>
         <Favicon />
+        <script dangerouslySetInnerHTML={{ __html: nightwind.init() }} />
       </head>
-      <body className={`text-lg/6 font-sans text-neutral-900 dark:bg-neutral-50`}>{children}</body>
+      <body className={`text-lg/6 font-sans text-neutral-900 bg-white dark:bg-neutral-50`}>{children}</body>
     </html>
   )
 }
