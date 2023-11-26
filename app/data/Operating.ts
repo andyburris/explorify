@@ -78,7 +78,7 @@ function combineItems(items: HistoryEntry[], groupOperation: GroupOperation): Co
     }, new Map())
     return Array.from(combinationMap).map(([key, entries]) => {
         entries.sort((a, b) => (groupOperation.combineInto == CombineInto.EarliestPlay) ? a.timestamp.getTime() - b.timestamp.getTime() : b.timestamp.getTime() - a.timestamp.getTime())
-        if(groupOperation.combineBy == CombineType.SameArtist) return new ArtistCombination(0, key, entries)
+        if(groupOperation.combineBy == CombineType.SameArtist) return new ArtistCombination(0, entries[0].artistName, entries)
         
         const firstListen = entries[0]
         return new TrackCombination(0, firstListen.trackName, firstListen.artistName, firstListen.albumName, firstListen.uri, entries)
