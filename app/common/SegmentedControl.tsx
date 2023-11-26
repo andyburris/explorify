@@ -13,7 +13,7 @@ const toggleGroupItemClasses = "flex-grow"
 export function SegmentedControl<T>({ items, selectedItem, onSelect }: { items: Segment<T>[], selectedItem: T, onSelect: (item: T) => void }) {
     return (
         <ToggleGroup.Root
-        className="flex bg-neutral-100 rounded-full"
+        className="flex bg-neutral-50 border border-neutral-200 rounded-full"
         type="single"
         defaultValue="center"
         aria-label="Text alignment"

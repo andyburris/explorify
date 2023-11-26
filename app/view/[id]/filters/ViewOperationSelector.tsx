@@ -1,7 +1,7 @@
 import { ViewInfoType, ViewOptions } from "@/app/data/model/ViewOptions";
 import { OperationSection } from "./OperationsSelector";
 import { SegmentedControl } from "@/app/common/SegmentedControl";
-import { Calendar, EyeSlash, List, ListNumbers, Play, PlusCircle } from "phosphor-react-sc";
+import { Calendar, EyeSlash, List, ListNumbers, MagnifyingGlass, Play, PlusCircle } from "phosphor-react-sc";
 
 export function ViewOptionsSelector({ currentOperation, onChangeOperation }: { currentOperation: ViewOptions, onChangeOperation: (newFilter: ViewOptions) => void }) {
     return (
@@ -25,6 +25,16 @@ export function ViewOptionsSelector({ currentOperation, onChangeOperation }: { c
                     ]} 
                     selectedItem={currentOperation.secondaryInfo}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, secondaryInfo: n})}
+                />
+            </OperationSection>
+            <OperationSection title="Show search">
+                <SegmentedControl 
+                    items={[
+                        { item: true, title: "Yes", icon: <MagnifyingGlass/> },
+                        { item: false, title: "No", icon: <EyeSlash/> },
+                    ]} 
+                    selectedItem={currentOperation.showSearch}
+                    onSelect={(n) => onChangeOperation({ ...currentOperation, showSearch: n})}
                 />
             </OperationSection>
             <OperationSection title="Show items">

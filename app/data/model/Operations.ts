@@ -27,6 +27,10 @@ export interface SortOperation {
 }
 
 export enum SkipFilterType { All, NoSkips, OnlySkips }
+export enum SearchType { All, SongName, ArtistName }
 export interface FilterOperation {
     filterSkipsBy: SkipFilterType,
+    searchTerm: string,
+    searchBy: SearchType,
+    rerankSearch: boolean,
 }

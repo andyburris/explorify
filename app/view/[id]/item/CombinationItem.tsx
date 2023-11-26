@@ -20,10 +20,10 @@ export function CombinationItem({ combination, indexInGroup, viewOptions, isExpa
 
             { combination instanceof TrackCombination
                 ? <div className="flex flex-col flex-grow w-min break-words">
-                    <p className="font-semibold">{firstListen.trackName}</p>
-                    <p className="text-neutral-500">{firstListen.artistName}</p>
+                    <p className="font-semibold break-words [word-break:break-word]">{firstListen.trackName}</p>
+                    <p className="text-neutral-500 break-words [word-break:break-word]">{firstListen.artistName}</p>
                 </div>
-                : <p className="font-semibold flex-grow w-min break-words">{firstListen.artistName}</p>
+                : <p className="font-semibold flex-grow w-min break-words [word-break:break-word]">{firstListen.artistName}</p>
             }
 
             

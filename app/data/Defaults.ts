@@ -1,4 +1,4 @@
-import { CombineInto, CombineType, GroupSortType, ItemSortType, SkipFilterType } from "./model/Operations";
+import { CombineInto, CombineType, GroupSortType, ItemSortType, SearchType, SkipFilterType } from "./model/Operations";
 import { GroupType } from "./model/Group";
 import { Preset } from "./model/Preset";
 import { ViewInfoType } from "./model/ViewOptions";
@@ -18,6 +18,9 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
+                searchTerm: "",
+                searchBy: SearchType.All,
+                rerankSearch: false,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -26,6 +29,7 @@ export const defaultPresets: Preset[] = [
                 sortItemsAscending: false,
             },
             viewOptions: {
+                showSearch: false,
                 showGroupSum: true,
                 showItems: true,
                 showItemRanks: true,
@@ -49,6 +53,9 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
+                searchTerm: "",
+                searchBy: SearchType.All,
+                rerankSearch: false,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -57,6 +64,7 @@ export const defaultPresets: Preset[] = [
                 sortItemsAscending: false,
             },
             viewOptions: {
+                showSearch: false,
                 showGroupSum: true,
                 showItems: true,
                 showItemRanks: true,
@@ -80,6 +88,9 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.OnlySkips,
+                searchTerm: "",
+                searchBy: SearchType.All,
+                rerankSearch: false,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -88,6 +99,7 @@ export const defaultPresets: Preset[] = [
                 sortItemsAscending: false,
             },
             viewOptions: {
+                showSearch: false,
                 showGroupSum: false,
                 showItems: true,
                 showItemRanks: true,
@@ -111,6 +123,9 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.All,
+                searchTerm: "",
+                searchBy: SearchType.All,
+                rerankSearch: false,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -119,6 +134,7 @@ export const defaultPresets: Preset[] = [
                 sortItemsAscending: true,
             },
             viewOptions: {
+                showSearch: false,
                 showGroupSum: true,
                 showItems: true,
                 showItemRanks: false,
@@ -142,6 +158,9 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
+                searchTerm: "",
+                searchBy: SearchType.All,
+                rerankSearch: false,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Date,
@@ -150,6 +169,7 @@ export const defaultPresets: Preset[] = [
                 sortItemsAscending: true,
             },
             viewOptions: {
+                showSearch: false,
                 showGroupSum: true,
                 showItems: true,
                 showItemRanks: false,
@@ -173,6 +193,9 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
+                searchTerm: "",
+                searchBy: SearchType.All,
+                rerankSearch: false,
             },
             sort: {
                 sortGroupsBy: GroupSortType.Plays,
@@ -181,6 +204,7 @@ export const defaultPresets: Preset[] = [
                 sortItemsAscending: false,
             },
             viewOptions: {
+                showSearch: false,
                 showGroupSum: true,
                 showItems: true,
                 showItemRanks: true,

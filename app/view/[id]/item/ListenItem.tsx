@@ -1,5 +1,5 @@
 import { EndReason, HistoryEntry, StartReason } from "@/app/data/model/HistoryEntry";
-import { Cloud, CloudSlash, Devices, Hourglass, Minus, MusicNote, Play, Plus, Shuffle, SkipForward, Stop, User, VinylRecord } from "phosphor-react-sc";
+import { Cloud, CloudSlash, Devices, Hourglass, Link, Minus, MusicNote, Play, Plus, Shuffle, SkipForward, Stop, User, VinylRecord } from "phosphor-react-sc";
 import { useState } from "react";
 
 const dateFormatOptions: Intl.DateTimeFormatOptions = {
@@ -28,10 +28,11 @@ export function ListenItem({ listen, isFirst, isLast, previewSongInfo }: { liste
             <div className="flex flex-col w-full">
                 <div className="flex items-center py-2 gap-2 min-h-[32px]">
                     <div className="flex flex-col flex-grow flex-shrink w-min">
-                        <p className="font-semibold">{listen.timestamp.toLocaleDateString('en-US', dateFormatOptions)}</p>
+                        <p className="font-semibold [word-break:break-word]">{listen.timestamp.toLocaleDateString('en-US', dateFormatOptions)}</p>
+                        { (previewSongInfo && !isExpanded) && <p className="text-neutral-500 [word-break:break-word]">{listen.trackName}</p> }
+
                     </div>
                     <div className="flex gap-1">
-                        { previewSongInfo && <InfoChip text={listen.trackName} icon={<MusicNote/>} className="max-sm:max-w-[128px]"/> }
                         <div 
                             className="flex gap-1.5 px-3 py-1.5 bg-neutral-100 rounded-full items-center text-neutral-500 cursor-pointer"
                             onClick={() => setExpanded(!isExpanded)}
@@ -53,6 +54,7 @@ export function ListenItem({ listen, isFirst, isLast, previewSongInfo }: { liste
                         <InfoItem text={listen.offline ? "Offline" : "Online"} icon={listen.offline ? <CloudSlash/> : <Cloud/>}/>
                         <InfoItem text={listen.shuffle ? "Shuffled" : "Not shuffled"} icon={listen.shuffle ? <Shuffle/> : <Shuffle/>}/>
                         <InfoItem description="played on" text={listen.platform} icon={<Devices/>}/>
+                        <InfoItem text={listen.uri} icon={<Link/>} />
                     </div>
                 }
             </div>
@@ -68,15 +70,6 @@ function InfoItem({ description, text, icon, className }: { description?: string
                 { description && <span className="text-neutral-500">{description} </span> }
                 <span className="">{text}</span>
             </p>
-        </div>
-    )
-}
-
-function InfoChip({ text, icon, className }: { text: string, icon: React.ReactNode, className?: string }) {
-    return (
-        <div className={"flex gap-1.5 px-3 py-1.5 border border-neutral-200 rounded-full items-center" + (className != undefined ? ` ${className}` : "") }>
-            <span className="text-md text-neutral-500">{icon}</span>
-            <span className="max-sm:truncate">{text}</span>
         </div>
     )
 }

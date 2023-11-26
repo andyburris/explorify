@@ -4,6 +4,7 @@ export enum ViewInfoType {
 }
 
 export interface ViewOptions {
+    showSearch: boolean,
     showGroupSum: boolean,
     showItems: boolean,
     showItemRanks: boolean,

@@ -71,7 +71,7 @@ function flattenGroups(
     const groupData = new GroupData(g)
     const isExpanded = expandedGroups.includes(g)
     const shownCombinations = isExpanded ? [...g.combinations] : [...g.combinations.slice(0, amountToShowCollapsed), ]
-    const indexedCombinations = viewOptions.showItems ? shownCombinations.flatMap((c, i) => flattenCombinations(c, i, expandedCombinations.includes(c))) : []
+    const indexedCombinations = viewOptions.showItems ? shownCombinations.flatMap((c, i) => flattenCombinations(c, expandedCombinations.includes(c))) : []
     const needsExpandItem = g.combinations.length > amountToShowCollapsed
     const expandItem = needsExpandItem
       ? isExpanded
@@ -82,8 +82,8 @@ function flattenGroups(
    } )
 }
 
-function flattenCombinations(combination: Combination, index: number, isExpanded: boolean): ListItem[] {
-  const indexedCombination = new IndexedCombination(index, combination, isExpanded)
+function flattenCombinations(combination: Combination, isExpanded: boolean): ListItem[] {
+  const indexedCombination = new IndexedCombination(combination.index, combination, isExpanded)
   const listens = (isExpanded) ? combination.listens.map((l, i) => new IndexedHistoryEntry(i == 0, i == combination.listens.length - 1, l, combination instanceof ArtistCombination)) : []
   return [indexedCombination, ...listens]
 }

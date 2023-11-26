@@ -14,7 +14,7 @@ export function OperationsSelector({ currentOperations, onChangeOperations }: { 
         <div className="flex flex-col rounded-2xl border border-neutral-200 mt-4">
             <p className="text-neutral-500 font-semibold px-4 pt-4 pb-2">Customize</p>
             <Tabs.Root defaultValue={OperationType.Group}>
-                <Tabs.List className="flex w-full border-b border-b-neutral-300">
+                <Tabs.List className="flex w-full border-b border-b-neutral-300 dark:border-b-neutral-800">
                     <OperationTab operationType={OperationType.Group} icon={<ArrowsMerge/>} />
                     <OperationTab operationType={OperationType.Filter} icon={<FunnelSimple/>} />
                     <OperationTab operationType={OperationType.Sort} icon={<SortAscending/>} />
@@ -53,7 +53,7 @@ export function OperationsSelector({ currentOperations, onChangeOperations }: { 
 function OperationTab({ operationType, icon }: { operationType: OperationType, icon: React.ReactNode }) {
     return (
         <Tabs.Trigger 
-            className="flex gap-2 items-center justify-center py-3 px-4 text-neutral-500 hover:bg-neutral-100 rounded-t-lg data-[state=active]:text-green-200 dark:data-[state=active]:text-green-900 data-[state=active]:border-b data-[state=active]:border-b-green-700 data-[state=active]:-mb-[1px]" 
+            className="flex gap-2 items-center justify-center py-3 px-4 text-neutral-500 hover:bg-neutral-100 rounded-t-lg data-[state=active]:text-green-700 dark:data-[state=active]:text-green-200 data-[state=active]:border-b data-[state=active]:border-b-green-700 data-[state=active]:-mb-[1px]" 
             value={operationType}
         >
             {icon}

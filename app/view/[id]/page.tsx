@@ -8,13 +8,15 @@ import { LinkButton, StaticButton } from "@/app/common/button/Button"
 import { getListens } from "@/app/data/Database"
 import { defaultPresets } from "@/app/data/Defaults"
 import { HistoryEntry } from "@/app/data/model/HistoryEntry"
-import { ArrowCounterClockwise, ArrowLeft, DotsThreeVertical, Pencil, PencilSimple, Play, Share } from "phosphor-react-sc"
+import { ArrowCounterClockwise, ArrowLeft, DotsThreeVertical, Moon, Pencil, PencilSimple, Play, Share } from "phosphor-react-sc"
 import { useEffect, useState } from "react"
 import { DataTable } from "./DataTable"
 import { applyOperations } from "@/app/data/Operating"
 import { LazyList } from "../../common/LazyList"
 import { OperationsSelector } from "./filters/OperationsSelector"
 import { ActionButton } from "@/app/common/button/ActionButton"
+import nightwindHelper from "nightwind/helper"
+import { TextField } from "@/app/common/TextField"
 
 export default function ViewPage({ params }: { params: { id: string } }) {
     const preset = defaultPresets.find(p => p.id == params.id)
@@ -63,6 +65,11 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                                         title: "Share preset",
                                         onClick: () => {  },
                                     },
+                                    {
+                                        icon: <Moon size="24px"/>,
+                                        title: "Toggle dark mode",
+                                        onClick: () => nightwindHelper.toggle()
+                                    },
                                 ]}
                             />
                         </div>
@@ -71,6 +78,12 @@ export default function ViewPage({ params }: { params: { id: string } }) {
             </div>
             { isCustomizing &&
                 <OperationsSelector currentOperations={customizedFilters} onChangeOperations={newFilters => setCustomizedFilters(newFilters)} />
+            }
+            { customizedFilters.viewOptions.showSearch && 
+                <TextField 
+                    currentValue={customizedFilters.filter.searchTerm} 
+                    placeholder="Search..."
+                    onChangeValue={v => setCustomizedFilters({ ...customizedFilters, filter: { ...customizedFilters.filter, searchTerm: v }})} />
             }
             { filtered 
                 ? <DataTable groups={filtered} viewOptions={customizedFilters.viewOptions}/> 

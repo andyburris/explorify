@@ -34,7 +34,7 @@ export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClea
                                     icon: <Moon size="24px"/>,
                                     title: "Toggle dark mode",
                                     onClick: () => nightwind.toggle()
-                                }
+                                },
                             ]}
                         />
                     </div>
