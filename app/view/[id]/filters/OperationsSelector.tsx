@@ -4,7 +4,6 @@ import * as Tabs from '@radix-ui/react-tabs';
 import React, { useState } from "react";
 import { GroupOperationSelector } from "./GroupOperationSelector";
 import { SortOperationSelector } from "./SortOperationSelector";
-import { GroupType } from "@/app/data/model/Group";
 import { ViewOptionsSelector } from "./ViewOperationSelector";
 import { FilterOperationSelector } from "./FilterOperationSelector";
 
@@ -35,7 +34,7 @@ export function OperationsSelector({ currentOperations, onChangeOperations }: { 
                 <Tabs.Content value={OperationType.Sort} className="p-4 max-h-80 overflow-y-scroll">
                     <SortOperationSelector 
                         currentOperation={currentOperations.sort} 
-                        hasGroups={currentOperations.group.groupBy != GroupType.None} 
+                        hasGroups={Object.values(currentOperations.group.groupBy).some(b => b)} 
                         onChangeOperation={sf => onChangeOperations({...currentOperations, sort: sf }) } 
                     />
                 </Tabs.Content>

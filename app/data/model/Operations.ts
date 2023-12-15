@@ -1,4 +1,3 @@
-import { GroupType } from "./Group";
 import { ViewOptions } from "./ViewOptions";
 
 export interface Operations {
@@ -8,6 +7,16 @@ export interface Operations {
     viewOptions: ViewOptions,
 }
 
+export interface GroupType {
+    hour: boolean,
+    dayOfWeek: boolean,
+    date: boolean,
+    month: boolean,
+    year: boolean,
+    artist: boolean,
+    song: boolean,
+    album: boolean,
+}
 export enum CombineType { None, SameSong, SameArtist }
 export enum CombineInto { EarliestPlay, LatestPlay }
 export interface GroupOperation {
@@ -17,11 +26,23 @@ export interface GroupOperation {
     combineInto: CombineInto,
 }
 
-export enum GroupSortType { Date, Plays }
+export interface GroupSortOrderItem {
+    index: number,
+    isAscending: boolean,
+}
+export interface GroupSortOrder {
+    hour: GroupSortOrderItem,
+    dayOfWeek: GroupSortOrderItem,
+    date: GroupSortOrderItem,
+    month: GroupSortOrderItem,
+    year: GroupSortOrderItem,
+    artist: GroupSortOrderItem,
+    song: GroupSortOrderItem,
+    album: GroupSortOrderItem,
+}
 export enum ItemSortType { Date, Plays, Name, ArtistName }
 export interface SortOperation {
-    sortGroupsBy: GroupSortType,
-    sortGroupsAscending: boolean,
+    sortGroupsBy: GroupSortOrder,
     sortItemsBy: ItemSortType,
     sortItemsAscending: boolean,
 }

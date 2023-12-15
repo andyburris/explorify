@@ -3,13 +3,13 @@
 import { HistoryEntry } from '@/app/data/model/HistoryEntry'
 import React, { useState } from 'react'
 import { CombinationItem } from './item/CombinationItem'
-import { ArtistCombination, Combination, Group } from '@/app/data/model/Group'
+import { Group } from '@/app/data/model/Group'
 import { LazyList } from '../../common/LazyList'
 import { GroupHeader } from './item/GroupHeaderItem'
 import { ViewOptions } from '@/app/data/model/ViewOptions'
 import { ListenItem } from './item/ListenItem'
-import { list } from 'postcss'
 import { ExpandItem } from './item/ExpandItem'
+import { Combination, ArtistCombination } from '@/app/data/model/Combination'
 
 type ListItem = IndexedCombination | GroupData | IndexedHistoryEntry | ExpandGroup
 class GroupData { constructor(public group: Group) {} }

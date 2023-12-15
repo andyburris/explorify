@@ -1,4 +1,4 @@
-import { Combination } from "@/app/data/model/Group"
+import { Combination } from "@/app/data/model/Combination"
 import { ViewInfoType } from "@/app/data/model/ViewOptions"
 import { Play } from "phosphor-react-sc"
 

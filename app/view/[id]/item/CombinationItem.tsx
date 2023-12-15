@@ -1,11 +1,11 @@
 import { ActionButton } from "@/app/common/button/ActionButton";
-import { ArtistCombination, Combination, TrackCombination } from "@/app/data/model/Group";
 import { HistoryEntry } from "@/app/data/model/HistoryEntry";
 import { ViewInfoType, ViewOptions } from "@/app/data/model/ViewOptions";
 import { CaretDown, CaretRight, DotsThreeVertical } from "phosphor-react-sc";
 import { SecondaryInfo, PrimaryInfo } from "./InfoChips";
 import { useState } from "react";
 import { ListenItem } from "./ListenItem";
+import { Combination, TrackCombination } from "@/app/data/model/Combination";
 
 interface CombinationItemProps { combination: Combination, indexInGroup: number, viewOptions: ViewOptions, isExpanded: boolean, onToggleExpand: () => void }
 export function CombinationItem({ combination, indexInGroup, viewOptions, isExpanded, onToggleExpand }: CombinationItemProps) {

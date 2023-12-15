@@ -1,4 +1,4 @@
-import { ArrowCounterClockwise, DotsThreeVertical, Moon } from "phosphor-react-sc";
+import { ArrowCounterClockwise, DotsThreeVertical, ListPlus, Moon } from "phosphor-react-sc";
 import { Container } from "../common/Container";
 import { Header } from "../common/Header";
 import { Logo } from "../common/Logo";
@@ -9,6 +9,7 @@ import { Dropdown } from "../common/Dropdown";
 import { defaultPresets } from "../data/Defaults";
 import { PresetPreview } from "./PresetPreview";
 import nightwind from "nightwind/helper"
+import Link from "next/link";
 
 export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClear: () => void }) {
     return (
@@ -42,6 +43,13 @@ export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClea
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8">
                 {defaultPresets.map((preset) => <PresetPreview key={preset.name} preset={preset} listens={listens} />)}
+                <Link 
+                    className="flex flex-col p-6 gap-2 justify-center items-center bg-neutral-50 border border-neutral-200 text-neutral-500 rounded-2xl" 
+                    href="/customize"
+                >
+                    <ListPlus size="32px"/>
+                    <p>Add custom</p>
+                </Link>
             </div>
         </Container>
     )

@@ -1,7 +1,28 @@
-import { CombineInto, CombineType, GroupSortType, ItemSortType, SearchType, SkipFilterType } from "./model/Operations";
-import { GroupType } from "./model/Group";
+import { CombineInto, CombineType, ItemSortType, SearchType, SkipFilterType } from "./model/Operations";
 import { Preset } from "./model/Preset";
 import { ViewInfoType } from "./model/ViewOptions";
+
+const groupNone = { hour: false, dayOfWeek: false, date: false, month: false,year: false, artist: false, song: false, album: false, }
+const sortGroupsDate = {
+    hour: { index: 4, isAscending: true },
+    dayOfWeek: { index: 3, isAscending: true },
+    date: { index: 2, isAscending: true },
+    month: { index: 1, isAscending: true },
+    year: { index: 0, isAscending: true },
+    artist: { index: 6, isAscending: true },
+    song: { index: 5, isAscending: true },
+    album: { index: 7, isAscending: true },
+}
+const sortGroupsSong = {
+    hour: { index: 7, isAscending: true },
+    dayOfWeek: { index: 6, isAscending: true },
+    date: { index: 5, isAscending: true },
+    month: { index: 4, isAscending: true },
+    year: { index: 3, isAscending: true },
+    artist: { index: 1, isAscending: true },
+    song: { index: 0, isAscending: true },
+    album: { index: 2, isAscending: true },
+}
 
 export const defaultPresets: Preset[] = [
     {
@@ -11,7 +32,7 @@ export const defaultPresets: Preset[] = [
         description: "The songs you’ve listened to the most",
         operations: {
             group: {
-                groupBy: GroupType.None,
+                groupBy: { ...groupNone },
                 combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
@@ -23,8 +44,7 @@ export const defaultPresets: Preset[] = [
                 rerankSearch: false,
             },
             sort: {
-                sortGroupsBy: GroupSortType.Date,
-                sortGroupsAscending: true,
+                sortGroupsBy: sortGroupsDate,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
             },
@@ -46,7 +66,7 @@ export const defaultPresets: Preset[] = [
         description: "The artists you’ve listened to the most",
         operations: {
             group: {
-                groupBy: GroupType.None,
+                groupBy: { ...groupNone },
                 combineBy: CombineType.SameArtist,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
@@ -58,8 +78,7 @@ export const defaultPresets: Preset[] = [
                 rerankSearch: false,
             },
             sort: {
-                sortGroupsBy: GroupSortType.Date,
-                sortGroupsAscending: true,
+                sortGroupsBy: sortGroupsDate,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
             },
@@ -81,7 +100,7 @@ export const defaultPresets: Preset[] = [
         description: "The songs you’ve skipped the most",
         operations: {
             group: {
-                groupBy: GroupType.None,
+                groupBy: { ...groupNone },
                 combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
@@ -93,8 +112,7 @@ export const defaultPresets: Preset[] = [
                 rerankSearch: false,
             },
             sort: {
-                sortGroupsBy: GroupSortType.Date,
-                sortGroupsAscending: true,
+                sortGroupsBy: sortGroupsDate,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
             },
@@ -116,7 +134,7 @@ export const defaultPresets: Preset[] = [
         description: "Every song you’ve ever played",
         operations: {
             group: {
-                groupBy: GroupType.Day,
+                groupBy: { ...groupNone, date: true },
                 combineBy: CombineType.None,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
@@ -128,8 +146,7 @@ export const defaultPresets: Preset[] = [
                 rerankSearch: false,
             },
             sort: {
-                sortGroupsBy: GroupSortType.Date,
-                sortGroupsAscending: true,
+                sortGroupsBy: sortGroupsDate,
                 sortItemsBy: ItemSortType.Date,
                 sortItemsAscending: true,
             },
@@ -151,7 +168,7 @@ export const defaultPresets: Preset[] = [
         description: "When you first listened to every song",
         operations: {
             group: {
-                groupBy: GroupType.Day,
+                groupBy: { ...groupNone, date: true },
                 combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: true,
@@ -163,8 +180,7 @@ export const defaultPresets: Preset[] = [
                 rerankSearch: false,
             },
             sort: {
-                sortGroupsBy: GroupSortType.Date,
-                sortGroupsAscending: true,
+                sortGroupsBy: sortGroupsDate,
                 sortItemsBy: ItemSortType.Date,
                 sortItemsAscending: true,
             },
@@ -186,7 +202,7 @@ export const defaultPresets: Preset[] = [
         description: "What days did you discover the music you listen to the most?",
         operations: {
             group: {
-                groupBy: GroupType.Day,
+                groupBy: { ...groupNone, date: true },
                 combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: true,
@@ -198,8 +214,7 @@ export const defaultPresets: Preset[] = [
                 rerankSearch: false,
             },
             sort: {
-                sortGroupsBy: GroupSortType.Plays,
-                sortGroupsAscending: false,
+                sortGroupsBy: sortGroupsSong,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
             },

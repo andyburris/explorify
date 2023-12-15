@@ -1,4 +1,4 @@
-import { applyOperations } from "./Operating";
+import { applyOperations } from "./transform/Operating";
 import { Operations } from "./model/Operations";
 import { Group } from "./model/Group";
 import { HistoryEntry } from "./model/HistoryEntry";

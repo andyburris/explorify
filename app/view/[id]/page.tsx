@@ -8,15 +8,16 @@ import { LinkButton, StaticButton } from "@/app/common/button/Button"
 import { getListens } from "@/app/data/Database"
 import { defaultPresets } from "@/app/data/Defaults"
 import { HistoryEntry } from "@/app/data/model/HistoryEntry"
-import { ArrowCounterClockwise, ArrowLeft, DotsThreeVertical, Moon, Pencil, PencilSimple, Play, Share } from "phosphor-react-sc"
+import { ArrowCounterClockwise, ArrowLeft, DotsThreeVertical, Link, Moon, Pencil, PencilSimple, Play, Share, SquaresFour } from "phosphor-react-sc"
 import { useEffect, useState } from "react"
 import { DataTable } from "./DataTable"
-import { applyOperations } from "@/app/data/Operating"
+import { applyOperations } from "@/app/data/transform/Operating"
 import { LazyList } from "../../common/LazyList"
 import { OperationsSelector } from "./filters/OperationsSelector"
 import { ActionButton } from "@/app/common/button/ActionButton"
 import nightwindHelper from "nightwind/helper"
 import { TextField } from "@/app/common/TextField"
+import { hashOperations } from "@/app/data/Hashing"
 
 export default function ViewPage({ params }: { params: { id: string } }) {
     const preset = defaultPresets.find(p => p.id == params.id)
@@ -41,7 +42,7 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                     title={preset.name}
                     description={preset.description}
                     actions={
-                        <div className="flex gap-3">
+                        <div className="flex gap-3 items-center">
                             <ActionButton 
                                 onClick={() => { 
                                     if(isCustomizing) {
@@ -53,12 +54,22 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                                 icon={isCustomizing ? <ArrowCounterClockwise/> : <PencilSimple/>}
                             />
 
+                            {/* <p className="text-neutral-500 tabular-nums">{hashOperations(customizedFilters)} • {hashOperations(customizedFilters, true)}</p> */}
+
                             <Dropdown
                                 trigger={<StaticButton text={undefined} icon={<DotsThreeVertical/>}/>}
                                 menuItems={[
                                     {
                                         icon: <Play/>,
                                         title: loadedEntries === undefined ? "Loading..." : `${loadedEntries.length.toLocaleString()} play${loadedEntries.length == 0 ? "" : "s"}`,
+                                    },
+                                    {
+                                        icon: <SquaresFour/>,
+                                        title: filtered === undefined ? "Loading..." : `${filtered.length.toLocaleString()} group${filtered.length == 0 ? "" : "s"}`,
+                                    },
+                                    {
+                                        icon: <Link/>,
+                                        title: `${hashOperations(customizedFilters)}`,
                                     },
                                     {
                                         icon: <Share/>,

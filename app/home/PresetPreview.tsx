@@ -2,11 +2,12 @@ import { HistoryEntry } from "../data/model/HistoryEntry";
 import { Preset } from "../data/model/Preset";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArtistCombination, Combination, Group, TrackCombination } from "../data/model/Group";
-import { applyOperations } from "../data/Operating";
+import { Group } from "../data/model/Group";
+import { applyOperations } from "../data/transform/Operating";
 import { PickedIcon } from "../common/PickedIcon";
 import { ViewInfoType, ViewOptions } from "../data/model/ViewOptions";
 import { Play } from "phosphor-react-sc";
+import { Combination, TrackCombination, ArtistCombination } from "../data/model/Combination";
 
 export function PresetPreview({ preset, listens }: { preset: Preset, listens: HistoryEntry[] }) {
     const [previewItems, setPreviewItems] = useState<Combination[] | Group[] | null>(null)
@@ -61,7 +62,7 @@ function PreviewItem({ combinationOrGroup, index, viewOptions }: { combinationOr
             }
             <p className="text-green-900 flex-grow overflow-hidden truncate h-fit">
                 { combinationOrGroup instanceof Group 
-                    ? combinationOrGroup.date.toLocaleDateString('en-us', formatOptions)
+                    ? combinationOrGroup.headerStrings(true).primary
                     : (combinationOrGroup instanceof TrackCombination) ? combinationOrGroup.trackName : (combinationOrGroup as ArtistCombination).artistName
                 }
             </p>
