@@ -30,7 +30,7 @@ function sortGroups(groups: Group[], groupSortOrder: GroupSortOrder) {
     const sortFunctionsInOrder: GroupSortFunction[] = Object.entries(groupSortOrder)
         .map(([k, v]) => [k, v] as [string, GroupSortOrderItem])
         .toSorted(([k1, v1], [k2, v2]) => v1.index - v2.index)
-        .filter(([key, _]) => groups[0].key[key as keyof GroupKey] !== null)
+        // .filter(([key, _]) => groups[0].key[key as keyof GroupKey] !== null)
         .map(([key, groupSortItem]) => {
             const sortFunction: (isAscending: boolean) => GroupSortFunction = sortFunctionMap.get(key)!
             return sortFunction(groupSortItem.isAscending)
@@ -45,29 +45,32 @@ function sortGroups(groups: Group[], groupSortOrder: GroupSortOrder) {
 }
 
 const groupBySong = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.key.song!.toLowerCase()!.localeCompare(g2.key.song!))
-    : (g1: Group, g2: Group) => (g2.key.song!.toLowerCase()!.localeCompare(g1.key.song!))
+    ? (g1: Group, g2: Group) => ((g1.key.song ?? g1.combinations[0].listens[0].trackName).toLowerCase()!.localeCompare((g2.key.song ?? g2.combinations[0].listens[0].trackName)))
+    : (g1: Group, g2: Group) => ((g2.key.song ?? g2.combinations[0].listens[0].trackName).toLowerCase()!.localeCompare((g1.key.song ?? g1.combinations[0].listens[0].trackName)))
 const groupByArtist = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.key.artist!.toLowerCase()!.localeCompare(g2.key.artist!))
-    : (g1: Group, g2: Group) => (g2.key.artist!.toLowerCase()!.localeCompare(g1.key.artist!))
+    ? (g1: Group, g2: Group) => ((g1.key.artist ?? g1.combinations[0].listens[0].artistName).toLowerCase()!.localeCompare((g2.key.artist ?? g2.combinations[0].listens[0].artistName)))
+    : (g1: Group, g2: Group) => ((g2.key.artist ?? g2.combinations[0].listens[0].artistName).toLowerCase()!.localeCompare((g1.key.artist ?? g1.combinations[0].listens[0].artistName)))
 const groupByAlbum = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.key.album!.toLowerCase()!.localeCompare(g2.key.album!))
-    : (g1: Group, g2: Group) => (g2.key.album!.toLowerCase()!.localeCompare(g1.key.album!))
+    ? (g1: Group, g2: Group) => ((g1.key.album ?? g1.combinations[0].listens[0].albumName).toLowerCase()!.localeCompare((g2.key.album ?? g2.combinations[0].listens[0].albumName)))
+    : (g1: Group, g2: Group) => ((g2.key.album ?? g2.combinations[0].listens[0].albumName).toLowerCase()!.localeCompare((g1.key.album ?? g1.combinations[0].listens[0].albumName)))
 const groupByHour = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.key.hour! - g2.key.hour!)
-    : (g1: Group, g2: Group) => (g2.key.hour! - g1.key.hour!)
+    ? (g1: Group, g2: Group) => ((g1.key.hour ?? g1.combinations[0].listens[0].timestamp.getHours()) - (g2.key.hour ?? g2.combinations[0].listens[0].timestamp.getHours()))
+    : (g1: Group, g2: Group) => ((g2.key.hour ?? g2.combinations[0].listens[0].timestamp.getHours()) - (g1.key.hour ?? g1.combinations[0].listens[0].timestamp.getHours()))
 const groupByDay = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.key.dayOfWeek! - g2.key.dayOfWeek!)
-    : (g1: Group, g2: Group) => (g2.key.dayOfWeek! - g1.key.dayOfWeek!)
+    ? (g1: Group, g2: Group) => ((g1.key.dayOfWeek ?? g1.combinations[0].listens[0].timestamp.getDay()) - (g2.key.dayOfWeek ?? g2.combinations[0].listens[0].timestamp.getDay()))
+    : (g1: Group, g2: Group) => ((g2.key.dayOfWeek ?? g2.combinations[0].listens[0].timestamp.getDay()) - (g1.key.dayOfWeek ?? g1.combinations[0].listens[0].timestamp.getDay()))
 const groupByDate = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.key.date! - g2.key.date!)
-    : (g1: Group, g2: Group) => (g2.key.date! - g1.key.date!)
+    ? (g1: Group, g2: Group) => ((g1.key.date ?? g1.combinations[0].listens[0].timestamp.getDate()) - (g2.key.date ?? g2.combinations[0].listens[0].timestamp.getDate()))
+    : (g1: Group, g2: Group) => ((g2.key.date ?? g2.combinations[0].listens[0].timestamp.getDate()) - (g1.key.date ?? g1.combinations[0].listens[0].timestamp.getDate()))
 const groupByMonth = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.key.month! - g2.key.month!)
-    : (g1: Group, g2: Group) => (g2.key.month! - g1.key.month!)
+    ? (g1: Group, g2: Group) => ((g1.key.month ?? g1.combinations[0].listens[0].timestamp.getMonth()) - (g2.key.month ?? g2.combinations[0].listens[0].timestamp.getMonth()))
+    : (g1: Group, g2: Group) => ((g2.key.month ?? g2.combinations[0].listens[0].timestamp.getMonth()) - (g1.key.month ?? g1.combinations[0].listens[0].timestamp.getMonth()))
 const groupByYear = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.key.year! - g2.key.year!)
-    : (g1: Group, g2: Group) => (g2.key.year! - g1.key.year!)
+    ? (g1: Group, g2: Group) => ((g1.key.year ?? g1.combinations[0].listens[0].timestamp.getFullYear()) - (g2.key.year ?? g2.combinations[0].listens[0].timestamp.getFullYear()))
+    : (g1: Group, g2: Group) => ((g2.key.year ?? g2.combinations[0].listens[0].timestamp.getFullYear()) - (g1.key.year ?? g1.combinations[0].listens[0].timestamp.getFullYear()))
+const groupBySum = (isAscending: boolean) => isAscending 
+    ? (g1: Group, g2: Group) => (g1.totalPlays - g2.totalPlays)
+    : (g1: Group, g2: Group) => (g2.totalPlays - g1.totalPlays)
 
 const sortFunctionMap: Map<string, (isAscending: boolean) => GroupSortFunction> = new Map([
     ["song", groupBySong],
@@ -78,4 +81,5 @@ const sortFunctionMap: Map<string, (isAscending: boolean) => GroupSortFunction> 
     ["date", groupByDate],
     ["month", groupByMonth],
     ["year", groupByYear],
+    ["sum", groupBySum],
 ])

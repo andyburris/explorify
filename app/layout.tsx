@@ -17,7 +17,7 @@ const libreCaslonCondensed = localFont({
 
 export const metadata: Metadata = {
   title: 'Data Explorer',
-  description: 'Spotify Data Explorer',
+  description: 'Quantize',
 }
 
 export default function RootLayout({

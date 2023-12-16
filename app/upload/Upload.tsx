@@ -22,7 +22,7 @@ export function UploadPage({ onUpload }: { onUpload: (entries: HistoryEntry[], r
             <div className="flex flex-col gap-6">
                 <Header 
                     icon={<Logo/>} 
-                    title="Spotify Data Explorer" 
+                    title="Quantize" 
                     // description="by Lyrical"
                 />
                 <p>Don’t have your extended data yet? Go to <a className=" underline text-green-700 break-words" href="https://www.spotify.com/us/account/privacy/" target="_blank">https://www.spotify.com/us/account/privacy/</a> and request your extended streaming history. It usually takes ~2 weeks to receive your data.</p>

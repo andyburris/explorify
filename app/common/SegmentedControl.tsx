@@ -8,7 +8,6 @@ export interface Segment<T> {
     icon: React.ReactNode,
 }
 const toggleGroupItemClasses = "flex-grow"
-// const toggleGroupItemClasses = 'hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex h-[35px] w-[35px] items-center justify-center bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none';
 
 export function SegmentedControl<T>({ items, selectedItem, onSelect }: { items: Segment<T>[], selectedItem: T, onSelect: (item: T) => void }) {
     return (
@@ -17,7 +16,10 @@ export function SegmentedControl<T>({ items, selectedItem, onSelect }: { items: 
         type="single"
         defaultValue="center"
         aria-label="Text alignment"
-        onValueChange={v => onSelect(items.find(i => (i.key ?? i.title) == v)!.item)}
+        onValueChange={v => {
+            const item = items.find(i => (i.key ?? i.title) == v)
+            if(item != null) onSelect(item.item)
+        }}
       >
         {items.map((item) => {
             return <ToggleGroup.Item 

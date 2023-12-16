@@ -64,11 +64,11 @@ export class Group {
 }
 
 function songStrings(song: string | null, album: string | null, artist: string | null): { primary: string, secondary: string | undefined } | undefined {
-    if(song && album && artist) return { primary: song, secondary: `- ${artist}, ${album}` }
-    if(song && !album && artist) return { primary: song, secondary: `- ${artist}` }
+    if(song && album && artist) return { primary: song, secondary: `${artist}, ${album}` }
+    if(song && !album && artist) return { primary: song, secondary: `${artist}` }
     if(song && album && !artist) return { primary: song, secondary: `from ${album}` }
     if(song && !album && !artist) return { primary: song, secondary: undefined }
-    if(!song && album && artist) return { primary: album, secondary: `- ${artist}` }
+    if(!song && album && artist) return { primary: album, secondary: `${artist}` }
     if(!song && album && !artist) return { primary: album, secondary: undefined }
     if(!song && !album && artist) return { primary: artist, secondary: undefined }
     return undefined

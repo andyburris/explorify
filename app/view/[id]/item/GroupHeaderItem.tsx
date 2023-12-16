@@ -14,7 +14,7 @@ export function GroupHeader({ group, viewOptions }: { group: Group, viewOptions:
                 </div>
             </div>
             { viewOptions.showGroupSum &&
-                <div className="px-3 py-1.5 border border-neutral-200 rounded-full items-center text-neutral-500">
+                <div className="px-3 py-1.5 border border-neutral-200 rounded-full items-center text-neutral-500 flex-shrink-0">
                     <div className="flex gap-0.5 items-center">
                         <p>
                             <span className="font-medium">{group.totalPlays}</span>

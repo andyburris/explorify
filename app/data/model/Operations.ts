@@ -39,6 +39,7 @@ export interface GroupSortOrder {
     artist: GroupSortOrderItem,
     song: GroupSortOrderItem,
     album: GroupSortOrderItem,
+    sum: GroupSortOrderItem,
 }
 export enum ItemSortType { Date, Plays, Name, ArtistName }
 export interface SortOperation {

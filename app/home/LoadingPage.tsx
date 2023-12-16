@@ -7,7 +7,7 @@ export function LoadingPage() {
         <Container>
             <Header
                 icon={<Logo/>}
-                title="Spotify Data Explorer"
+                title="Quantize"
                 // description="by Lyrical"
                 actions={
                     <div className="px-3 py-2 text-neutral-500 border border-neutral-200 rounded-full">

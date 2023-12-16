@@ -16,7 +16,7 @@ export function HomePage({ listens, onClear }: { listens: HistoryEntry[], onClea
         <Container>
             <Header
                 icon={<Logo/>}
-                title="Spotify Data Explorer"
+                title="Quantize"
                 // description="by Lyrical"
                 actions={
                     <div className="flex gap-3">
