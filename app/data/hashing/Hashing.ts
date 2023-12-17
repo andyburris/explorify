@@ -1,7 +1,8 @@
+import { assert } from "console";
 import { defaultPresets, groupNone } from "../Defaults";
 import { CombineInto, CombineType, GroupSortOrder, GroupSortOrderItem, GroupType, ItemSortType, Operations, SearchType, SkipFilterType } from "../model/Operations";
 import { ViewInfoType } from "../model/ViewOptions";
-import { hashSortedIndices, unhashSortedIndices } from "./HashSort";
+import { factorial, hashSortedIndices, unhashSortedIndices } from "./HashSort";
 
 interface HashSegment { value: number | boolean, numberOfBits: number }
 interface HashSegmentSetter { setter: (value: number) => void, numberOfBits: number }
@@ -25,9 +26,20 @@ function segmentsToHashNumber(segments: HashSegment[]): number {
     }, { value: 0, numberOfBits: 0 })
     .value as number
 }
+function applyHashBigintToSegments(hash: bigint, segmentSetters: HashSegmentSetter[]) {
+    segmentSetters.reduce((accNumberBits, segmentSetter) => {
+        const lowSlice = BigInt(Math.pow(2, accNumberBits))
+        const highSlice = BigInt(Math.pow(2, segmentSetter.numberOfBits))
+        const hashSlice = (hash / lowSlice) % highSlice
+        segmentSetter.setter(Number(hashSlice))
+        return accNumberBits + segmentSetter.numberOfBits
+    }, 0)
+}
 function applyHashToSegments(hash: number, segmentSetters: HashSegmentSetter[]) {
     segmentSetters.reduce((acc, segmentSetter) => {
-        const hashSlice = (hash / Math.pow(2, acc)) % Math.pow(2, acc + segmentSetter.numberOfBits)
+        const lowSlice = Math.pow(2, acc)
+        const highSlice = Math.pow(2, segmentSetter.numberOfBits)
+        const hashSlice = Math.floor(hash / lowSlice) % highSlice
         segmentSetter.setter(hashSlice)
         return acc + segmentSetter.numberOfBits
     }, 0)
@@ -65,16 +77,24 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
     return version + asBigint.toString(36).padStart(numberOfBits / 5, '0')
 }
 
-function parseHash(hash: string): Operations {
-    const operations: Operations = defaultPresets[0].operations;
-    const version = hash.at(0)
-
-    const hashNumber = parseInt(hash, 16)
+function parseBigInt(str: string, radix: number): bigint {
+    return str.split('').reduceRight((acc, c, index) => { 
+        const numAtIndex = parseInt(c, radix)
+        const newNum = acc + (BigInt(numAtIndex) * BigInt(Math.pow(radix, str.length - index - 1)))
+        return newNum
+    }, BigInt(0))
+}
+export function parseHash(hash: string): Operations {
+    const operations: Operations = JSON.parse(JSON.stringify(defaultPresets[0].operations));
+    const version = parseInt(hash.at(0)!, 36)
+    const operationsHash = hash.substring(1)
+    const hashNumber = parseBigInt(operationsHash, 36)
+    if(operationsHash != hashNumber.toString(36).padStart(operationsHash.length, '0')) throw Error(`parseBigInt not working: operationsHash = ${operationsHash}, hashNumber = ${hashNumber.toString(36).padStart(operationsHash.length, '0')}`)
     let segments: HashSegmentSetter[]
     switch(version) {
-        case '1': {
+        case 1: {
             segments = [
-                { setter: (n) => operations.group.groupBy = parseGroupType(n), numberOfBits: 3 },
+                { setter: (n) => applyGroupType(n, operations.group.groupBy), numberOfBits: 8 },
                 { setter: (n) => operations.group.combineBy = n as CombineType, numberOfBits: 2 },
                 { setter: (n) => operations.group.combineInto = n as CombineInto, numberOfBits: 1 },
                 { setter: (n) => operations.group.combineAcrossGroups = !!n, numberOfBits: 1 },
@@ -83,7 +103,7 @@ function parseHash(hash: string): Operations {
                 { setter: (n) => operations.filter.searchBy = n as SearchType, numberOfBits: 2 },
                 { setter: (n) => operations.filter.rerankSearch = !!n, numberOfBits: 1 },
                 
-                { setter: (n) => applyGroupSort(n, operations.sort.sortGroupsBy), numberOfBits: 1 },
+                { setter: (n) => applyGroupSort(n, operations.sort.sortGroupsBy), numberOfBits: 28 },
                 { setter: (n) => operations.sort.sortItemsBy = n as ItemSortType, numberOfBits: 2 },
                 { setter: (n) => operations.sort.sortItemsAscending = !!n, numberOfBits: 1 },
         
@@ -95,10 +115,12 @@ function parseHash(hash: string): Operations {
                 { setter: (n) => operations.viewOptions.showGroupSum = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.previewGroups = !!n, numberOfBits: 1 },        
             ]
+            break
         }
         default: throw Error(`unsupported version: ${version}`)
     }
-    applyHashToSegments(hashNumber, segments)
+    applyHashBigintToSegments(hashNumber, segments)
+    return operations
 }
 
 function hashGroupType(groupType: GroupType): HashSegment {
@@ -115,11 +137,10 @@ function hashGroupType(groupType: GroupType): HashSegment {
     return { value: segmentsToHashNumber(segments), numberOfBits: countBits(segments)}
 }
 
-function parseGroupType(hash: number): GroupType {
-    const groupType = groupNone
+function applyGroupType(hash: number, groupType: GroupType) {
     const segments: HashSegmentSetter[] = [
-        { setter: (n) => groupType.hour = !!n, numberOfBits: 3 },
-        { setter: (n) => groupType.dayOfWeek = !!n, numberOfBits: 2 },
+        { setter: (n) => groupType.hour = !!n, numberOfBits: 1 },
+        { setter: (n) => groupType.dayOfWeek = !!n, numberOfBits: 1 },
         { setter: (n) => groupType.date = !!n, numberOfBits: 1 },
         { setter: (n) => groupType.month = !!n, numberOfBits: 1 },
         { setter: (n) => groupType.year = !!n, numberOfBits: 1 },
@@ -128,7 +149,6 @@ function parseGroupType(hash: number): GroupType {
         { setter: (n) => groupType.album = !!n, numberOfBits: 1 },
     ]
     applyHashToSegments(hash, segments)
-    return groupType
 }
 
 function hashGroupSort(sortOrder: GroupSortOrder): HashSegment {
@@ -140,32 +160,23 @@ function hashGroupSort(sortOrder: GroupSortOrder): HashSegment {
 }
 
 function applyGroupSort(hash: number, sortOrder: GroupSortOrder) {
-    const groupSortOrder = defaultPresets[0].operations.sort.sortGroupsBy
     const segments: HashSegmentSetter[] = [
-        { setter: (n) => applyGroupSortOrder(n, groupSortOrder), numberOfBits: 9 },
-        { setter: (n) => applyGroupSortDirections(n, groupSortOrder), numberOfBits: 4 },
+        { setter: (n) => applyGroupSortOrder(n, sortOrder), numberOfBits: 19 },
+        { setter: (n) => applyGroupSortDirections(n, sortOrder), numberOfBits: 9 },
     ]
     applyHashToSegments(hash, segments)
 }
 
 function hashGroupSortOrder(sortOrder: GroupSortOrder): HashSegment {
-    const initialSortOrder = "000000000".split('')
-    initialSortOrder[sortOrder.album.index] = 'l'
-    initialSortOrder[sortOrder.artist.index] = 'a'
-    initialSortOrder[sortOrder.song.index] = 't'
-    initialSortOrder[sortOrder.hour.index] = 'h'
-    initialSortOrder[sortOrder.dayOfWeek.index] = 'w'
-    initialSortOrder[sortOrder.date.index] = 'd'
-    initialSortOrder[sortOrder.month.index] = 'm'
-    initialSortOrder[sortOrder.year.index] = 'y'
-    initialSortOrder[sortOrder.sum.index] = 's'
     const hashed = hashSortedIndices(Object.entries(sortOrder).map(([k, v]) => v.index))
-
-    return { value: hashed, numberOfBits: hashed.toString(2).length }
+    const sortEntries = Object.keys(sortOrder).length
+    if(hashed > factorial(sortEntries)) throw Error(`hashed sort order = ${hashed} too large, max is ${sortEntries}! = ${factorial(sortEntries)}`)
+    return { value: hashed, numberOfBits: factorial(sortEntries).toString(2).length }
 }
 
 function applyGroupSortOrder(hash: number, sortOrder: GroupSortOrder) {
-    unhashSortedIndices(hash, Object.keys(sortOrder)).forEach(k => sortOrder[k.key as keyof GroupSortOrder].index = k.index)
+    const unhashed = unhashSortedIndices(hash, Object.keys(sortOrder))
+    unhashed.forEach(k => sortOrder[k.key as keyof GroupSortOrder].index = k.index)
 }
 
 function hashGroupSortDirections(sortOrder: GroupSortOrder): HashSegment {

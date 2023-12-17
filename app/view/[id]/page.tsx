@@ -17,7 +17,7 @@ import { OperationsSelector } from "./filters/OperationsSelector"
 import { ActionButton } from "@/app/common/button/ActionButton"
 import nightwindHelper from "nightwind/helper"
 import { TextField } from "@/app/common/TextField"
-import { hashOperations } from "@/app/data/hashing/Hashing"
+import { hashOperations, parseHash } from "@/app/data/hashing/Hashing"
 
 export default function ViewPage({ params }: { params: { id: string } }) {
     const preset = defaultPresets.find(p => p.id == params.id)
@@ -27,7 +27,8 @@ export default function ViewPage({ params }: { params: { id: string } }) {
     useEffect(() => { getListens().then(entries => { setLoadedEntries(entries) }) }, [])
 
     const [isCustomizing, setCustomizing] = useState(false)
-    const [customizedFilters, setCustomizedFilters] = useState(preset.operations)
+    // const [customizedFilters, setCustomizedFilters] = useState(preset.operations)
+    const [customizedFilters, setCustomizedFilters] = useState(parseHash(hashOperations(preset.operations)))
 
     const filtered = (loadedEntries === undefined || preset === undefined) ? undefined : applyOperations(loadedEntries, customizedFilters);
 

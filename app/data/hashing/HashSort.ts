@@ -1,14 +1,18 @@
-export function hashSortedIndices(indices: number[], keys?: string[]): number {
+export function hashSortedIndices(indices: number[]): number {
     const initialSortOrder = Array(indices.length).map(_ => '0')
-    indices.forEach((n, i) => initialSortOrder[n] = String.fromCharCode('a'.charCodeAt(0) + i))
+    indices.forEach((n, i) => initialSortOrder[i] = String.fromCharCode('a'.charCodeAt(0) + n))
     const hashed = alphabetToNumber(initialSortOrder.join(''))
+
+    const unhashed = unhashSortedIndices(hashed, indices.map(_ => ""))
+    if(!indices.every((v, i) => v == unhashed[i].index)) throw Error(`hash != unhash, indices = ${indices}, hash = ${hashed}, unhashed = ${unhashed.map(v => v.index)}`)
     return hashed
 }
 
 export function unhashSortedIndices(hash: number, keys: string[]): { key: string, index: number }[] {
-    const sortedAlphabet = Array(keys.length).map((_, i) => String.fromCharCode('a'.charCodeAt(0) + i)).join('')
+    const sortedAlphabet = keys.map((_, i) => String.fromCharCode('a'.charCodeAt(0) + i)).join('')
     const alphabet = numberToAlphabet(hash, sortedAlphabet)
-    return keys.map((k, i) => { return { key: k, index: alphabet.charCodeAt(i) - 'a'.charCodeAt(0) } })
+    const mapped = keys.map((k, i) => { return { key: k, index: alphabet.charCodeAt(i) - 'a'.charCodeAt(0) } })
+    return mapped
 }
 
 function alphabetToNumber(str: String): number {
@@ -18,13 +22,14 @@ function alphabetToNumber(str: String): number {
     }, 0)
 }
 
-function factorial(n: number): number {
+export function factorial(n: number): number {
     if(n <= 1) return 1
     return n * factorial(n - 1)
 }
 
 function downTo(endInclusive: number, startInclusive: number) {
-    const size = endInclusive - startInclusive
+    if(startInclusive > endInclusive) return []
+    const size = endInclusive - (startInclusive - 1)
     return Array.from(Array(size).keys()).map(i => endInclusive - i);
 }
 
@@ -34,9 +39,10 @@ function numberToAlphabet(number: number, initialChars: String): String {
 
     const result = downTo(size - 1, 1).reduce((acc, i) => {
         const fact = factorial(i)
-        const index = acc.remaining / fact
+        const index = Math.floor(acc.remaining / fact)
         const char = characters[index]
-        characters.splice(index)
+        console.log(`i = ${i}, index = ${index}, char = ${char}, characters = ${characters}, remaining = ${acc.remaining}`)
+        characters.splice(index, 1)
         const remaining = acc.remaining % fact
         return { remaining: remaining, str: acc.str + char }
     }, { remaining: number, str: "" })
