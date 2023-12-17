@@ -17,7 +17,7 @@ import { OperationsSelector } from "./filters/OperationsSelector"
 import { ActionButton } from "@/app/common/button/ActionButton"
 import nightwindHelper from "nightwind/helper"
 import { TextField } from "@/app/common/TextField"
-import { hashOperations } from "@/app/data/Hashing"
+import { hashOperations } from "@/app/data/hashing/Hashing"
 
 export default function ViewPage({ params }: { params: { id: string } }) {
     const preset = defaultPresets.find(p => p.id == params.id)
@@ -74,7 +74,11 @@ export default function ViewPage({ params }: { params: { id: string } }) {
                                     {
                                         icon: <Share/>,
                                         title: "Share preset",
-                                        onClick: () => {  },
+                                        onClick: () => { 
+                                            const hash = hashOperations(customizedFilters)
+                                            const url = `https://localhost:3000/customize/${hash}`
+                                            navigator.clipboard.writeText(url)
+                                        },
                                     },
                                     {
                                         icon: <Moon size="24px"/>,

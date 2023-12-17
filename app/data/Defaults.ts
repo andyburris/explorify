@@ -3,7 +3,7 @@ import { CombineInto, CombineType, ItemSortType, SearchType, SkipFilterType } fr
 import { Preset } from "./model/Preset";
 import { ViewInfoType } from "./model/ViewOptions";
 
-const groupNone = { hour: false, dayOfWeek: false, date: false, month: false,year: false, artist: false, song: false, album: false, }
+export const groupNone = { hour: false, dayOfWeek: false, date: false, month: false,year: false, artist: false, song: false, album: false, }
 
 
 export const defaultPresets: Preset[] = [
