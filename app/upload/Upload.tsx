@@ -11,7 +11,7 @@ import { parseFile } from "../data/Parsing"
 import { Header } from "../common/Header"
 import { HistoryEntry } from "../data/model/HistoryEntry"
 import { openDB } from "idb"
-import { DATABASE_NAME, LISTENS_STORE_NAME, getDatabase, saveListens } from "../data/Database"
+import { DATABASE_NAME, LISTENS_STORE_NAME, getDatabase, saveListens } from "../data/persist/Database"
 
 export function UploadPage({ onUpload }: { onUpload: (entries: HistoryEntry[], rememberHistory: boolean) => void }) {
     const [file, setFile] = useState<File | undefined>(undefined)

@@ -1,15 +1,21 @@
 import { Calendar, CalendarPlus, Headphones, IconWeight, List, ListBullets, MusicNote, SkipBack, SkipForward, Users } from "phosphor-react-sc";
 
+export interface PickableIcon { name: string, component: (color?: string, size?: string, weight?: IconWeight) => React.ReactNode }
+export const pickableIcons: PickableIcon[] = [
+    { name: "musicnote", component: (color, size, weight) => <MusicNote color={color} size={size} weight={weight}/> },
+    { name: "headphones", component: (color, size, weight) => <Headphones color={color} size={size} weight={weight}/> },
+    { name: "list", component: (color, size, weight) => <List color={color} size={size} weight={weight}/> },
+    { name: "listbullets", component: (color, size, weight) => <ListBullets color={color} size={size} weight={weight}/> },
+    { name: "users", component: (color, size, weight) => <Users color={color} size={size} weight={weight}/> },
+    { name: "skipforward", component: (color, size, weight) => <SkipForward color={color} size={size} weight={weight}/> },
+    { name: "skipback", component: (color, size, weight) => <SkipBack color={color} size={size} weight={weight}/> },
+    { name: "calendar", component: (color, size, weight) => <Calendar color={color} size={size} weight={weight}/> },
+    { name: "calendarplus", component: (color, size, weight) => <CalendarPlus color={color} size={size} weight={weight}/> },
+]
+
 export function PickedIcon({ iconName, color, size, weight }: { iconName: string, color?: string, size?: string, weight?: IconWeight, }) {
-    switch(iconName.toLowerCase()) {
-        case "musicnote": return <MusicNote color={color} size={size} weight={weight}/>
-        case "headphones": return <Headphones color={color} size={size} weight={weight}/>
-        case "list": return <List color={color} size={size} weight={weight}/>
-        case "listbullets": return <ListBullets color={color} size={size} weight={weight}/>
-        case "users": return <Users color={color} size={size} weight={weight}/>
-        case "skipforward": return <SkipForward color={color} size={size} weight={weight}/>
-        case "skipback": return <SkipBack color={color} size={size} weight={weight}/>
-        case "calendar": return <Calendar color={color} size={size} weight={weight}/>
-        case "calendarplus": return <CalendarPlus color={color} size={size} weight={weight}/>
+    const pickableIcon = pickableIcons.find(pi => pi.name.toLowerCase() == iconName.toLowerCase())
+    if(pickableIcon) {
+        return pickableIcon.component(color, size, weight)
     }
 }

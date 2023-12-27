@@ -50,7 +50,7 @@ export class Group {
 
     headerStrings(short?: boolean): { primary: string, secondary: string | undefined } {
         const song = songStrings(this.key.song, this.key.album, this.key.artist) 
-        const date = dateString(this.key, this.combinations[0].listens[0].timestamp)
+        const date = dateString(this.key, this.combinations[0]?.listens[0]?.timestamp)
         var out = (song && date) 
             ? { primary: `${song.primary}, ${date}`, secondary: song.secondary }
             : song
@@ -74,9 +74,9 @@ function songStrings(song: string | null, album: string | null, artist: string |
     return undefined
 }
 
-function dateString(key: GroupKey, defaultDate: Date): string | undefined {
+function dateString(key: GroupKey, defaultDate: Date | undefined): string | undefined {
     if(key.year != null || key.month != null || key.date != null || key.dayOfWeek != null || key.hour != null) {
-        const date = new Date(key.year ?? defaultDate.getFullYear(), key.month ?? defaultDate.getMonth(), key.date ?? defaultDate.getDate(), key.hour ?? defaultDate.getHours(), 1)
+        const date = new Date(key.year ?? defaultDate?.getFullYear() ?? 0, key.month ?? defaultDate?.getMonth() ?? 0, key.date ?? defaultDate?.getDate() ?? 0, key.hour ?? defaultDate?.getHours() ?? 0, 1)
         const dateFormatOptions: Intl.DateTimeFormatOptions = {
             year: key.year != null ? "numeric" : undefined,
             month: key.month != null ? "long" : undefined,

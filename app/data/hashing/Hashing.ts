@@ -3,6 +3,7 @@ import { defaultPresets, groupNone } from "../Defaults";
 import { CombineInto, CombineType, GroupSortOrder, GroupSortOrderItem, GroupType, ItemSortType, Operations, SearchType, SkipFilterType } from "../model/Operations";
 import { ViewInfoType } from "../model/ViewOptions";
 import { factorial, hashSortedIndices, unhashSortedIndices } from "./HashSort";
+import { DEBUG } from "../utils/debug";
 
 interface HashSegment { value: number | boolean, numberOfBits: number }
 interface HashSegmentSetter { setter: (value: number) => void, numberOfBits: number }
@@ -74,7 +75,9 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
     const numberOfBits = countBits(segments)
     const asBigint = segmentsToHashBigint(segments)
     if(inBinary == true) return asBigint.toString(2).padStart(numberOfBits, '0')
-    return version + asBigint.toString(36).padStart(numberOfBits / 5, '0')
+    const hashString = version + asBigint.toString(36).padStart(numberOfBits / 5, '0')
+    if(DEBUG && JSON.stringify(operations) != JSON.stringify(parseHash(hashString))) throw Error(`Incorrect hashing/unhashing algorithm: operations = ${JSON.stringify(operations)}, unhashed = ${JSON.stringify(parseHash(hashString))}`)
+    return hashString
 }
 
 function parseBigInt(str: string, radix: number): bigint {
@@ -89,7 +92,7 @@ export function parseHash(hash: string): Operations {
     const version = parseInt(hash.at(0)!, 36)
     const operationsHash = hash.substring(1)
     const hashNumber = parseBigInt(operationsHash, 36)
-    if(operationsHash != hashNumber.toString(36).padStart(operationsHash.length, '0')) throw Error(`parseBigInt not working: operationsHash = ${operationsHash}, hashNumber = ${hashNumber.toString(36).padStart(operationsHash.length, '0')}`)
+    if(DEBUG && operationsHash != hashNumber.toString(36).padStart(operationsHash.length, '0')) throw Error(`parseBigInt not working: operationsHash = ${operationsHash}, hashNumber = ${hashNumber.toString(36).padStart(operationsHash.length, '0')}`)
     let segments: HashSegmentSetter[]
     switch(version) {
         case 1: {
@@ -170,7 +173,7 @@ function applyGroupSort(hash: number, sortOrder: GroupSortOrder) {
 function hashGroupSortOrder(sortOrder: GroupSortOrder): HashSegment {
     const hashed = hashSortedIndices(Object.entries(sortOrder).map(([k, v]) => v.index))
     const sortEntries = Object.keys(sortOrder).length
-    if(hashed > factorial(sortEntries)) throw Error(`hashed sort order = ${hashed} too large, max is ${sortEntries}! = ${factorial(sortEntries)}`)
+    if(DEBUG && hashed > factorial(sortEntries)) throw Error(`hashed sort order = ${hashed} too large, max is ${sortEntries}! = ${factorial(sortEntries)}`)
     return { value: hashed, numberOfBits: factorial(sortEntries).toString(2).length }
 }
 

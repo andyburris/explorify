@@ -1,7 +1,7 @@
 import { SegmentedControl } from "@/app/common/SegmentedControl";
 import { GroupSortOrder, ItemSortType, SortOperation } from "@/app/data/model/Operations";
 import { Calendar, CalendarBlank, Clock, ClockCounterClockwise, Disc, MusicNote, Play, SortAscending, SortDescending, User } from "phosphor-react-sc";
-import { OperationSection } from "./OperationsSelector";
+import { OperationSection, ResponsiveControl } from "./OperationsSelector";
 
 export function SortOperationSelector({ currentOperation, hasGroups, onChangeOperation }: { currentOperation: SortOperation, hasGroups: boolean, onChangeOperation: (newFilter: SortOperation) => void }) {
     return (
@@ -18,11 +18,11 @@ export function SortOperationSelector({ currentOperation, hasGroups, onChangeOpe
                         <GroupSortItem icon={<User/>} name="Artist name" isAscending={false} sortNames={["A-Z", "Z-A"]}/>
                         <GroupSortItem icon={<Disc/>} name="Album name" isAscending={false} sortNames={["A-Z", "Z-A"]}/>
                     </div> */}
-                    <SegmentedControl 
+                    <ResponsiveControl 
                     items={[
-                        { item: SimpleGroupSortType.Date, title: "Date", icon: <Calendar/> },
-                        { item: SimpleGroupSortType.Plays, title: "Plays", icon: <Play/> },
-                        { item: SimpleGroupSortType.Name, title: "Name", icon: <MusicNote/> },
+                        { value: SimpleGroupSortType.Date, key: "Date", label: "Date", icon: <Calendar/> },
+                        { value: SimpleGroupSortType.Plays, key: "Plays", label: "Plays", icon: <Play/> },
+                        { value: SimpleGroupSortType.Name, key: "Name", label: "Name", icon: <MusicNote/> },
                     ]} 
                     selectedItem={complexToSimple(currentOperation.sortGroupsBy)}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, sortGroupsBy: simpleToComplex(n)})}
@@ -30,21 +30,22 @@ export function SortOperationSelector({ currentOperation, hasGroups, onChangeOpe
                 </OperationSection>
             }
             <OperationSection title="Sort items by">
-                <SegmentedControl 
+                <ResponsiveControl 
                     items={[
-                        { item: ItemSortType.Date, title: "Date", icon: <Calendar/> },
-                        { item: ItemSortType.Plays, title: "Plays", icon: <Play/> },
-                        { item: ItemSortType.Name, title: "Song Name", icon: <MusicNote/> },
-                        { item: ItemSortType.ArtistName, title: "Artist Name", icon: <User/> },
+                        { value: ItemSortType.Date, key: "Date", label: "Date", icon: <Calendar/> },
+                        { value: ItemSortType.Plays, key: "Plays", label: "Plays", icon: <Play/> },
+                        { value: ItemSortType.Name, key: "Song Name", label: "Song Name", icon: <MusicNote/> },
+                        { value: ItemSortType.ArtistName, key: "Artist Name", label: "Artist Name", icon: <User/> },
                     ]} 
                     selectedItem={currentOperation.sortItemsBy}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, sortItemsBy: n})}
                 />
-                <SegmentedControl 
+                <ResponsiveControl 
                     items={[
                         { 
-                            item: false, 
-                            title: (currentOperation.sortItemsBy == ItemSortType.Date) 
+                            value: false, 
+                            key: "descending",
+                            label: (currentOperation.sortItemsBy == ItemSortType.Date) 
                                 ? "Earliest to latest" 
                                 : (currentOperation.sortItemsBy == ItemSortType.Plays)
                                 ? "Most to least plays"
@@ -52,8 +53,9 @@ export function SortOperationSelector({ currentOperation, hasGroups, onChangeOpe
                             icon: <SortDescending/> 
                         },
                         { 
-                            item: true, 
-                            title: (currentOperation.sortItemsBy == ItemSortType.Date) 
+                            value: true, 
+                            key: "ascending",
+                            label: (currentOperation.sortItemsBy == ItemSortType.Date) 
                                 ? "Latest to earliest" 
                                 : (currentOperation.sortItemsBy == ItemSortType.Plays)
                                 ? "Least to most plays"
@@ -76,10 +78,10 @@ function GroupSortItem({ icon, name, isAscending, sortNames }: { icon: React.Rea
             <div className="text-neutral-500 text-lg">{icon}</div>
             <div className="flex flex-col">
                 <div className="font-semibold">{name}</div>
-                <SegmentedControl
+                <ResponsiveControl
                     items={[
-                        { item: false, title: descendingName, icon: <SortDescending/> },
-                        { item: true, title: ascendingName, icon: <SortAscending/> },
+                        { value: false, key: "descending", label: descendingName, icon: <SortDescending/> },
+                        { value: true, key: "ascending", label: ascendingName, icon: <SortAscending/> },
                     ]}
                     selectedItem={isAscending}
                     onSelect={b => true}

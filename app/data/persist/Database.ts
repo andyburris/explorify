@@ -1,7 +1,5 @@
 import { openDB, deleteDB, wrap, unwrap } from 'idb';
-import { HistoryEntry } from './model/HistoryEntry';
-import { list } from 'postcss';
-import { assert } from 'console';
+import { HistoryEntry } from '../model/HistoryEntry';
 
 export const DATABASE_NAME = "spotify-data-explorer"
 export const LISTENS_STORE_NAME = "listens"

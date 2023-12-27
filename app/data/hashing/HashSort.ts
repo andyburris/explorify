@@ -1,10 +1,12 @@
+import { DEBUG } from "../utils/debug"
+
 export function hashSortedIndices(indices: number[]): number {
     const initialSortOrder = Array(indices.length).map(_ => '0')
     indices.forEach((n, i) => initialSortOrder[i] = String.fromCharCode('a'.charCodeAt(0) + n))
     const hashed = alphabetToNumber(initialSortOrder.join(''))
 
     const unhashed = unhashSortedIndices(hashed, indices.map(_ => ""))
-    if(!indices.every((v, i) => v == unhashed[i].index)) throw Error(`hash != unhash, indices = ${indices}, hash = ${hashed}, unhashed = ${unhashed.map(v => v.index)}`)
+    if(DEBUG && !indices.every((v, i) => v == unhashed[i].index)) throw Error(`hash != unhash, indices = ${indices}, hash = ${hashed}, unhashed = ${unhashed.map(v => v.index)}`)
     return hashed
 }
 
@@ -41,7 +43,7 @@ function numberToAlphabet(number: number, initialChars: String): String {
         const fact = factorial(i)
         const index = Math.floor(acc.remaining / fact)
         const char = characters[index]
-        console.log(`i = ${i}, index = ${index}, char = ${char}, characters = ${characters}, remaining = ${acc.remaining}`)
+        if(DEBUG) console.log(`i = ${i}, index = ${index}, char = ${char}, characters = ${characters}, remaining = ${acc.remaining}`)
         characters.splice(index, 1)
         const remaining = acc.remaining % fact
         return { remaining: remaining, str: acc.str + char }

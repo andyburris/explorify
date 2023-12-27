@@ -1,7 +1,6 @@
-import { SegmentedControl } from "@/app/common/SegmentedControl";
 import { CombineInto, CombineType, GroupOperation, GroupType } from "@/app/data/model/Operations";
 import { ArrowsInLineVertical, ArrowsOutLineVertical, Calendar, CalendarBlank, Clock, ClockCounterClockwise, Disc, List, MusicNote, SortAscending, SortDescending, User, Users } from "phosphor-react-sc";
-import { OperationSection } from "./OperationsSelector";
+import { OperationSection, ResponsiveControl } from "./OperationsSelector";
 import { Combobox } from "@/app/common/components/ui/combobox";
 import { GroupKey } from "@/app/data/model/Group";
 
@@ -52,28 +51,28 @@ export function GroupOperationSelector({ currentOperation, onChangeOperation }: 
                 />
             </OperationSection>
             <OperationSection title="Combine by">
-                <SegmentedControl 
+                <ResponsiveControl 
                     items={[
-                        { item: CombineType.None, title: "None", icon: <List/> },
-                        { item: CombineType.SameSong, title: "Same Song", icon: <MusicNote/> },
-                        { item: CombineType.SameArtist, title: "Same Artist", icon: <User/> },
+                        { value: CombineType.None, label: "None", key: "None", icon: <List/> },
+                        { value: CombineType.SameSong, label: "Same Song", key: "Same Song", icon: <MusicNote/> },
+                        { value: CombineType.SameArtist, label: "Same Artist", key: "Same Artist", icon: <User/> },
                     ]} 
                     selectedItem={currentOperation.combineBy}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, combineBy: n})}
                 />
-                <SegmentedControl 
+                <ResponsiveControl 
                     items={[
-                        { item: CombineInto.EarliestPlay, title: "Earliest Play", icon: <SortAscending/> },
-                        { item: CombineInto.LatestPlay, title: "Most Recent Play", icon: <SortDescending/> },
+                        { value: CombineInto.EarliestPlay, label: "Earliest Play", key: "Earliest Play", icon: <SortAscending/> },
+                        { value: CombineInto.LatestPlay, label: "Most Recent Play", key: "Most Recent Play", icon: <SortDescending/> },
                     ]} 
                     selectedItem={currentOperation.combineInto}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, combineInto: n})}
                 />
-                { Object.entries(currentOperation.groupBy).length <= 0 && 
-                    <SegmentedControl 
+                { Object.entries(currentOperation.groupBy).some(([k, b]) => b as boolean) && 
+                    <ResponsiveControl 
                         items={[
-                            { item: false, title: "Within Groups", icon: <ArrowsInLineVertical/> },
-                            { item: true, title: "Across Groups", icon: <ArrowsOutLineVertical/> },
+                            { value: false, label: "Within Groups", key: "Within Groups", icon: <ArrowsInLineVertical/> },
+                            { value: true, label: "Across Groups", key: "Across Groups", icon: <ArrowsOutLineVertical/> },
                         ]} 
                         selectedItem={currentOperation.combineAcrossGroups}
                         onSelect={(n) => onChangeOperation({ ...currentOperation, combineAcrossGroups: n})}

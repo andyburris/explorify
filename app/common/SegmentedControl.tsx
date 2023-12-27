@@ -2,9 +2,9 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { StaticButton } from './button/Button';
 
 export interface Segment<T> {
-    item: T,
-    title: string,
-    key?: string,
+    value: T,
+    label: string,
+    key: string,
     icon: React.ReactNode,
 }
 const toggleGroupItemClasses = "flex-grow"
@@ -17,22 +17,22 @@ export function SegmentedControl<T>({ items, selectedItem, onSelect }: { items: 
         defaultValue="center"
         aria-label="Text alignment"
         onValueChange={v => {
-            const item = items.find(i => (i.key ?? i.title) == v)
-            if(item != null) onSelect(item.item)
+            const item = items.find(i => (i.key ?? i.label) == v)
+            if(item != null) onSelect(item.value)
         }}
       >
         {items.map((item) => {
             return <ToggleGroup.Item 
-                key={item.key ?? item.title}
+                key={item.key ?? item.label}
                 className={toggleGroupItemClasses} 
-                value={item.key ?? item.title} 
+                value={item.key ?? item.label} 
                 aria-label="Left aligned"
             >
                 <StaticButton 
                     icon={item.icon} 
-                    text={item.title} 
-                    hideShadow={item.item != selectedItem} 
-                    className={"h-8 " + (item.item == selectedItem ? "bg-white" : "hover:bg-neutral-200")}
+                    text={item.label} 
+                    hideShadow={item.value != selectedItem} 
+                    className={"h-8 " + (item.value == selectedItem ? "bg-white" : "hover:bg-neutral-200")}
                 />
             </ToggleGroup.Item>
         })}
