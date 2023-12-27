@@ -20,6 +20,7 @@ import { SaveDialog } from "./SaveDialog"
 import { Preset } from "@/app/data/model/Preset"
 import { getPresets, savePreset } from "@/app/data/persist/PresetRepository"
 import { useRouter } from "next/navigation"
+import { usePresets } from "@/app/data/utils/presetUtils"
 
 export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
     const router = useRouter()
@@ -29,8 +30,9 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
 
     const [customizedPreset, setCustomizedPreset] = useState(initialPreset)
     const filtered = useMemo(() => (loadedEntries === undefined) ? undefined : applyOperations(loadedEntries, customizedPreset.operations), [loadedEntries, customizedPreset.operations]) 
-    const overwriting = getPresets().find(p => p.id == customizedPreset.id)
+    const overwriting = usePresets()?.find(p => p.id == customizedPreset.id)
     const hasChanged = JSON.stringify(initialPreset) != JSON.stringify(customizedPreset)
+    const isValid = (customizedPreset.name.trim().length != 0 && customizedPreset.description.trim().length != 0 && customizedPreset.icon.trim().length != 0 && customizedPreset.id.trim().length != 0)
 
     const [isCustomizing, setCustomizing] = useState(false)
     const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
@@ -57,12 +59,12 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
                                 icon={isCustomizing ? <ArrowCounterClockwise/> : <PencilSimple/>}
                             />
 
-                            { isCustomizing && 
+                            { (hasChanged) && 
                                 <ActionButton 
                                     onClick={() => setSaveDialogOpen(true)}
                                     text={overwriting ? `Overwrite` : `Save`} 
                                     icon={<FloppyDiskBack/>}
-                                    enabled={hasChanged}
+                                    enabled={isValid}
                                 />
                             }
 
