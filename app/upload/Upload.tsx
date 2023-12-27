@@ -1,6 +1,6 @@
 "use client"
 
-import { FileArchive, FileZip, Spinner, Upload } from "phosphor-react-sc"
+import { FileArchive, FileZip, Spinner, Upload, Warning } from "phosphor-react-sc"
 import { Button } from "../common/button/Button"
 import { Container } from "../common/Container"
 import { Logo } from "../common/Logo"
@@ -17,7 +17,7 @@ import { InstructionCard } from "./InstructionCard"
 export function UploadPage({ onUpload }: { onUpload: (entries: HistoryEntry[], rememberHistory: boolean) => void }) {
     const [file, setFile] = useState<File | undefined>(undefined)
     const [isProcessing, setProcessing] = useState(false)
-
+    const [isError, setError] = useState(false)
     return (
         <Container>
             <div className="flex flex-col gap-8">
@@ -43,6 +43,12 @@ export function UploadPage({ onUpload }: { onUpload: (entries: HistoryEntry[], r
                     </label>
                     <p className="text-neutral-500">This file stays on your device, and is never uploaded to any servers.</p>
                 </div>
+                { isError &&
+                    <div className="flex items-center gap-3 p-3 bg-red-50 border-red-300 text-red-700 rounded-xl">
+                        <Warning className="flex-shrink-0"/>
+                        <p>File wasn't able to be processed. Are you sure you have the right file (with the <b>extended</b> streaming history)?</p>
+                    </div>
+                }
                 <ActionButton 
                 text={ isProcessing ? "Processing" : "Process" }
                 icon={isProcessing ? <Spinner>
@@ -68,6 +74,7 @@ export function UploadPage({ onUpload }: { onUpload: (entries: HistoryEntry[], r
                                 saveListens(entries).then(() => onUpload(entries, false))
                             })
                             .catch(e => {
+                                setError(true)
                                 setProcessing(false)
                                 console.log(e)
                             })
