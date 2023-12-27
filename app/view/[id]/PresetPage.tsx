@@ -1,3 +1,4 @@
+
 import { Container } from "@/app/common/Container"
 import { Dropdown } from "@/app/common/Dropdown"
 import { Header } from "@/app/common/Header"
@@ -18,10 +19,11 @@ import { hashOperations, parseHash } from "@/app/data/hashing/Hashing"
 import { SaveDialog } from "./SaveDialog"
 import { Preset } from "@/app/data/model/Preset"
 import { getPresets, savePreset } from "@/app/data/persist/PresetRepository"
+import { useRouter } from "next/navigation"
 
 export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
-    const [isCustomizing, setCustomizing] = useState(false)
-
+    const router = useRouter()
+    
     const [loadedEntries, setLoadedEntries] = useState<HistoryEntry[] | undefined>();
     useEffect(() => { getListens().then(entries => { setLoadedEntries(entries) }) }, [])
 
@@ -30,6 +32,7 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
     const overwriting = getPresets().find(p => p.id == customizedPreset.id)
     const hasChanged = JSON.stringify(initialPreset) != JSON.stringify(customizedPreset)
 
+    const [isCustomizing, setCustomizing] = useState(false)
     const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
     return (
         <Container>
@@ -67,7 +70,7 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
                                 <SaveDialog
                                 open={isSaveDialogOpen}
                                 onOpenChange={(open) => { setSaveDialogOpen(open) }}
-                                onSave={p => { savePreset(p); setSaveDialogOpen(false); /* TODO: navigate to URL (reloads initialPreset if overwrite, goes if new) */ }}
+                                onSave={p => { savePreset(p); setSaveDialogOpen(false); router.push(`/view/${p.id}`) }}
                                 preset={customizedPreset}
                                 listens={loadedEntries} />
                             }

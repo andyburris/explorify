@@ -5,8 +5,11 @@ import { Header } from "../common/Header";
 import { Logo } from "../common/Logo";
 import { StaticButton } from "../common/button/Button";
 import nightwindHelper from "nightwind/helper";
+import { getPresets } from "../data/persist/PresetRepository";
 
 export function LoadingPage() {
+    const numSavedPresets = getPresets().length
+    const numPresets = numSavedPresets > 0 ? numSavedPresets + 1 : 5
     return (
         <Container>
             <Header
@@ -32,11 +35,9 @@ export function LoadingPage() {
                 }
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8">
-                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
-                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
-                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
-                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
-                <div className="bg-neutral-100 rounded-2xl w-full h-44"></div>
+                { Array.from(Array(numPresets).keys()).map((i) => { 
+                    return <div className="bg-neutral-100 rounded-2xl w-full h-72" key={i}></div>
+                })}
             </div>
         </Container>
     )

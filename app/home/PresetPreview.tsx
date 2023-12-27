@@ -12,9 +12,11 @@ import { Combination, TrackCombination, ArtistCombination } from "../data/model/
 export function PresetPreview({ preset, listens }: { preset: Preset, listens: HistoryEntry[] }) {
     const [previewItems, setPreviewItems] = useState<Combination[] | Group[] | null>(null)
     useEffect(() => {
-        const filtered = applyOperations(listens, preset.operations)
-        const selected = preset.operations.viewOptions.previewGroups ? filtered : filtered.flatMap(g => g.combinations)
-        setPreviewItems(selected.slice(0, 4))
+        setTimeout(() => { //putting the operations in a settimeout seems to do the trick of rendering the preview before the operations are applied
+            const filtered = applyOperations(listens, preset.operations)
+            const selected = preset.operations.viewOptions.previewGroups ? filtered : filtered.flatMap(g => g.combinations)
+            setPreviewItems(selected.slice(0, 4))
+        }, 0)
     }, [])
 
     return (
@@ -29,10 +31,12 @@ export function PresetPreview({ preset, listens }: { preset: Preset, listens: Hi
             { previewItems == null
                 ? (
                     <div className="flex flex-col p-4 gap-3">
-                        <div className="w-full h-3 rounded-full bg-neutral-100"></div>
-                        <div className="w-full h-3 rounded-full bg-neutral-100"></div>
-                        <div className="w-full h-3 rounded-full bg-neutral-100"></div>
-                        <div className="w-full h-3 rounded-full bg-neutral-100"></div>
+                        <div className="w-full h-6 rounded-full bg-neutral-100"></div>
+                        <div className="w-full h-6 rounded-full bg-neutral-100"></div>
+                        <div className="w-full h-6 rounded-full bg-neutral-100"></div>
+                        <div className="h-0">
+                            <div className="w-full h-6 rounded-full bg-neutral-100"></div>
+                        </div>
                     </div>
                 ) : (
                     <div className="flex flex-col p-4 gap-3">
