@@ -8,12 +8,12 @@ import { getListens } from './data/persist/Database';
 import { LoadingPage } from './home/LoadingPage';
 import { getPresets, saveDefaultPresets } from './data/persist/PresetRepository';
 import { Preset } from './data/model/Preset';
-import { usePresets } from './data/utils/presetUtils';
+import { usePresetState, usePresets } from './data/utils/presetUtils';
 
 export default function Home() {
   const [loadedEntries, setLoadedEntries] = useState<HistoryEntry[] | undefined>();
   useEffect(() => { getListens().then(entries => setLoadedEntries(entries))}, [])
-  const savedPresets = usePresets()
+  const [savedPresets, setSavedPresets] = usePresetState()
 
   if (loadedEntries === undefined || savedPresets === undefined) {
     return (<LoadingPage/>)
@@ -21,7 +21,10 @@ export default function Home() {
     return (
       <UploadPage onUpload={(entries, rememberHistory) => {
         console.log(`uploaded ${entries.length} entries`)
-        if(getPresets().length <= 0) saveDefaultPresets()
+        if(getPresets().length <= 0) { 
+            saveDefaultPresets()
+            setSavedPresets(getPresets())
+        }
         setLoadedEntries(entries)
       }}/>
     )
