@@ -6,9 +6,11 @@ import { Logo } from "../common/Logo";
 import { StaticButton } from "../common/button/Button";
 import nightwindHelper from "nightwind/helper";
 import { getPresets } from "../data/persist/PresetRepository";
+import { usePresets } from "../data/utils/presetUtils";
 
 export function LoadingPage() {
-    const numSavedPresets = getPresets().length
+    const savedPresets = usePresets()
+    const numSavedPresets = savedPresets?.length ?? 0
     const numPresets = numSavedPresets > 0 ? numSavedPresets + 1 : 5
     return (
         <Container>

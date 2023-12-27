@@ -7,13 +7,15 @@ import { HomePage } from './home/HomePage';
 import { getListens } from './data/persist/Database';
 import { LoadingPage } from './home/LoadingPage';
 import { getPresets, saveDefaultPresets } from './data/persist/PresetRepository';
+import { Preset } from './data/model/Preset';
+import { usePresets } from './data/utils/presetUtils';
 
 export default function Home() {
   const [loadedEntries, setLoadedEntries] = useState<HistoryEntry[] | undefined>();
   useEffect(() => { getListens().then(entries => setLoadedEntries(entries))}, [])
-  const [savedPresets, _] = useState(getPresets())
+  const savedPresets = usePresets()
 
-  if (loadedEntries === undefined) {
+  if (loadedEntries === undefined || savedPresets === undefined) {
     return (<LoadingPage/>)
   } else if(loadedEntries.length <= 0) {
     return (
