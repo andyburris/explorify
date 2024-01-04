@@ -28,7 +28,7 @@ export function CombinationItem({ combination, indexInGroup, viewOptions, isExpa
 
             
             <div className="flex gap-1 items-center flex-shrink-0">
-                <div className="flex gap-3 items-center">
+                <div className="flex flex-col-reverse items-end sm:flex-row gap-1 sm:gap-3 sm:items-center">
                     { viewOptions.secondaryInfo != null && <SecondaryInfo combination={combination} secondaryInfo={viewOptions.secondaryInfo} /> }
                     <PrimaryInfo combination={combination} primaryInfo={viewOptions.primaryInfo} />
                 </div>
