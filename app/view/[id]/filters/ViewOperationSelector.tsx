@@ -1,6 +1,6 @@
 import { ViewInfoType, ViewOptions } from "@/app/data/model/ViewOptions";
 import { OperationSection, ResponsiveControl } from "./OperationsSelector";
-import { Calendar, EyeSlash, List, ListNumbers, MagnifyingGlass, Play, PlusCircle } from "phosphor-react-sc";
+import { Calendar, Clock, EyeSlash, List, ListNumbers, MagnifyingGlass, Play, PlusCircle } from "phosphor-react-sc";
 
 export function ViewOptionsSelector({ currentOperation, onChangeOperation }: { currentOperation: ViewOptions, onChangeOperation: (newFilter: ViewOptions) => void }) {
     return (
@@ -10,6 +10,7 @@ export function ViewOptionsSelector({ currentOperation, onChangeOperation }: { c
                     items={[
                         { value: ViewInfoType.Date, label: "Date", key: "Date", icon: <Calendar/> },
                         { value: ViewInfoType.Plays, label: "Plays", key: "Plays", icon: <Play/> },
+                        { value: ViewInfoType.Playtime, label: "Playtime", key: "Playtime", icon: <Clock/> },
                     ]} 
                     selectedItem={currentOperation.primaryInfo}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, primaryInfo: n})}

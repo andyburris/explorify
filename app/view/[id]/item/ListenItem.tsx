@@ -74,12 +74,16 @@ function InfoItem({ description, text, icon, className }: { description?: string
     )
 }
 
-function millisToMinsSecs(milliseconds: number) {
+export function millisToMinsSecs(milliseconds: number) {
     const seconds = milliseconds / 1000
     const roundedSeconds = Math.round(seconds)
     const minutes = Math.round(roundedSeconds / 60)
     const remainingSeconds = roundedSeconds % 60
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+    const hours = Math.round(roundedSeconds / (60 * 60))
+    const remainingMinutes = minutes % 60
+    return (hours > 0) 
+        ? `${hours}:${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+        : `${minutes}${remainingSeconds.toString().padStart(2, '0')}`
 }
 
 function startReasonInfo(startReason: StartReason): string {

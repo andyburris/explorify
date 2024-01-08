@@ -43,7 +43,7 @@ function numberToAlphabet(number: number, initialChars: String): String {
         const fact = factorial(i)
         const index = Math.floor(acc.remaining / fact)
         const char = characters[index]
-        if(DEBUG) console.log(`i = ${i}, index = ${index}, char = ${char}, characters = ${characters}, remaining = ${acc.remaining}`)
+        // if(DEBUG) console.log(`i = ${i}, index = ${index}, char = ${char}, characters = ${characters}, remaining = ${acc.remaining}`)
         characters.splice(index, 1)
         const remaining = acc.remaining % fact
         return { remaining: remaining, str: acc.str + char }

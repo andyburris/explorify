@@ -1,6 +1,7 @@
 export enum ViewInfoType {
     Date,
     Plays,
+    Playtime,
 }
 
 export interface ViewOptions {

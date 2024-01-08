@@ -101,7 +101,8 @@ export const simpleSortGroupsDate = {
     artist: { index: 6, isAscending: true },
     song: { index: 5, isAscending: true },
     album: { index: 7, isAscending: true },
-    sum: { index: 8, isAscending: true },
+    totalPlays: { index: 8, isAscending: true },
+    totalPlaytime: { index: 9, isAscending: true },
 }
 export const simpleSortGroupsSong = {
     hour: { index: 7, isAscending: true },
@@ -112,7 +113,8 @@ export const simpleSortGroupsSong = {
     artist: { index: 1, isAscending: true },
     song: { index: 0, isAscending: true },
     album: { index: 2, isAscending: true },
-    sum: { index: 8, isAscending: true },
+    totalPlays: { index: 8, isAscending: true },
+    totalPlaytime: { index: 9, isAscending: true },
 }
 export const simpleSortGroupsSum = {
     hour: { index: 8, isAscending: true },
@@ -123,7 +125,8 @@ export const simpleSortGroupsSum = {
     artist: { index: 2, isAscending: true },
     song: { index: 1, isAscending: true },
     album: { index: 3, isAscending: true },
-    sum: { index: 0, isAscending: false },
+    totalPlays: { index: 0, isAscending: false },
+    totalPlaytime: { index: 9, isAscending: false },
 }
 
 function complexToSimple(complex: GroupSortOrder): SimpleGroupSortType {

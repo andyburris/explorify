@@ -68,9 +68,12 @@ const groupByMonth = (isAscending: boolean) => isAscending
 const groupByYear = (isAscending: boolean) => isAscending 
     ? (g1: Group, g2: Group) => ((g1.key.year ?? g1.combinations[0].listens[0].timestamp.getFullYear()) - (g2.key.year ?? g2.combinations[0].listens[0].timestamp.getFullYear()))
     : (g1: Group, g2: Group) => ((g2.key.year ?? g2.combinations[0].listens[0].timestamp.getFullYear()) - (g1.key.year ?? g1.combinations[0].listens[0].timestamp.getFullYear()))
-const groupBySum = (isAscending: boolean) => isAscending 
+const groupByPlays = (isAscending: boolean) => isAscending 
     ? (g1: Group, g2: Group) => (g1.totalPlays - g2.totalPlays)
     : (g1: Group, g2: Group) => (g2.totalPlays - g1.totalPlays)
+const groupByPlaytime = (isAscending: boolean) => isAscending 
+    ? (g1: Group, g2: Group) => (g1.totalPlaytimeMs - g2.totalPlaytimeMs)
+    : (g1: Group, g2: Group) => (g2.totalPlaytimeMs - g1.totalPlaytimeMs)
 
 const sortFunctionMap: Map<string, (isAscending: boolean) => GroupSortFunction> = new Map([
     ["song", groupBySong],
@@ -81,5 +84,6 @@ const sortFunctionMap: Map<string, (isAscending: boolean) => GroupSortFunction> 
     ["date", groupByDate],
     ["month", groupByMonth],
     ["year", groupByYear],
-    ["sum", groupBySum],
+    ["totalPlays", groupByPlays],
+    ["totalPlaytime", groupByPlaytime],
 ])

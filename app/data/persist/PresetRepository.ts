@@ -2,6 +2,7 @@
 import { defaultPresets } from "../Defaults";
 import { hashOperations, parseHash } from "../hashing/Hashing";
 import { Preset } from "../model/Preset";
+import { DEBUG } from "../utils/debug";
 
 interface SavedPreset {
     id: string,
@@ -40,4 +41,13 @@ export function savePreset(preset: Preset) {
 
 export function saveDefaultPresets() {
     defaultPresets.forEach(p => savePreset(p))
+}
+
+export function clearPresets() {
+    getSavedPresets().forEach(([key, _]) => localStorage.removeItem(key))
+}
+
+export function resetPresets() {
+    clearPresets()
+    saveDefaultPresets()
 }

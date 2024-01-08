@@ -40,12 +40,14 @@ export function groupKeyFromHashCode(hashCode: string) {
 export class Group {
     public id: string = crypto.randomUUID()
     public totalPlays: number
+    public totalPlaytimeMs: number
     constructor(
         public type: GroupType,
         public key: GroupKey,
         public combinations: Combination[],
     ){
         this.totalPlays = combinations.reduce((acc, c) => acc + c.listens.length, 0)
+        this.totalPlaytimeMs = combinations.reduce((acc, c) => acc + c.totalPlaytimeMs, 0)
     }
 
     headerStrings(short?: boolean): { primary: string, secondary: string | undefined } {

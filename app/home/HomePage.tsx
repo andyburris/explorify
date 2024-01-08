@@ -1,4 +1,4 @@
-import { ArrowCounterClockwise, DotsThreeVertical, ListPlus, Moon, Pencil } from "phosphor-react-sc";
+import { ArrowBendUpLeft, ArrowCounterClockwise, DotsThreeVertical, ListPlus, Moon, Pencil, Trash, TrashSimple } from "phosphor-react-sc";
 import { Container } from "../common/Container";
 import { Header } from "../common/Header";
 import { Logo } from "../common/Logo";
@@ -11,6 +11,7 @@ import { PresetPreview } from "./PresetPreview";
 import nightwind from "nightwind/helper"
 import Link from "next/link";
 import { Preset } from "../data/model/Preset";
+import { clearPresets, resetPresets } from "../data/persist/PresetRepository";
 
 export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[], presets: Preset[], onClear: () => void }) {
     return (
@@ -31,6 +32,11 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                                     icon: <Pencil size="24px"/>,
                                     title: "Edit presets",
                                     onClick: () => {}
+                                },
+                                {
+                                    icon: <TrashSimple size="24px"/>,
+                                    title: "Clear presets",
+                                    onClick: () => { resetPresets() }
                                 },
                                 {
                                     icon: <ArrowCounterClockwise size="24px"/>,

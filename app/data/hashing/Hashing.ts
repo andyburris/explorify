@@ -45,7 +45,7 @@ function applyHashToSegments(hash: number, segmentSetters: HashSegmentSetter[]) 
         return acc + segmentSetter.numberOfBits
     }, 0)
 }
-function countBits(segments: HashSegment[]) { return segments.reduce((acc, s) => acc + s.numberOfBits, 0)}
+function countBits(segments: HashSegment[] | HashSegmentSetter[]) { return segments.reduce((acc, s) => acc + s.numberOfBits, 0)}
 
 export function hashOperations(operations: Operations, inBinary?: boolean): string {
     const version = '1' //increment the first character each version upgrade to ensure breaking changes are handled
@@ -64,7 +64,7 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
         { value: operations.sort.sortItemsBy, numberOfBits: 2 },
         { value: operations.sort.sortItemsAscending, numberOfBits: 1 },
 
-        { value: operations.viewOptions.primaryInfo, numberOfBits: 1 },
+        { value: operations.viewOptions.primaryInfo, numberOfBits: 2 },
         { value: (operations.viewOptions.secondaryInfo ?? -1) + 1, numberOfBits: 2 },
         { value: operations.viewOptions.showSearch, numberOfBits: 1 },
         { value: operations.viewOptions.showItems, numberOfBits: 1 },
@@ -76,7 +76,7 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
     const asBigint = segmentsToHashBigint(segments)
     if(inBinary == true) return asBigint.toString(2).padStart(numberOfBits, '0')
     const hashString = version + asBigint.toString(36).padStart(numberOfBits / 5, '0')
-    if(DEBUG && JSON.stringify(operations) != JSON.stringify(parseHash(hashString))) throw Error(`Incorrect hashing/unhashing algorithm: operations = ${JSON.stringify(operations)}, unhashed = ${JSON.stringify(parseHash(hashString))}`)
+    if(DEBUG && JSON.stringify(operations) != JSON.stringify(parseHash(hashString))) throw Error(`Incorrect hashing/unhashing algorithm: operations = ${JSON.stringify(operations, null, 2)}, unhashed = ${JSON.stringify(parseHash(hashString), null, 2)}`)
     return hashString
 }
 
@@ -106,11 +106,11 @@ export function parseHash(hash: string): Operations {
                 { setter: (n) => operations.filter.searchBy = n as SearchType, numberOfBits: 2 },
                 { setter: (n) => operations.filter.rerankSearch = !!n, numberOfBits: 1 },
                 
-                { setter: (n) => applyGroupSort(n, operations.sort.sortGroupsBy), numberOfBits: 28 },
+                applyGroupSort(operations.sort.sortGroupsBy),
                 { setter: (n) => operations.sort.sortItemsBy = n as ItemSortType, numberOfBits: 2 },
                 { setter: (n) => operations.sort.sortItemsAscending = !!n, numberOfBits: 1 },
         
-                { setter: (n) => operations.viewOptions.primaryInfo = n, numberOfBits: 1 },
+                { setter: (n) => operations.viewOptions.primaryInfo = n, numberOfBits: 2 },
                 { setter: (n) => operations.viewOptions.secondaryInfo = (n == 0 ? null : n - 1 as ViewInfoType), numberOfBits: 2 },
                 { setter: (n) => operations.viewOptions.showSearch = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.showItems = !!n, numberOfBits: 1 },
@@ -162,12 +162,12 @@ function hashGroupSort(sortOrder: GroupSortOrder): HashSegment {
     return { value: segmentsToHashNumber(segments), numberOfBits: countBits(segments)}
 }
 
-function applyGroupSort(hash: number, sortOrder: GroupSortOrder) {
+function applyGroupSort(sortOrder: GroupSortOrder): HashSegmentSetter {
     const segments: HashSegmentSetter[] = [
-        { setter: (n) => applyGroupSortOrder(n, sortOrder), numberOfBits: 19 },
-        { setter: (n) => applyGroupSortDirections(n, sortOrder), numberOfBits: 9 },
+        applyGroupSortOrder(sortOrder),
+        applyGroupSortDirections(sortOrder),
     ]
-    applyHashToSegments(hash, segments)
+    return { setter: (n) => applyHashToSegments(n, segments), numberOfBits: countBits(segments) }   
 }
 
 function hashGroupSortOrder(sortOrder: GroupSortOrder): HashSegment {
@@ -177,9 +177,16 @@ function hashGroupSortOrder(sortOrder: GroupSortOrder): HashSegment {
     return { value: hashed, numberOfBits: factorial(sortEntries).toString(2).length }
 }
 
-function applyGroupSortOrder(hash: number, sortOrder: GroupSortOrder) {
-    const unhashed = unhashSortedIndices(hash, Object.keys(sortOrder))
-    unhashed.forEach(k => sortOrder[k.key as keyof GroupSortOrder].index = k.index)
+function applyGroupSortOrder(sortOrder: GroupSortOrder): HashSegmentSetter {
+    const keys = Object.keys(sortOrder)
+    const numberOfBits = factorial(keys.length).toString(2).length
+    return { 
+        setter: (n) => {
+            const unhashed = unhashSortedIndices(n, keys)
+            unhashed.forEach(k => sortOrder[k.key as keyof GroupSortOrder].index = k.index)
+        },
+        numberOfBits: numberOfBits,
+    }
 }
 
 function hashGroupSortDirections(sortOrder: GroupSortOrder): HashSegment {
@@ -192,12 +199,13 @@ function hashGroupSortDirections(sortOrder: GroupSortOrder): HashSegment {
         { value: sortOrder.artist.isAscending, numberOfBits: 1 },
         { value: sortOrder.song.isAscending, numberOfBits: 1 },
         { value: sortOrder.album.isAscending, numberOfBits: 1 },
-        { value: sortOrder.sum.isAscending, numberOfBits: 1 },
+        { value: sortOrder.totalPlays.isAscending, numberOfBits: 1 },
+        { value: sortOrder.totalPlaytime.isAscending, numberOfBits: 1 },
     ]
     return { value: segmentsToHashNumber(segments), numberOfBits: countBits(segments)}
 }
 
-function applyGroupSortDirections(hash: number, sortOrder: GroupSortOrder) {
+function applyGroupSortDirections(sortOrder: GroupSortOrder): HashSegmentSetter {
     const segments: HashSegmentSetter[] = [
         { setter: (n) => sortOrder.hour.isAscending = !!n, numberOfBits: 1 },
         { setter: (n) => sortOrder.dayOfWeek.isAscending = !!n, numberOfBits: 1 },
@@ -207,7 +215,8 @@ function applyGroupSortDirections(hash: number, sortOrder: GroupSortOrder) {
         { setter: (n) => sortOrder.artist.isAscending = !!n, numberOfBits: 1 },
         { setter: (n) => sortOrder.song.isAscending = !!n, numberOfBits: 1 },
         { setter: (n) => sortOrder.album.isAscending = !!n, numberOfBits: 1 },
-        { setter: (n) => sortOrder.sum.isAscending = !!n, numberOfBits: 1 },
+        { setter: (n) => sortOrder.totalPlays.isAscending = !!n, numberOfBits: 1 },
+        { setter: (n) => sortOrder.totalPlaytime.isAscending = !!n, numberOfBits: 1 },
     ]
-    applyHashToSegments(hash, segments)
+    return { setter: (n) => applyHashToSegments(n, segments), numberOfBits: countBits(segments) }
 }
