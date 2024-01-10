@@ -6,8 +6,9 @@ import { Group } from "../data/model/Group";
 import { applyOperations } from "../data/transform/Operating";
 import { PickedIcon } from "../common/PickedIcon";
 import { ViewInfoType, ViewOptions } from "../data/model/ViewOptions";
-import { Play } from "phosphor-react-sc";
+import { Clock, Play } from "phosphor-react-sc";
 import { Combination, TrackCombination, ArtistCombination } from "../data/model/Combination";
+import { millisToMinsSecs } from "../view/[id]/item/ListenItem";
 
 export function PresetPreview({ preset, listens }: { preset: Preset, listens: HistoryEntry[] }) {
     const [previewItems, setPreviewItems] = useState<Combination[] | Group[] | null>(null)
@@ -70,11 +71,16 @@ function PreviewItem({ combinationOrGroup, index, viewOptions }: { combinationOr
                     : (combinationOrGroup instanceof TrackCombination) ? combinationOrGroup.trackName : (combinationOrGroup as ArtistCombination).artistName
                 }
             </p>
-            { combinationOrGroup instanceof Group
-                ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.totalPlays} </p><Play weight="bold" size="16px"/></div>
-                : viewOptions.primaryInfo == ViewInfoType.Plays
-                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.listens.length} </p><Play weight="bold" size="16px"/></div>
-                    : <p className="text-green-700">{combinationOrGroup.listens[0].timestamp.toLocaleDateString('en-US', formatOptions)}</p>
+            {
+                viewOptions.primaryInfo == ViewInfoType.Plays
+                    ? combinationOrGroup instanceof Group
+                        ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.totalPlays} </p><Play weight="bold" size="16px"/></div>
+                        : <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.listens.length} </p><Play weight="bold" size="16px"/></div>
+                : viewOptions.primaryInfo == ViewInfoType.Playtime
+                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{millisToMinsSecs(combinationOrGroup.totalPlaytimeMs)} </p><Clock weight="bold" size="16px"/></div>
+                    : combinationOrGroup instanceof Group
+                        ? <></>
+                        : <p className="text-green-700">{combinationOrGroup.listens[0].timestamp.toLocaleDateString('en-US', formatOptions)}</p>
             }
         </div>
     )

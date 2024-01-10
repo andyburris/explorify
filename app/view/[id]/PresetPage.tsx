@@ -11,7 +11,7 @@ import { useEffect, useMemo, useState } from "react"
 import { DataTable } from "./DataTable"
 import { applyOperations } from "@/app/data/transform/Operating"
 import { LazyList } from "../../common/LazyList"
-import { OperationsSelector } from "./filters/OperationsSelector"
+import { OperationType, OperationsSelector } from "./filters/OperationsSelector"
 import { ActionButton } from "@/app/common/button/ActionButton"
 import nightwindHelper from "nightwind/helper"
 import { TextField } from "@/app/common/TextField"
@@ -35,6 +35,7 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
     const isValid = (customizedPreset.name.trim().length != 0 && customizedPreset.description.trim().length != 0 && customizedPreset.icon.trim().length != 0 && customizedPreset.id.trim().length != 0)
 
     const [isCustomizing, setCustomizing] = useState(false)
+    const [currentTab, setCurrentTab] = useState(OperationType.Info)
     const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
 
     const header = (
@@ -116,7 +117,12 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
                 />
             </div>
             { isCustomizing &&
-                <OperationsSelector currentPreset={customizedPreset} onChangePreset={p => setCustomizedPreset(p)} />
+                <OperationsSelector 
+                    currentPreset={customizedPreset} 
+                    onChangePreset={p => setCustomizedPreset(p)}
+                    currentTab={currentTab}
+                    onChangeTab={setCurrentTab}
+                     />
             }
             { customizedPreset.operations.viewOptions.showSearch && 
                 <TextField 

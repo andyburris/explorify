@@ -11,14 +11,19 @@ import { Preset } from "@/app/data/model/Preset";
 import { Segment, SegmentedControl } from "@/app/common/SegmentedControl";
 import { Combobox } from "@/app/common/components/ui/combobox";
 
-enum OperationType { Info="Info", Group="Group", Filter="Filter", Sort="Sort", View="View" }
-export function OperationsSelector({ currentPreset, onChangePreset }: { currentPreset: Preset, onChangePreset: (preset: Preset) => void }) {
+export enum OperationType { Info="Info", Group="Group", Filter="Filter", Sort="Sort", View="View" }
+export function OperationsSelector({ currentPreset, onChangePreset, currentTab, onChangeTab }: { 
+    currentPreset: Preset,
+    onChangePreset: (preset: Preset) => void,
+    currentTab: OperationType,
+    onChangeTab: (tab: OperationType) => void,
+ }) {
     const currentOperations = currentPreset.operations
     const onChangeOperations = (operations: Operations) => onChangePreset({ ...currentPreset, operations: operations})
     return (
         <div className="flex flex-col rounded-2xl shadow-outset mt-4 overflow-hidden">
             <p className="text-neutral-500 font-semibold px-4 pt-4 pb-2">Customize</p>
-            <Tabs.Root defaultValue={OperationType.Info}>
+            <Tabs.Root value={currentTab} onValueChange={t => onChangeTab(t as OperationType)}>
                 <Tabs.List className="flex w-full border-b border-neutral-300 overflow-x-scroll pb-[1px]">
                     <OperationTab operationType={OperationType.Info} icon={<Info/>} />
                     <OperationTab operationType={OperationType.Group} icon={<ArrowsMerge/>} />
