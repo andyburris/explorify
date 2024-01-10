@@ -17,7 +17,7 @@ class IndexedCombination { constructor(public index: number, public combination:
 class IndexedHistoryEntry { constructor(public isFirst: boolean, public isLast: boolean, public listen: HistoryEntry, public showSong: boolean){} }
 class ExpandGroup { constructor(public group: Group, public isExpanded: boolean, public amountRemaining: number){} }
 
-export function DataTable({ groups, viewOptions }: { groups: Group[], viewOptions: ViewOptions }) {
+export function DataTable({ groups, viewOptions, header }: { groups: Group[], viewOptions: ViewOptions, header: React.ReactNode }) {
   const [expandedGroups, setExpandedGroups] = useState<Group[]>([])
   const [expandedCombinations, setExpandedCombinations] = useState<Combination[]>([])
 
@@ -25,6 +25,7 @@ export function DataTable({ groups, viewOptions }: { groups: Group[], viewOption
 
   return (
     <LazyList 
+      header={header}
       items={flattened} 
       itemContent={(index) => {
         const listItem = flattened[index]

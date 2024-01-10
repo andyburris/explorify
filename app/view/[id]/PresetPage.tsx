@@ -36,8 +36,9 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
 
     const [isCustomizing, setCustomizing] = useState(false)
     const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
-    return (
-        <Container>
+
+    const header = (
+        <div className="flex flex-col gap-8">
             <div className="flex flex-col">
                 <div className="w-full flex -ml-4">
                     <LinkButton linkPath="/" text="Home" icon={<ArrowLeft/>} hideShadow/>
@@ -123,9 +124,14 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
                     placeholder="Search..."
                     onChangeValue={v => setCustomizedPreset({ ...customizedPreset, operations: { ...customizedPreset.operations, filter: { ...customizedPreset.operations.filter, searchTerm: v }}})} />
             }
+        </div>
+    )
+
+    return (
+        <Container>
             { filtered 
-                ? <DataTable groups={filtered} viewOptions={customizedPreset.operations.viewOptions}/> 
-                : <LazyList className="mt-10" items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
+                ? <DataTable groups={filtered} viewOptions={customizedPreset.operations.viewOptions} header={header}/> 
+                : <LazyList header={<div className="mb-10">{header}</div>} items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
             }
         </Container>
     )
