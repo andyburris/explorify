@@ -1,3 +1,4 @@
+"use client"
 
 import { Container } from "@/app/common/Container"
 import { Dropdown } from "@/app/common/Dropdown"
@@ -23,7 +24,7 @@ import { useRouter } from "next/navigation"
 import { usePresets } from "@/app/data/utils/presetUtils"
 import { ShareDialog } from "./ShareDialog"
 
-export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
+export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset, isShared: boolean }) {
     const router = useRouter()
     
     const [loadedEntries, setLoadedEntries] = useState<HistoryEntry[] | undefined>();
@@ -38,7 +39,7 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
     const [isCustomizing, setCustomizing] = useState(false)
     const [currentTab, setCurrentTab] = useState(OperationType.Info)
     const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
-    const [isShareDialogOpen, setShareDialogOpen] = useState(true)
+    const [isShareDialogOpen, setShareDialogOpen] = useState(false)
 
     const header = (
         <div className="flex flex-col gap-8">
@@ -121,6 +122,13 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
                     }
                 />
             </div>
+            { (isShared && !isCustomizing) && 
+                <div className="flex items-center gap-4 p-4 rounded-2xl bg-green-50 w-full text-green-700 border border-green-200">
+                    <Share/>
+                    <p className="">
+                        You probably got this link from someone. <span className="font-semibold text-green-900 hover:underline cursor-pointer" onClick={() => setCustomizing(true)}>Customize</span> to make this preset your own and save it!</p>
+                </div>
+            }
             { isCustomizing &&
                 <OperationsSelector 
                     currentPreset={customizedPreset} 

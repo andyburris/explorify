@@ -15,6 +15,6 @@ export default function ViewPage({ params }: { params: { id: string } }) {
     if(preset === undefined) return (<p>Can't find preset with id = "{params.id}"</p>)
 
     return (
-        <PresetPage initialPreset={preset} />
+        <PresetPage initialPreset={preset} isShared={false} />
     )
 }

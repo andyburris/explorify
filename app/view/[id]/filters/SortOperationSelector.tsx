@@ -6,6 +6,7 @@ import { Combobox } from "@/app/common/components/ui/combobox";
 import { useState } from "react";
 import { ActionButton } from "@/app/common/button/ActionButton";
 import { sortItemsInOrder } from "@/app/data/transform/Sorting";
+import { simpleSortGroupsDate, simpleSortGroupsPlays, simpleSortGroupsSong } from "@/app/data/Defaults";
 
 export function SortOperationSelector({ currentOperation, groupType, onChangeOperation }: { currentOperation: SortOperation, groupType: GroupType, onChangeOperation: (newFilter: SortOperation) => void }) {
     const [isCustomGroupSort, setCustomGroupSort] = useState(false)
@@ -186,42 +187,6 @@ function GroupSortItem({ icon, name, isAscending, sortNames, isEnabled, canIncre
 }
 
 enum SimpleGroupSortType { Date, Name, Plays }
-export const simpleSortGroupsDate = {
-    hour: { index: 4, isAscending: true },
-    dayOfWeek: { index: 3, isAscending: true },
-    date: { index: 2, isAscending: true },
-    month: { index: 1, isAscending: true },
-    year: { index: 0, isAscending: true },
-    artist: { index: 6, isAscending: true },
-    song: { index: 5, isAscending: true },
-    album: { index: 7, isAscending: true },
-    totalPlays: { index: 8, isAscending: true },
-    totalPlaytime: { index: 9, isAscending: true },
-}
-export const simpleSortGroupsSong = {
-    hour: { index: 7, isAscending: true },
-    dayOfWeek: { index: 6, isAscending: true },
-    date: { index: 5, isAscending: true },
-    month: { index: 4, isAscending: true },
-    year: { index: 3, isAscending: true },
-    artist: { index: 1, isAscending: true },
-    song: { index: 0, isAscending: true },
-    album: { index: 2, isAscending: true },
-    totalPlays: { index: 8, isAscending: true },
-    totalPlaytime: { index: 9, isAscending: true },
-}
-export const simpleSortGroupsPlays = {
-    hour: { index: 8, isAscending: true },
-    dayOfWeek: { index: 7, isAscending: true },
-    date: { index: 6, isAscending: true },
-    month: { index: 5, isAscending: true },
-    year: { index: 4, isAscending: true },
-    artist: { index: 2, isAscending: true },
-    song: { index: 1, isAscending: true },
-    album: { index: 3, isAscending: true },
-    totalPlays: { index: 0, isAscending: false },
-    totalPlaytime: { index: 9, isAscending: false },
-}
 
 const songAsString = JSON.stringify(simpleSortGroupsSong)
 const playsAsString = JSON.stringify(simpleSortGroupsPlays)

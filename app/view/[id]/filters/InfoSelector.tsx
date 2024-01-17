@@ -23,7 +23,10 @@ export function InfoSelector({ preset, onChangePreset }: { preset: Preset, onCha
             </OperationSection>
             <OperationSection title="Identifier">
                 <TextField placeholder="ID" currentValue={preset.id} onChangeValue={(v) => onChangePreset({ ...preset, id: v })}/>
-                <p><span className="text-neutral-500">https://quantize.music/view/</span><span className="font-semibold">{preset.id}</span></p>
+                <div className="flex justify-between flex-wrap">
+                    <p><span className="text-neutral-500">https://quantize.music/view/</span><span className="font-semibold">{preset.id}</span></p>
+                    {preset.id.trim().length <= 0 && <p className="text-red-700">A valid ID is required to save</p>}
+                </div>
             </OperationSection>
         </div>
     )

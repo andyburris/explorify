@@ -30,7 +30,7 @@ export function SaveDialog({ open, preset, listens, onOpenChange, onSave }: {ope
                                 <ActionButton className="shadow-none hover:bg-neutral-100 flex-shrink-0" onClick={() => onOpenChange(false)} icon={<X/>} />
                             </div>
                             { overwriting &&
-                                <div className="flex items-center gap-3 p-3 rounded-xl bg-green-50 w-full text-green-700">
+                                <div className="flex items-center gap-4 p-4 rounded-2xl bg-green-50 w-full text-green-700 border border-green-200">
                                     <Warning/>
                                     <p className="">Saving will overwrite <span className="font-bold text-green-900">{overwriting.name}</span></p>
                                 </div>

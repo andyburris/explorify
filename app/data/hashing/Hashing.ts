@@ -93,6 +93,10 @@ function parseBigInt(str: string, radix: number): bigint {
         return newNum
     }, BigInt(0))
 }
+
+export function parsePresetHash(hash: string) {
+    
+}
 export function parseHash(hash: string): Operations {
     const operations: Operations = JSON.parse(JSON.stringify(defaultPresets[0].operations));
     const version = parseInt(hash.at(0)!, 36)

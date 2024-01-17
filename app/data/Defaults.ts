@@ -1,10 +1,45 @@
-import { simpleSortGroupsDate, simpleSortGroupsPlays } from "../view/[id]/filters/SortOperationSelector";
 import { CombineInto, CombineType, ItemSortType, SearchType, SkipFilterType } from "./model/Operations";
 import { Preset } from "./model/Preset";
 import { ViewInfoType } from "./model/ViewOptions";
 
 export const groupNone = { hour: false, dayOfWeek: false, date: false, month: false,year: false, artist: false, song: false, album: false, }
 
+export const simpleSortGroupsDate = {
+    hour: { index: 4, isAscending: true },
+    dayOfWeek: { index: 3, isAscending: true },
+    date: { index: 2, isAscending: true },
+    month: { index: 1, isAscending: true },
+    year: { index: 0, isAscending: true },
+    artist: { index: 6, isAscending: true },
+    song: { index: 5, isAscending: true },
+    album: { index: 7, isAscending: true },
+    totalPlays: { index: 8, isAscending: true },
+    totalPlaytime: { index: 9, isAscending: true },
+}
+export const simpleSortGroupsSong = {
+    hour: { index: 7, isAscending: true },
+    dayOfWeek: { index: 6, isAscending: true },
+    date: { index: 5, isAscending: true },
+    month: { index: 4, isAscending: true },
+    year: { index: 3, isAscending: true },
+    artist: { index: 1, isAscending: true },
+    song: { index: 0, isAscending: true },
+    album: { index: 2, isAscending: true },
+    totalPlays: { index: 8, isAscending: true },
+    totalPlaytime: { index: 9, isAscending: true },
+}
+export const simpleSortGroupsPlays = {
+    hour: { index: 8, isAscending: true },
+    dayOfWeek: { index: 7, isAscending: true },
+    date: { index: 6, isAscending: true },
+    month: { index: 5, isAscending: true },
+    year: { index: 4, isAscending: true },
+    artist: { index: 2, isAscending: true },
+    song: { index: 1, isAscending: true },
+    album: { index: 3, isAscending: true },
+    totalPlays: { index: 0, isAscending: false },
+    totalPlaytime: { index: 9, isAscending: false },
+}
 
 export const defaultPresets: Preset[] = [
     {

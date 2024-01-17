@@ -2,7 +2,7 @@ import { ActionButton } from "@/app/common/button/ActionButton";
 import { hashOperations, hashPreset } from "@/app/data/hashing/Hashing";
 import { Preset } from "@/app/data/model/Preset";
 import * as Dialog from "@radix-ui/react-dialog"
-import { Copy, Share, X } from "phosphor-react-sc";
+import { Copy, Info, Share, X } from "phosphor-react-sc";
 import { useState } from "react";
 
 export function ShareDialog({ preset, open, onOpenChange }: { preset: Preset, open: boolean, onOpenChange: (open: boolean) => void, }) {
@@ -11,7 +11,7 @@ export function ShareDialog({ preset, open, onOpenChange }: { preset: Preset, op
     const presetHash = hashPreset(preset)
     const operationHash = hashOperations(preset.operations)
     
-    const [includeDetails, setIncludeDetails] = useState(Boolean(localStorage.getItem("shareIncludeDetails")))
+    const [includeDetails, setIncludeDetails] = useState(Boolean(localStorage.getItem("shareIncludeDetails") ?? true))
     const hash = (includeDetails ? presetHash : operationHash)
     const url = `${domain}${hash}`
 
@@ -31,12 +31,13 @@ export function ShareDialog({ preset, open, onOpenChange }: { preset: Preset, op
                                 <ActionButton className="shadow-none hover:bg-neutral-100 flex-shrink-0" onClick={() => onOpenChange(false)} icon={<X/>} />
                             </div>
                         </div>
-                        <div className="flex flex-col p-4 gap-4 rounded-2xl bg-green-50 border border-green-200">
+                        <div className="flex p-4 gap-4 rounded-2xl bg-green-50 border border-green-200">
                             {/* <p className="text-green-700">Link</p> */}
                             <p className="">
                                 <span className="text-green-700">{domain}</span>
                                 <span className="text-green-950 font-semibold break-all">{hash}</span>
                             </p>
+                            {/* <ActionButton hideShadow onClick={() => setIncludeDetails(!includeDetails)} icon={<Info/>} /> */}
                         </div>
                         <ActionButton 
                             icon={<Copy/>} 
