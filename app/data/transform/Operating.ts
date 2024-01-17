@@ -38,11 +38,12 @@ function filterItems(items: HistoryEntry[], filterOperation: FilterOperation): H
     return filteredSkips.filter(he => filterItem(he, filterOperation))
 }
 
-function filterItem(listen: HistoryEntry, operation: FilterOperation) : boolean{
+function filterItem(listen: HistoryEntry, operation: FilterOperation) : boolean {
     switch(operation.searchBy) {
-        case SearchType.All: return listen.trackName.toLowerCase().includes(operation.searchTerm.toLowerCase()) || listen.artistName.toLowerCase().includes(operation.searchTerm.toLowerCase())
+        case SearchType.All: return listen.trackName.toLowerCase().includes(operation.searchTerm.toLowerCase()) || listen.artistName.toLowerCase().includes(operation.searchTerm.toLowerCase())|| listen.albumName.toLowerCase().includes(operation.searchTerm.toLowerCase())
         case SearchType.SongName: return listen.trackName.toLowerCase().includes(operation.searchTerm.toLowerCase())
         case SearchType.ArtistName: return listen.artistName.toLowerCase().includes(operation.searchTerm.toLowerCase())
+        case SearchType.AlbumName: return listen.albumName.toLowerCase().includes(operation.searchTerm.toLowerCase())
     }
 }
 

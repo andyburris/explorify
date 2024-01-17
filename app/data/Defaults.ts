@@ -109,6 +109,39 @@ export const defaultPresets: Preset[] = [
                 secondaryInfo: null,
             },
         },
+    },    {
+        id: "top-albums",
+        name: "Top Albums",
+        icon: "disc",
+        description: "The albums you’ve listened to the most",
+        operations: {
+            group: {
+                groupBy: { ...groupNone, album: true, artist: true },
+                combineBy: CombineType.SameSong,
+                combineInto: CombineInto.EarliestPlay,
+                combineAcrossGroups: false,
+            },
+            filter: {
+                filterSkipsBy: SkipFilterType.NoSkips,
+                searchTerm: "",
+                searchBy: SearchType.All,
+                rerankSearch: false,
+            },
+            sort: {
+                sortGroupsBy: simpleSortGroupsPlays,
+                sortItemsBy: ItemSortType.Plays,
+                sortItemsAscending: false,
+            },
+            viewOptions: {
+                showSearch: false,
+                showGroupSum: true,
+                showItems: true,
+                showItemRanks: true,
+                previewGroups: false,
+                primaryInfo: ViewInfoType.Plays,
+                secondaryInfo: null,
+            },
+        },
     },
     {
         id: "most-skipped",
