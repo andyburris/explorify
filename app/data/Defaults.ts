@@ -1,4 +1,4 @@
-import { simpleSortGroupsDate, simpleSortGroupsSum } from "../view/[id]/filters/SortOperationSelector";
+import { simpleSortGroupsDate, simpleSortGroupsPlays } from "../view/[id]/filters/SortOperationSelector";
 import { CombineInto, CombineType, ItemSortType, SearchType, SkipFilterType } from "./model/Operations";
 import { Preset } from "./model/Preset";
 import { ViewInfoType } from "./model/ViewOptions";
@@ -26,7 +26,7 @@ export const defaultPresets: Preset[] = [
                 rerankSearch: false,
             },
             sort: {
-                sortGroupsBy: simpleSortGroupsSum,
+                sortGroupsBy: simpleSortGroupsPlays,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
             },
@@ -60,7 +60,7 @@ export const defaultPresets: Preset[] = [
                 rerankSearch: false,
             },
             sort: {
-                sortGroupsBy: simpleSortGroupsSum,
+                sortGroupsBy: simpleSortGroupsPlays,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
             },
@@ -196,7 +196,7 @@ export const defaultPresets: Preset[] = [
                 rerankSearch: false,
             },
             sort: {
-                sortGroupsBy: simpleSortGroupsSum,
+                sortGroupsBy: simpleSortGroupsPlays,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
             },

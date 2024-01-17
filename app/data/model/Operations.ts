@@ -42,7 +42,7 @@ export interface GroupSortOrder {
     totalPlays: GroupSortOrderItem,
     totalPlaytime: GroupSortOrderItem,
 }
-export enum ItemSortType { Date, Plays, Name, ArtistName }
+export enum ItemSortType { Date, Plays, Name, ArtistName, Playtime }
 export interface SortOperation {
     sortGroupsBy: GroupSortOrder,
     sortItemsBy: ItemSortType,

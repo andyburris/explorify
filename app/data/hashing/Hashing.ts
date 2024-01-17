@@ -61,7 +61,7 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
         { value: operations.filter.rerankSearch, numberOfBits: 1 },
         
         hashGroupSort(operations.sort.sortGroupsBy),
-        { value: operations.sort.sortItemsBy, numberOfBits: 2 },
+        { value: operations.sort.sortItemsBy, numberOfBits: 3 },
         { value: operations.sort.sortItemsAscending, numberOfBits: 1 },
 
         { value: operations.viewOptions.primaryInfo, numberOfBits: 2 },
@@ -107,7 +107,7 @@ export function parseHash(hash: string): Operations {
                 { setter: (n) => operations.filter.rerankSearch = !!n, numberOfBits: 1 },
                 
                 applyGroupSort(operations.sort.sortGroupsBy),
-                { setter: (n) => operations.sort.sortItemsBy = n as ItemSortType, numberOfBits: 2 },
+                { setter: (n) => operations.sort.sortItemsBy = n as ItemSortType, numberOfBits: 3 },
                 { setter: (n) => operations.sort.sortItemsAscending = !!n, numberOfBits: 1 },
         
                 { setter: (n) => operations.viewOptions.primaryInfo = n, numberOfBits: 2 },

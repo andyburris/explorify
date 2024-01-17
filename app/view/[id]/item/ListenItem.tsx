@@ -74,7 +74,22 @@ function InfoItem({ description, text, icon, className }: { description?: string
     )
 }
 
-export function millisToMinsSecs(milliseconds: number) {
+export function millisToMinsSecs(milliseconds: number, compact?: boolean) {
+    if(compact) return millisToMinsSecsColon(milliseconds)
+    const space = compact ? "" : " "
+
+    const seconds = milliseconds / 1000
+    const roundedSeconds = Math.round(seconds)
+    const minutes = Math.floor(roundedSeconds / 60)
+    const remainingSeconds = roundedSeconds % 60
+    const hours = Math.floor(roundedSeconds / (60 * 60))
+    const remainingMinutes = minutes % 60
+    return (hours > 0) 
+        ? `${hours}h${space}${remainingMinutes.toString()}m${space}${remainingSeconds.toString().padStart(2, '0')}s`
+        : `${minutes}m${space}${remainingSeconds.toString().padStart(2, '0')}s`
+}
+
+function millisToMinsSecsColon(milliseconds: number) {
     const seconds = milliseconds / 1000
     const roundedSeconds = Math.round(seconds)
     const minutes = Math.floor(roundedSeconds / 60)

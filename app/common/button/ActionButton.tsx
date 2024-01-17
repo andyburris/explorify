@@ -10,7 +10,7 @@ export function ActionButton(props: ActionButtonProps) {
         onClick={() => { 
             if(enabled ?? true) { onClick() } }
          }
-        className={buttonClassName(props)+ " cursor-pointer"}>
+        className={buttonClassName(props)}>
             {icon && icon}
             {text && (<span className="text-base font-medium">{text}</span>)}
         </a>

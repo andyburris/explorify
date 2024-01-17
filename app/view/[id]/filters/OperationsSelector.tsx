@@ -52,7 +52,7 @@ export function OperationsSelector({ currentPreset, onChangePreset, currentTab, 
                 <Tabs.Content value={OperationType.Sort} className="p-4">
                     <SortOperationSelector 
                         currentOperation={currentOperations.sort} 
-                        hasGroups={Object.values(currentOperations.group.groupBy).some(b => b)} 
+                        groupType={currentOperations.group.groupBy} 
                         onChangeOperation={sf => onChangeOperations({...currentOperations, sort: sf }) } 
                     />
                 </Tabs.Content>

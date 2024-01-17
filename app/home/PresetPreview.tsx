@@ -77,7 +77,7 @@ function PreviewItem({ combinationOrGroup, index, viewOptions }: { combinationOr
                         ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.totalPlays} </p><Play weight="bold" size="16px"/></div>
                         : <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.listens.length} </p><Play weight="bold" size="16px"/></div>
                 : viewOptions.primaryInfo == ViewInfoType.Playtime
-                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{millisToMinsSecs(combinationOrGroup.totalPlaytimeMs)} </p><Clock weight="bold" size="16px"/></div>
+                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{millisToMinsSecs(combinationOrGroup.totalPlaytimeMs, true)} </p><Clock weight="bold" size="16px"/></div>
                     : combinationOrGroup instanceof Group
                         ? <></>
                         : <p className="text-green-700">{combinationOrGroup.listens[0].timestamp.toLocaleDateString('en-US', formatOptions)}</p>

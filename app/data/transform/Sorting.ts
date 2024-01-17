@@ -19,6 +19,7 @@ export function applySort(groups: Group[], sortOperation: SortOperation) {
                         ? a.artistName.localeCompare((b as TrackCombination).artistName) * ((sortOperation.sortItemsAscending) ? 1 : -1)
                         : (a as ArtistCombination).artistName.localeCompare((b as ArtistCombination).artistName)  * ((sortOperation.sortItemsAscending) ? 1 : -1)
                 }
+                case ItemSortType.Playtime: return (sortOperation.sortItemsAscending) ? a.totalPlaytimeMs - b.totalPlaytimeMs : b.totalPlaytimeMs - a.totalPlaytimeMs
             }
         })
         g.combinations.forEach((c, i) => c.index = i)
@@ -26,11 +27,15 @@ export function applySort(groups: Group[], sortOperation: SortOperation) {
 }
 
 type GroupSortFunction = (g1: Group, g2: Group) => number
+export function sortItemsInOrder(order: GroupSortOrder): [string, GroupSortOrderItem][] {
+    return Object.entries(order)
+    .map(([k, v]) => [k, v] as [string, GroupSortOrderItem])
+    .toSorted(([k1, v1], [k2, v2]) => v1.index - v2.index)
+    // .filter(([key, _]) => groups[0].key[key as keyof GroupKey] !== null)
+}
 function sortGroups(groups: Group[], groupSortOrder: GroupSortOrder) {
-    const sortFunctionsInOrder: GroupSortFunction[] = Object.entries(groupSortOrder)
-        .map(([k, v]) => [k, v] as [string, GroupSortOrderItem])
-        .toSorted(([k1, v1], [k2, v2]) => v1.index - v2.index)
-        // .filter(([key, _]) => groups[0].key[key as keyof GroupKey] !== null)
+    const sortFunctionsInOrder: GroupSortFunction[] = 
+        sortItemsInOrder(groupSortOrder)
         .map(([key, groupSortItem]) => {
             const sortFunction: (isAscending: boolean) => GroupSortFunction = sortFunctionMap.get(key)!
             return sortFunction(groupSortItem.isAscending)
