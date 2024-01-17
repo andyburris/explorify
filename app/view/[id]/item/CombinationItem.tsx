@@ -13,7 +13,7 @@ export function CombinationItem({ combination, indexInGroup, viewOptions, isExpa
     return (
         <div className="flex items-center py-2 gap-4 min-h-[64px]">
             { viewOptions.showItemRanks && 
-                <div className="flex items-center justify-center w-10 h-10 rounded-md bg-neutral-100">
+                <div className="flex items-center justify-center w-10 bg-neutral-100 -ml-4 sm:ml-0 h-8 sm:h-10 rounded-e-2xl sm:rounded-md">
                     <p className="text-neutral-500 text-center text-sm font-medium">{indexInGroup + 1}</p>
                 </div>
             }

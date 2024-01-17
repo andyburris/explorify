@@ -75,8 +75,7 @@ function InfoItem({ description, text, icon, className }: { description?: string
 }
 
 export function millisToMinsSecs(milliseconds: number, compact?: boolean) {
-    if(compact) return millisToMinsSecsColon(milliseconds)
-    const space = compact ? "" : " "
+    // if(compact) return millisToMinsSecsColon(milliseconds)
 
     const seconds = milliseconds / 1000
     const roundedSeconds = Math.round(seconds)
@@ -84,9 +83,16 @@ export function millisToMinsSecs(milliseconds: number, compact?: boolean) {
     const remainingSeconds = roundedSeconds % 60
     const hours = Math.floor(roundedSeconds / (60 * 60))
     const remainingMinutes = minutes % 60
-    return (hours > 0) 
-        ? `${hours}h${space}${remainingMinutes.toString()}m${space}${remainingSeconds.toString().padStart(2, '0')}s`
-        : `${minutes}m${space}${remainingSeconds.toString().padStart(2, '0')}s`
+
+    if(compact) {
+        return (hours > 0) 
+            ? `${hours}h${remainingMinutes.toString().padStart(2, '0')}m`
+            : `${minutes}m ${remainingSeconds.toString().padStart(2, '0')}s`
+    } else {
+        return (hours > 0) 
+            ? `${hours}h ${remainingMinutes.toString()}m ${remainingSeconds.toString().padStart(2, '0')}s`
+            : `${minutes}m ${remainingSeconds.toString().padStart(2, '0')}s`
+    }
 }
 
 function millisToMinsSecsColon(milliseconds: number) {

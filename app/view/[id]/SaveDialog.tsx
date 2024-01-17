@@ -27,7 +27,7 @@ export function SaveDialog({ open, preset, listens, onOpenChange, onSave }: {ope
                                     <p className="font-serif font-bold tracking-tight text-4xl flex-grow">Save Preset</p>
                                     <ActionButton enabled={isValid} onClick={() => onSave(preset)} text="Save" icon={<FloppyDiskBack/>} />
                                 </div>
-                                <ActionButton className="shadow-none hover:bg-neutral-100" onClick={() => onOpenChange(false)} icon={<X/>} />
+                                <ActionButton className="shadow-none hover:bg-neutral-100 flex-shrink-0" onClick={() => onOpenChange(false)} icon={<X/>} />
                             </div>
                             { overwriting &&
                                 <div className="flex items-center gap-3 p-3 rounded-xl bg-green-50 w-full text-green-700">

@@ -20,9 +20,13 @@ export function Combobox<T>({ options, selectedValues, onSelectValues, placehold
         className="flex items-center gap-3 w-full p-4 rounded-xl border border-neutral-200 justify-between cursor-pointer"
         onClick={() => setOpen(true)}
       >
-        <div className="flex gap-3 items-center flex-wrap text-neutral-500">
+        <div className="flex gap-3 items-center flex-wrap">
           {selectedOptions.length
-            ? selectedOptions.map((o, i) => <div className="flex items-center gap-2" key={o.key}>{o.icon}{o.label}{i == selectedOptions.length - 1 ? "" : ", "}</div>)
+            ? selectedOptions.map((o, i) => 
+              <div className="flex items-center gap-2" key={o.key}>
+                <span className="text-neutral-500">{o.icon}</span>
+                <p>{o.label}<span className="text-neutral-500">{i == selectedOptions.length - 1 ? "" : ", "}</span></p>
+              </div>)
             : placeholder}
         </div>
         <Plus className="ml-2 h-4 w-4 shrink-0 opacity-50" />

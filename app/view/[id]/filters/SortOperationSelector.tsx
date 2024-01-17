@@ -117,6 +117,7 @@ function GroupSortSelector({ currentSort, currentGroupType, onChangeSort }: { cu
                 const isAscending = currentSort[key as keyof GroupSortOrder].isAscending
                 return (
                     <GroupSortItem 
+                    key={key}
                     icon={sortType.icon} 
                     name={sortType.name} 
                     sortNames={sortType.sortNames} 
@@ -172,7 +173,7 @@ function GroupSortItem({ icon, name, isAscending, sortNames, isEnabled, canIncre
         <div className="flex gap-3 px-3 py-2 rounded-xl items-center w-full">
             <div className="text-neutral-500 text-xl">{icon}</div>
             <p className={"flex-grow" + (isEnabled ? "" : " opacity-70")}>
-                <span className="font-semibold min-w-min">{name}</span>
+                <span className="min-w-min">{name}</span>
                 <span className="text-neutral-500"> ∙ {isAscending ? ascendingName : descendingName}</span>
             </p>
             <div className="flex">

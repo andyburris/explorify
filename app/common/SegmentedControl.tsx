@@ -32,7 +32,7 @@ export function SegmentedControl<T>({ items, selectedItem, onSelect }: { items: 
                     icon={item.icon} 
                     text={item.label} 
                     hideShadow={item.value != selectedItem} 
-                    className={"h-8 " + (item.value == selectedItem ? "bg-white" : "hover:bg-neutral-200")}
+                    className={"h-8 " + (item.value == selectedItem ? "bg-white text-neutral-700" : "hover:bg-neutral-200")}
                 />
             </ToggleGroup.Item>
         })}

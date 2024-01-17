@@ -21,6 +21,7 @@ export function ViewOptionsSelector({ currentOperation, onChangeOperation }: { c
                     items={[
                         { value: ViewInfoType.Date, label: "Date", key: "Date", icon: <Calendar/> },
                         { value: ViewInfoType.Plays, label: "Plays", key: "Plays", icon: <Play/> },
+                        { value: ViewInfoType.Playtime, label: "Playtime", key: "Playime", icon: <Clock/> },
                         { value: null, label: "None", key: "None", icon: <EyeSlash/> },
                     ]} 
                     selectedItem={currentOperation.secondaryInfo}

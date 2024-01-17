@@ -18,7 +18,8 @@ export function PrimaryInfo({ combination, primaryInfo }: { combination: Combina
                 ? <p>{combination.listens[0].timestamp.toLocaleDateString('en-US', dateFormatOptions)}</p>
             : (primaryInfo == ViewInfoType.Playtime)
                 ? <div className="flex gap-0.5 items-center">
-                    <p className="font-semibold">{millisToMinsSecs(combination.totalPlaytimeMs)}</p>
+                    <p className="font-semibold hidden sm:block">{millisToMinsSecs(combination.totalPlaytimeMs)}</p>
+                    <p className="font-semibold sm:hidden">{millisToMinsSecs(combination.totalPlaytimeMs, true)}</p>
                     <Clock className="" size="16px" weight="bold"/>
                 </div>
                 : <div className="flex gap-0.5 items-center">
