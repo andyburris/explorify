@@ -4,6 +4,8 @@ import { CombineInto, CombineType, GroupSortOrder, GroupSortOrderItem, GroupType
 import { ViewInfoType } from "../model/ViewOptions";
 import { factorial, hashSortedIndices, unhashSortedIndices } from "./HashSort";
 import { DEBUG } from "../utils/debug";
+import { Preset } from "../model/Preset";
+import { Base64 } from "../utils/base64";
 
 interface HashSegment { value: number | boolean, numberOfBits: number }
 interface HashSegmentSetter { setter: (value: number) => void, numberOfBits: number }
@@ -46,6 +48,10 @@ function applyHashToSegments(hash: number, segmentSetters: HashSegmentSetter[]) 
     }, 0)
 }
 function countBits(segments: HashSegment[] | HashSegmentSetter[]) { return segments.reduce((acc, s) => acc + s.numberOfBits, 0)}
+
+export function hashPreset(preset: Preset): string {
+    return `${hashOperations(preset.operations)}?t=${Base64.encode(preset.name)}&d=${Base64.encode(preset.description)}&i=${Base64.encode(preset.icon)}`
+}
 
 export function hashOperations(operations: Operations, inBinary?: boolean): string {
     const version = '1' //increment the first character each version upgrade to ensure breaking changes are handled

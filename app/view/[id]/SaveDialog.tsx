@@ -19,11 +19,11 @@ export function SaveDialog({ open, preset, listens, onOpenChange, onSave }: {ope
         <Dialog.Root open={open} onOpenChange={(o) => onOpenChange(o)}>
             <Dialog.Portal>
                 <Dialog.Overlay className="bg-black opacity-50 data-[state=open]:animate-overlayShow fixed inset-0" />
-                <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[720px] translate-x-[-50%] translate-y-[-50%] rounded-3xl bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none overflow-hidden overflow-y-scroll">
+                <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[720px] translate-x-[-50%] translate-y-[-50%] rounded-2xl bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none overflow-hidden overflow-y-scroll">
                     <div className="flex flex-col gap-3 h-full">
                         <div className="flex flex-col gap-4 w-full">
                             <div className="flex gap-2 items-center w-full">
-                                <div className="flex gap-4 items-center flex-grow flex-wrap">
+                                <div className="flex gap-x-4 gap-y-2 items-center flex-grow flex-wrap">
                                     <p className="font-serif font-bold tracking-tight text-4xl flex-grow">Save Preset</p>
                                     <ActionButton enabled={isValid} onClick={() => onSave(preset)} text="Save" icon={<FloppyDiskBack/>} />
                                 </div>

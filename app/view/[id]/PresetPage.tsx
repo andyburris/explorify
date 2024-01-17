@@ -15,12 +15,13 @@ import { OperationType, OperationsSelector } from "./filters/OperationsSelector"
 import { ActionButton } from "@/app/common/button/ActionButton"
 import nightwindHelper from "nightwind/helper"
 import { TextField } from "@/app/common/TextField"
-import { hashOperations, parseHash } from "@/app/data/hashing/Hashing"
+import { hashOperations, hashPreset, parseHash } from "@/app/data/hashing/Hashing"
 import { SaveDialog } from "./SaveDialog"
 import { Preset } from "@/app/data/model/Preset"
 import { getPresets, savePreset } from "@/app/data/persist/PresetRepository"
 import { useRouter } from "next/navigation"
 import { usePresets } from "@/app/data/utils/presetUtils"
+import { ShareDialog } from "./ShareDialog"
 
 export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
     const router = useRouter()
@@ -37,6 +38,7 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
     const [isCustomizing, setCustomizing] = useState(false)
     const [currentTab, setCurrentTab] = useState(OperationType.Info)
     const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
+    const [isShareDialogOpen, setShareDialogOpen] = useState(true)
 
     const header = (
         <div className="flex flex-col gap-8">
@@ -79,6 +81,13 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
                                 listens={loadedEntries} />
                             }
 
+                            { isShareDialogOpen &&
+                                <ShareDialog
+                                open={isShareDialogOpen}
+                                onOpenChange={(open) => { setShareDialogOpen(open) }}
+                                preset={customizedPreset} />
+                            }
+
                             {/* <p className="text-neutral-500 tabular-nums">{hashOperations(customizedFilters)} • {hashOperations(customizedFilters, true)}</p> */}
 
                             <Dropdown
@@ -99,11 +108,7 @@ export function PresetPage({ initialPreset }: { initialPreset: Preset }) {
                                     {
                                         icon: <Share/>,
                                         title: "Share preset",
-                                        onClick: () => { 
-                                            const hash = hashOperations(customizedPreset.operations)
-                                            const url = `https://localhost:3000/customize/${hash}`
-                                            navigator.clipboard.writeText(url)
-                                        },
+                                        onClick: () => setShareDialogOpen(true),
                                     },
                                     {
                                         icon: <Moon size="24px"/>,
