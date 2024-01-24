@@ -13,8 +13,9 @@ import { HistoryEntry } from "../data/model/HistoryEntry"
 import { openDB } from "idb"
 import { DATABASE_NAME, LISTENS_STORE_NAME, getDatabase, saveListens } from "../data/persist/Database"
 import { InstructionCard } from "./InstructionCard"
+import { getPresets, saveDefaultPresets } from "../data/persist/PresetRepository"
 
-export function UploadPage({ onUpload }: { onUpload: (entries: HistoryEntry[], rememberHistory: boolean) => void }) {
+export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: HistoryEntry[], rememberHistory: boolean) => void, hasExisting: boolean }) {
     const [file, setFile] = useState<File | undefined>(undefined)
     const [isProcessing, setProcessing] = useState(false)
     const [isError, setError] = useState(false)
@@ -71,7 +72,12 @@ export function UploadPage({ onUpload }: { onUpload: (entries: HistoryEntry[], r
                         parseFile(file)
                             .then(entries => {
                                 if(entries.length <= 0) throw Error("nothing loaded")
-                                saveListens(entries).then(() => onUpload(entries, false))
+                                saveListens(entries).then(() => {
+                                    if(getPresets().length <= 0) { 
+                                        saveDefaultPresets()
+                                    }
+                                    onUpload(entries, false)
+                                })
                             })
                             .catch(e => {
                                 setError(true)

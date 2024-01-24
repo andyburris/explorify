@@ -19,12 +19,9 @@ export default function Home() {
     return (<LoadingPage/>)
   } else if(loadedEntries.length <= 0) {
     return (
-      <UploadPage onUpload={(entries, rememberHistory) => {
+      <UploadPage hasExisting={false} onUpload={(entries, rememberHistory) => {
         console.log(`uploaded ${entries.length} entries`)
-        if(getPresets().length <= 0) { 
-            saveDefaultPresets()
-            setSavedPresets(getPresets())
-        }
+        setSavedPresets(getPresets())
         setLoadedEntries(entries)
       }}/>
     )
@@ -32,7 +29,6 @@ export default function Home() {
     return (
       <HomePage listens={loadedEntries} presets={savedPresets} onClear={() => { 
         // clearListens()
-        setLoadedEntries([])
       }}/>
     )
   }

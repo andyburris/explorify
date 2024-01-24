@@ -6,6 +6,7 @@ import { factorial, hashSortedIndices, unhashSortedIndices } from "./HashSort";
 import { DEBUG } from "../utils/debug";
 import { Preset } from "../model/Preset";
 import { Base64 } from "../utils/base64";
+import { pickableIcons } from "@/app/common/PickedIcon";
 
 interface HashSegment { value: number | boolean, numberOfBits: number }
 interface HashSegmentSetter { setter: (value: number) => void, numberOfBits: number }
@@ -49,8 +50,12 @@ function applyHashToSegments(hash: number, segmentSetters: HashSegmentSetter[]) 
 }
 function countBits(segments: HashSegment[] | HashSegmentSetter[]) { return segments.reduce((acc, s) => acc + s.numberOfBits, 0)}
 
-export function hashPreset(preset: Preset): string {
-    return `${hashOperations(preset.operations)}?t=${Base64.encode(preset.name)}&d=${Base64.encode(preset.description)}&i=${Base64.encode(preset.icon)}`
+export function hashPreset(preset: Preset, includeSearchTerm: boolean): string {
+    return hashOperations(preset.operations)
+        + `?t=${Base64.encode(preset.name)}`
+        + `&d=${Base64.encode(preset.description)}`
+        + `&i=${pickableIcons.findIndex(p => p.name == preset.icon).toString(36)}`
+        + (includeSearchTerm ? `&s=${Base64.encode(preset.operations.filter.searchTerm)}` : "")
 }
 
 export function hashOperations(operations: Operations, inBinary?: boolean): string {
@@ -95,7 +100,7 @@ function parseBigInt(str: string, radix: number): bigint {
 }
 
 export function parsePresetHash(hash: string) {
-    
+
 }
 export function parseHash(hash: string): Operations {
     const operations: Operations = JSON.parse(JSON.stringify(defaultPresets[0].operations));

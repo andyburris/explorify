@@ -12,6 +12,7 @@ import nightwind from "nightwind/helper"
 import Link from "next/link";
 import { Preset } from "../data/model/Preset";
 import { clearPresets, resetPresets } from "../data/persist/PresetRepository";
+import { useRouter } from "next/router";
 
 export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[], presets: Preset[], onClear: () => void }) {
     return (
@@ -41,7 +42,7 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                                 {
                                     icon: <ArrowCounterClockwise size="24px"/>,
                                     title: "Upload new listens",
-                                    onClick: () => onClear()
+                                    linkPath: "/upload"
                                 },
                                 {
                                     icon: <Moon size="24px"/>,

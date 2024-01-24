@@ -1,5 +1,6 @@
 "use client" //TODO: remove and replace useSearchParams
 
+import { pickableIcons } from "@/app/common/PickedIcon"
 import { parseHash } from "@/app/data/hashing/Hashing"
 import { Preset } from "@/app/data/model/Preset"
 import { Base64 } from "@/app/data/utils/base64"
@@ -12,7 +13,7 @@ export default function SharedPage({ params }: { params: { hash: string } }) {
         id: "", 
         name: searchParams.has("t") ? Base64.decode(searchParams.get("t")!) : "Shared preset", 
         description: searchParams.has("d") ? Base64.decode(searchParams.get("d")!) : `You probably got this link from someone. Customize to make it your own and save it!`, 
-        icon: searchParams.has("i") ? Base64.decode(searchParams.get("i")!) : "share",
+        icon: searchParams.has("i") ? pickableIcons[Number.parseInt(searchParams.get("i")!, 36)].name : "share",
         operations: parseHash(params.hash)
     }
 

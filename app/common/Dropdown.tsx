@@ -1,9 +1,11 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import Link from 'next/link';
 
 export interface DropdownItem {
     icon: React.ReactNode,
     title: string,
-    onClick?: () => void
+    onClick?: () => void,
+    linkPath?: string,
 }
 export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, menuItems: DropdownItem[] }) {
     return (
@@ -18,14 +20,20 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
                         key={item.title} 
                         onClick={item.onClick !== undefined ? () => item.onClick?.() : undefined}
                         disabled={item.onClick === undefined}
-                        className={"flex gap-3 px-4 py-3 items-center outline-none" + (item.onClick === undefined ? "" : " hover:bg-neutral-100 focus:bg-neutral-100 cursor-pointer")}
+                        asChild={item.linkPath !== undefined}
+                        className="outline-none"
                     >
-                        <div className="text-2xl text-neutral-500">
-                            {item.icon}
-                        </div>
-                        <p className={`` + (item.onClick === undefined ? "text-neutral-500" : "")}>
-                            {item.title}
-                        </p>
+                        <Link 
+                            href={item.linkPath ?? ""}
+                            className={"flex gap-3 px-4 py-3 items-center" + ((item.onClick === undefined && item.linkPath === undefined) ? "" : " hover:bg-neutral-100 focus:bg-neutral-100 cursor-pointer")}
+                            >
+                            <div className="text-2xl text-neutral-500">
+                                {item.icon}
+                            </div>
+                            <p className={`` + ((item.onClick === undefined && item.linkPath === undefined) ? "text-neutral-500" : "")}>
+                                {item.title}
+                            </p>
+                        </Link>
                     </DropdownMenu.Item>
                 )}
             </DropdownMenu.Content>

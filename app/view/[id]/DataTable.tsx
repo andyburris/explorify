@@ -73,7 +73,7 @@ function flattenGroups(
     const isExpanded = expandedGroups.includes(g)
     const shownCombinations = isExpanded ? [...g.combinations] : [...g.combinations.slice(0, amountToShowCollapsed), ]
     const indexedCombinations = viewOptions.showItems ? shownCombinations.flatMap((c, i) => flattenCombinations(c, expandedCombinations.includes(c))) : []
-    const needsExpandItem = g.combinations.length > amountToShowCollapsed
+    const needsExpandItem = g.combinations.length > amountToShowCollapsed && viewOptions.showItems
     const expandItem = needsExpandItem
       ? isExpanded
         ? [new ExpandGroup(g, true, 0)]
