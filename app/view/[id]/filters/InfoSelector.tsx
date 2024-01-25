@@ -9,9 +9,11 @@ export function InfoSelector({ preset, onChangePreset }: { preset: Preset, onCha
         <div className="flex flex-col gap-6">
             <OperationSection title="Name">
                 <TextField placeholder="Title" currentValue={preset.name} onChangeValue={(v) => onChangePreset({ ...preset, name: v })}/>
+                {preset.name.trim().length <= 0 && <p className="text-red-700">A valid title is required to save</p>}
             </OperationSection>
             <OperationSection title="Description">
-                <TextField placeholder="Title" currentValue={preset.description} onChangeValue={(v) => onChangePreset({ ...preset, description: v })}/>
+                <TextField placeholder="Description" currentValue={preset.description} onChangeValue={(v) => onChangePreset({ ...preset, description: v })}/>
+                {preset.description.trim().length <= 0 && <p className="text-red-700">A valid description is required to save</p>}
             </OperationSection>
             <OperationSection title="Icon">
                 <Combobox 
@@ -20,6 +22,7 @@ export function InfoSelector({ preset, onChangePreset }: { preset: Preset, onCha
                     onSelectValues={(v) => onChangePreset({ ...preset, icon: v[0] ?? preset.icon })}
                     placeholder="Select icon..."
                     multiSelect={false}/>
+                {preset.icon.trim().length <= 0 && <p className="text-red-700">A valid icon is required to save</p>}
             </OperationSection>
             <OperationSection title="Identifier">
                 <TextField placeholder="ID" currentValue={preset.id} onChangeValue={(v) => onChangePreset({ ...preset, id: v })}/>

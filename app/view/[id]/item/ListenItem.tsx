@@ -67,8 +67,8 @@ function InfoItem({ description, text, icon, className }: { description?: string
         <div className={"flex gap-3 items-center" + (className != undefined ? ` ${className}` : "") }>
             <span className="text-md text-neutral-500 flex-shrink-0">{icon}</span>
             <p>
-                { description && <span className="text-neutral-500">{description} </span> }
-                <span className="">{text}</span>
+                { description && <span className="text-neutral-500 [word-break:break-word]">{description} </span> }
+                <span className="[word-break:break-word]">{text}</span>
             </p>
         </div>
     )
