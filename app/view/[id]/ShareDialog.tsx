@@ -59,7 +59,7 @@ export function ShareDialog({ preset, open, onOpenChange }: { preset: Preset, op
                             }}
                         />
                         <div className="flex flex-col gap-4">
-                            <p className="font-serif font-semibold text-2xl">Options</p>
+                            <p className="font-serif font-semibold text-2xl tracking-tight">Options</p>
                             <ToggleSection
                                 title="Don't include details"
                                 description="Drop details like the preset title and description from the URL, only keeping the actual filters. Makes the URL shorter (and more mysterious) for whoever you're sending it to."

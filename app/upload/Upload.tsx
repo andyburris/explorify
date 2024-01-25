@@ -28,7 +28,7 @@ export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: Hist
                     description="Take a deep dive into your entire Spotify streaming history"
                 />
                 <div className="flex flex-col gap-3">
-                    <p className="font-serif font-semibold text-2xl">How it works</p>
+                    <p className="font-serif font-semibold text-2xl tracking-tight">How it works</p>
                     <div className="flex gap-3 flex-wrap justify-stretch items-stretch">
                         <InstructionCard stepNumber={1} link="https://www.spotify.com/us/account/privacy/">Request your <b>extended</b> streaming history from Spotify</InstructionCard>
                         <InstructionCard stepNumber={2}>Wait ~2 weeks to receive the .zip file</InstructionCard>
@@ -36,7 +36,7 @@ export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: Hist
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">
-                    <p className="font-serif font-semibold text-2xl">Upload</p>
+                    <p className="font-serif font-semibold text-2xl tracking-tight">Upload</p>
                     <input type="file" id="file-upload" className="hidden" onChange={(e) => setFile(e.target.files?.[0])}/>
                     <label htmlFor="file-upload" className="flex flex-col gap-4 items-center justify-center px-8 py-12 border-dashed border border-neutral-200 rounded-xl cursor-pointer bg-neutral-50">
                         <FileArchive size="40px" className="text-neutral-500"/>

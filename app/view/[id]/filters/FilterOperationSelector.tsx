@@ -2,6 +2,7 @@ import { CombineInto, CombineType, FilterOperation, GroupOperation, SearchType, 
 import { ArrowsInLineVertical, ArrowsOutLineVertical, Calendar, CalendarBlank, Clock, ClockCounterClockwise, Disc, List, ListDashes, ListNumbers, MusicNote, SortAscending, SortDescending, User, Users } from "phosphor-react-sc";
 import { OperationSection, ResponsiveControl } from "./OperationsSelector";
 import { TextField } from "@/app/common/TextField";
+import { Combobox } from "@/app/common/components/ui/combobox";
 
 export function FilterOperationSelector({ currentOperation, onChangeOperation }: { currentOperation: FilterOperation, onChangeOperation: (newFilter: FilterOperation) => void }) {
     return (
@@ -15,6 +16,16 @@ export function FilterOperationSelector({ currentOperation, onChangeOperation }:
                     ]} 
                     selectedItem={currentOperation.filterSkipsBy}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, filterSkipsBy: n})}
+                />
+                <Combobox 
+                    options={[
+                        { value: true, label: "Filter out of total plays and ranks", key: "hidden", icon: <ListNumbers/> },
+                        { value: false, label: "Don't filter out of total plays and ranks", key: "validity", icon: <ListDashes/> },
+                    ]} 
+                    selectedValues={[currentOperation.rerankSearch]}
+                    onSelectValues={(n) => onChangeOperation({ ...currentOperation, rerankSearch: n[0] ?? currentOperation.rerankSearch})}
+                    multiSelect={false}
+                    placeholder="Search..."
                 />
             </OperationSection>
             <OperationSection title="Search by">
@@ -33,13 +44,15 @@ export function FilterOperationSelector({ currentOperation, onChangeOperation }:
                     selectedItem={currentOperation.searchBy}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, searchBy: n})}
                 />
-                <ResponsiveControl 
-                    items={[
-                        { value: true, label: "Rerank items", key: "Rerank items", icon: <ListNumbers/> },
-                        { value: false, label: "Don't rerank items", key: "Don't rerank items", icon: <ListDashes/> },
+                <Combobox 
+                    options={[
+                        { value: true, label: "Filter out of total plays and ranks", key: "hidden", icon: <ListNumbers/> },
+                        { value: false, label: "Don't filter out of total plays and ranks", key: "validity", icon: <ListDashes/> },
                     ]} 
-                    selectedItem={currentOperation.rerankSearch}
-                    onSelect={(n) => onChangeOperation({ ...currentOperation, rerankSearch: n})}
+                    selectedValues={[currentOperation.rerankSearch]}
+                    onSelectValues={(n) => onChangeOperation({ ...currentOperation, rerankSearch: n[0] ?? currentOperation.rerankSearch})}
+                    multiSelect={false}
+                    placeholder="Search..."
                 />
             </OperationSection>
         </div>

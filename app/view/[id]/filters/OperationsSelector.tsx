@@ -1,5 +1,5 @@
 import { Operations } from "@/app/data/model/Operations";
-import { ArrowsMerge, Eye, FunnelSimple, Info, NumberCircleOne, NumberCircleThree, NumberCircleTwo, SortAscending } from "phosphor-react-sc";
+import { ArrowsMerge, Eye, FunnelSimple, Info, NumberCircleOne, NumberCircleThree, NumberCircleTwo, Question, SortAscending, X } from "phosphor-react-sc";
 import * as Tabs from '@radix-ui/react-tabs';
 import React, { useState } from "react";
 import { GroupOperationSelector } from "./GroupOperationSelector";
@@ -10,6 +10,8 @@ import { InfoSelector } from "./InfoSelector";
 import { Preset } from "@/app/data/model/Preset";
 import { Segment, SegmentedControl } from "@/app/common/SegmentedControl";
 import { Combobox } from "@/app/common/components/ui/combobox";
+import { Popover } from "@radix-ui/react-popover";
+import { ActionButton } from "@/app/common/button/ActionButton";
 
 export enum OperationType { Info="Info", Group="Group", Filter="Filter", Sort="Sort", View="View" }
 export function OperationsSelector({ currentPreset, onChangePreset, currentTab, onChangeTab }: { 
@@ -80,9 +82,24 @@ function OperationTab({ operationType, icon }: { operationType: OperationType, i
 }
 
 export function OperationSection({ title, description, children }: { title: string, description?: string, children: React.ReactNode }) {
+    const [descriptionExpanded, setDescriptionExpanded] = useState(false)
     return (
         <div className="flex flex-col gap-2">
-            <p className="text-neutral-500">{title}</p>
+            <div className="flex gap-3 justify-between items-center text-neutral-500">
+                <p className="text-neutral-900">{title}</p>
+                { (!descriptionExpanded && description) && 
+                    <div className="flex items-center h-4">
+                        <ActionButton onClick={() => setDescriptionExpanded(true)} icon={<Question/>} hideShadow/>
+                    </div>
+                }
+            </div>
+            { (descriptionExpanded && description) && 
+                <div className="flex gap-3 p-3 rounded-xl border border-green-200 bg-green-50 text-green-700 items-center">
+                    <Question/>
+                    <p className="">{description}</p> 
+                    <ActionButton onClick={() => setDescriptionExpanded(false)} icon={<X/>} hideShadow className="!text-green-700 hover:text-green-900 hover:bg-green-100"/>
+                </div>
+            }
             {children}
         </div>
     )
