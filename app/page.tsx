@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { UploadPage } from './upload/Upload'
+import { UploadPage } from './import/Upload'
 import { HistoryEntry } from './data/model/HistoryEntry';
 import { HomePage } from './home/HomePage';
 import { getListens } from './data/persist/Database';

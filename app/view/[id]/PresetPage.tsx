@@ -23,6 +23,7 @@ import { getPresets, savePreset } from "@/app/data/persist/PresetRepository"
 import { useRouter } from "next/navigation"
 import { usePresets } from "@/app/data/utils/presetUtils"
 import { ShareDialog } from "./ShareDialog"
+import { DEBUG } from "@/app/data/utils/debug"
 
 export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset, isShared: boolean }) {
     const router = useRouter()
@@ -105,6 +106,7 @@ export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset,
                                     {
                                         icon: <Link/>,
                                         title: `${hashOperations(customizedPreset.operations)}`,
+                                        hide: !DEBUG,
                                     },
                                     {
                                         icon: <Share/>,
@@ -150,8 +152,18 @@ export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset,
         <Container>
             { filtered 
                 ? <DataTable groups={filtered} viewOptions={customizedPreset.operations.viewOptions} header={header}/> 
-                : <LazyList header={<div className="mb-10">{header}</div>} items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
+            : (loadedEntries === undefined)
+                ? <LazyList header={<div className="mb-10">{header}</div>} items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
+                : <LazyList header={<div className="mb-10">{header}</div>} items={new Array(1)} itemContent={(i) => <EmptyData/>}/>
             }
         </Container>
+    )
+}
+
+function EmptyData() {
+    return (
+        <div className="p-4 rounded-2xl bg-neutral-50">
+            
+        </div>
     )
 }

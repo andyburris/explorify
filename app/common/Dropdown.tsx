@@ -6,6 +6,7 @@ export interface DropdownItem {
     title: string,
     onClick?: () => void,
     linkPath?: string,
+    hide?: boolean,
 }
 export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, menuItems: DropdownItem[] }) {
     return (
@@ -15,7 +16,7 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
             <DropdownMenu.Content className="bg-white shadow-outset py-2 rounded-2xl w-64 overflow-hidden" align='end' sideOffset={8}>
-                {menuItems.map((item) => 
+                {menuItems.filter(i => i.hide != true).map((item) => 
                     <DropdownMenu.Item 
                         key={item.title} 
                         onClick={item.onClick !== undefined ? () => item.onClick?.() : undefined}
@@ -25,7 +26,7 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
                     >
                         <Link 
                             href={item.linkPath ?? ""}
-                            className={"flex gap-3 px-4 py-3 items-center" + ((item.onClick === undefined && item.linkPath === undefined) ? "" : " hover:bg-neutral-100 focus:bg-neutral-100 cursor-pointer")}
+                            className={"flex gap-3 px-4 py-3 items-center" + ((item.onClick === undefined && item.linkPath === undefined) ? " cursor-default" : " hover:bg-neutral-100 focus:bg-neutral-100 cursor-pointer")}
                             >
                             <div className="text-2xl text-neutral-500">
                                 {item.icon}

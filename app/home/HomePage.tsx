@@ -1,4 +1,4 @@
-import { ArrowBendUpLeft, ArrowCounterClockwise, DotsThreeVertical, ListPlus, Moon, Pencil, Trash, TrashSimple } from "phosphor-react-sc";
+import { ArrowBendUpLeft, ArrowCounterClockwise, DotsThreeVertical, ListPlus, Moon, Pencil, Trash, TrashSimple, Upload } from "phosphor-react-sc";
 import { Container } from "../common/Container";
 import { Header } from "../common/Header";
 import { Logo } from "../common/Logo";
@@ -13,8 +13,11 @@ import Link from "next/link";
 import { Preset } from "../data/model/Preset";
 import { clearPresets, resetPresets } from "../data/persist/PresetRepository";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { ManageData } from "./ManageData";
 
 export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[], presets: Preset[], onClear: () => void }) {
+    const [manageDataOpen, setManageDataOpen] = useState(false)
     return (
         <Container>
             <Header
@@ -35,14 +38,9 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                                     onClick: () => {}
                                 },
                                 {
-                                    icon: <TrashSimple size="24px"/>,
-                                    title: "Clear presets",
-                                    onClick: () => { resetPresets() }
-                                },
-                                {
-                                    icon: <ArrowCounterClockwise size="24px"/>,
-                                    title: "Upload new listens",
-                                    linkPath: "/upload"
+                                    icon: <Upload size="24px"/>,
+                                    title: "Manage data",
+                                    onClick: () => { setManageDataOpen(true) }
                                 },
                                 {
                                     icon: <Moon size="24px"/>,
@@ -54,6 +52,7 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                     </div>
                 }
             />
+            { manageDataOpen && <ManageData open={manageDataOpen} onOpenChange={setManageDataOpen}/> }
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8">
                 {presets.map((preset) => <PresetPreview key={preset.name} preset={preset} listens={listens} />)}
                 <Link 

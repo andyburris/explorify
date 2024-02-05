@@ -65,7 +65,7 @@ function PreviewItem({ combinationOrGroup, index, viewOptions }: { combinationOr
             { viewOptions.showItemRanks &&
                 <p className=" tabular-nums text-green-700">{index + 1}.</p>
             }
-            <p className="text-green-900 flex-grow overflow-hidden truncate h-fit">
+            <p className="text-green-900 font-medium flex-grow overflow-hidden truncate h-fit">
                 { combinationOrGroup instanceof Group 
                     ? combinationOrGroup.headerStrings(true).primary
                     : (combinationOrGroup instanceof TrackCombination) ? combinationOrGroup.trackName : (combinationOrGroup as ArtistCombination).artistName
@@ -74,10 +74,10 @@ function PreviewItem({ combinationOrGroup, index, viewOptions }: { combinationOr
             {
                 viewOptions.primaryInfo == ViewInfoType.Plays
                     ? combinationOrGroup instanceof Group
-                        ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.totalPlays} </p><Play weight="bold" size="16px"/></div>
+                        ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.plays} </p><Play weight="bold" size="16px"/></div>
                         : <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.listens.length} </p><Play weight="bold" size="16px"/></div>
                 : viewOptions.primaryInfo == ViewInfoType.Playtime
-                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{millisToMinsSecs(combinationOrGroup.totalPlaytimeMs, true)} </p><Clock weight="bold" size="16px"/></div>
+                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{millisToMinsSecs(combinationOrGroup.playtime, true)} </p><Clock weight="bold" size="16px"/></div>
                     : combinationOrGroup instanceof Group
                         ? <></>
                         : <p className="text-green-700">{combinationOrGroup.listens[0].timestamp.toLocaleDateString('en-US', formatOptions)}</p>

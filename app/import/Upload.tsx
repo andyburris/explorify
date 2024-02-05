@@ -1,7 +1,7 @@
 "use client"
 
-import { FileArchive, FileZip, Spinner, Upload, Warning } from "phosphor-react-sc"
-import { Button } from "../common/button/Button"
+import { ArrowLeft, FileArchive, FileZip, Spinner, Upload, Warning } from "phosphor-react-sc"
+import { Button, LinkButton } from "../common/button/Button"
 import { Container } from "../common/Container"
 import { Logo } from "../common/Logo"
 import { Switch } from "../common/Switch"
@@ -22,6 +22,11 @@ export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: Hist
     return (
         <Container>
             <div className="flex flex-col gap-8">
+                { hasExisting && 
+                    <div className="w-full flex -ml-4 -mb-8">
+                        <LinkButton linkPath="/" text="Home" icon={<ArrowLeft/>} hideShadow/>
+                    </div>
+                }
                 <Header 
                     icon={<Logo/>} 
                     title="Quantize" 
@@ -32,15 +37,15 @@ export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: Hist
                     <div className="flex gap-3 flex-wrap justify-stretch items-stretch">
                         <InstructionCard stepNumber={1} link="https://www.spotify.com/us/account/privacy/">Request your <b>extended</b> streaming history from Spotify</InstructionCard>
                         <InstructionCard stepNumber={2}>Wait ~2 weeks to receive the .zip file</InstructionCard>
-                        <InstructionCard stepNumber={3}>Upload it below to start exploring your data!</InstructionCard>
+                        <InstructionCard stepNumber={3}>Import it below to start exploring your data!</InstructionCard>
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">
-                    <p className="font-serif font-semibold text-2xl tracking-tight">Upload</p>
-                    <input type="file" id="file-upload" className="hidden" onChange={(e) => setFile(e.target.files?.[0])}/>
-                    <label htmlFor="file-upload" className="flex flex-col gap-4 items-center justify-center px-8 py-12 border-dashed border border-neutral-200 rounded-xl cursor-pointer bg-neutral-50">
+                    <p className="font-serif font-semibold text-2xl tracking-tight">Import</p>
+                    <input type="file" id="file-import" className="hidden" onChange={(e) => setFile(e.target.files?.[0])}/>
+                    <label htmlFor="file-import" className="flex flex-col gap-4 items-center justify-center px-8 py-12 border-dashed border border-neutral-200 rounded-xl cursor-pointer bg-neutral-50">
                         <FileArchive size="40px" className="text-neutral-500"/>
-                        { file !== undefined ? <p>{file.name}</p> : <p>Drag and drop or click to upload your .zip file</p>}
+                        { file !== undefined ? <p>{file.name}</p> : <p>Drag and drop or click to import your .zip file</p>}
                     </label>
                     <p className="text-neutral-500">This file stays on your device, and is never uploaded to any servers.</p>
                 </div>
@@ -64,7 +69,7 @@ export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: Hist
                     ></animateTransform>
                 </Spinner> : <Upload/>} 
                 className="w-fit"
-                enabled={!isProcessing}
+                enabled={!isProcessing && file !== undefined}
                 onClick={() => {
                     if(file !== undefined && isProcessing == false) {
                         console.log("processing entries")
