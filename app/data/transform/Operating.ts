@@ -3,6 +3,7 @@ import { Group, GroupKey, groupKeyFromHashCode } from "../model/Group";
 import { HistoryEntry } from "../model/HistoryEntry";
 import { Combination, ArtistCombination, TrackCombination } from "../model/Combination";
 import { applySort } from "./Sorting";
+import { ViewState } from "../model/Listen";
 
 function toGroupKey(listen: HistoryEntry, type: GroupType): GroupKey {
     return new GroupKey(
@@ -18,27 +19,32 @@ function toGroupKey(listen: HistoryEntry, type: GroupType): GroupKey {
 }
 
 export function applyOperations(listens: HistoryEntry[], operations: Operations): Group[] {
-    const filtered = filterItems(listens, operations.filter)
+    const filtered = filterValidItems(listens, operations.filter)
     const grouped = groupItems(filtered, operations.group)
-    applySort(grouped, operations.sort)
-    if(!operations.filter.rerankSearch) return filterItemsKeepRank(grouped, operations.filter)
-    return grouped
+    applyHidden(grouped, operations.filter, filtered.length, filtered.reduce((acc, l) => acc + l.millisecondsPlayed, 0))
+    applySort(grouped, operations.sort, operations.viewOptions)
+    const filteredRanks = filterHiddenRanks(grouped, operations.filter)
+    return filteredRanks
 }
 
-function filterItems(items: HistoryEntry[], filterOperation: FilterOperation): HistoryEntry[] {
-    const filteredSkips = items.filter(he => {
-        switch(filterOperation.filterSkipsBy) {
-            case SkipFilterType.All: return true
-            case SkipFilterType.NoSkips: return he.millisecondsPlayed >= 30 * 1000
-            case SkipFilterType.OnlySkips: return he.millisecondsPlayed <= 30 * 1000
-        }
-    })
-    if(!filterOperation.rerankSearch) return filteredSkips
-
-    return filteredSkips.filter(he => filterItem(he, filterOperation))
+function filterValidItems(items: HistoryEntry[], filterOperation: FilterOperation): HistoryEntry[] {
+    const filteredSkips = filterOperation.excludeSkipsFromTotal
+        ? items.filter(he => filterSkip(he, filterOperation))
+        : items
+    const filteredSearch = filterOperation.excludeSearchFromTotal
+        ? filteredSkips.filter(he => filterSearch(he, filterOperation))
+        : filteredSkips
+    return filteredSearch
 }
 
-function filterItem(listen: HistoryEntry, operation: FilterOperation) : boolean {
+function filterSkip(listen: HistoryEntry, filterOperation: FilterOperation): boolean {
+    switch(filterOperation.filterSkipsBy) {
+        case SkipFilterType.All: return true
+        case SkipFilterType.NoSkips: return listen.millisecondsPlayed >= 30 * 1000
+        case SkipFilterType.OnlySkips: return listen.millisecondsPlayed <= 30 * 1000
+    }
+}
+function filterSearch(listen: HistoryEntry, operation: FilterOperation) : boolean {
     switch(operation.searchBy) {
         case SearchType.All: return listen.trackName.toLowerCase().includes(operation.searchTerm.toLowerCase()) || listen.artistName.toLowerCase().includes(operation.searchTerm.toLowerCase())|| listen.albumName.toLowerCase().includes(operation.searchTerm.toLowerCase())
         case SearchType.SongName: return listen.trackName.toLowerCase().includes(operation.searchTerm.toLowerCase())
@@ -47,10 +53,26 @@ function filterItem(listen: HistoryEntry, operation: FilterOperation) : boolean 
     }
 }
 
-function filterItemsKeepRank(groups: Group[], operation: FilterOperation): Group[]{
+function applyHidden(groups: Group[], operation: FilterOperation, totalPlays: number, totalPlaytime: number) {
+    groups.forEach(g => {
+        g.combinations.forEach(c => {
+            c.listens.forEach(l => {
+                if(l.viewState == ViewState.Invalid) return
+                const hideSearch = (!operation.excludeSearchFromTotal) ? !filterSearch(l, operation) : false
+                const hideSkip = (!operation.excludeSkipsFromTotal) ? !filterSkip(l, operation) : false
+                l.viewState = (hideSearch || hideSkip) ? ViewState.Hidden : ViewState.Visible
+            })
+            c.recalculateTotals(totalPlays, totalPlaytime, g.plays, g.playtime)
+            //todo: calculate group plays/playtime before percents
+        })   
+        g.recalculateTotals(totalPlays, totalPlaytime)
+    })
+}
+
+function filterHiddenRanks(groups: Group[], operation: FilterOperation): Group[]{
     return groups.map(g => {
         g.combinations = g.combinations.map(c => {
-            c.listens = c.listens.filter(l => filterItem(l, operation))
+            c.listens = c.listens.filter(l => filterSearch(l, operation))
             return c
         })
         g.combinations = g.combinations.filter(c => c.listens.length > 0)
@@ -79,6 +101,7 @@ function groupItems(items: HistoryEntry[], groupOperation: GroupOperation): Grou
         })
 }
 
+function toListen(entry: HistoryEntry) { return { ...entry, viewState: ViewState.Visible } }
 function combineItems(items: HistoryEntry[], groupOperation: GroupOperation): Combination[] {
     const combinationMap: Map<string, HistoryEntry[]> = items.reduce((groups, entry) => {
         const key = (groupOperation.combineBy == CombineType.None) ? entry.id : (groupOperation.combineBy == CombineType.SameArtist) ? entry.artistName.toLowerCase() : `${entry.trackName} - ${entry.artistName}`.toLowerCase()
@@ -87,9 +110,9 @@ function combineItems(items: HistoryEntry[], groupOperation: GroupOperation): Co
     }, new Map())
     return Array.from(combinationMap).map(([key, entries]) => {
         entries.sort((a, b) => (groupOperation.combineInto == CombineInto.EarliestPlay) ? a.timestamp.getTime() - b.timestamp.getTime() : b.timestamp.getTime() - a.timestamp.getTime())
-        if(groupOperation.combineBy == CombineType.SameArtist) return new ArtistCombination(0, entries[0].artistName, entries)
+        if(groupOperation.combineBy == CombineType.SameArtist) return new ArtistCombination(0, entries[0].artistName, entries.map(toListen))
         
         const firstListen = entries[0]
-        return new TrackCombination(0, firstListen.trackName, firstListen.artistName, firstListen.albumName, firstListen.uri, entries)
+        return new TrackCombination(0, firstListen.trackName, firstListen.artistName, firstListen.albumName, firstListen.uri, entries.map(toListen))
     })
 }

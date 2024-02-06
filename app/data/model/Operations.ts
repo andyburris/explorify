@@ -39,8 +39,8 @@ export interface GroupSortOrder {
     artist: GroupSortOrderItem,
     song: GroupSortOrderItem,
     album: GroupSortOrderItem,
-    totalPlays: GroupSortOrderItem,
-    totalPlaytime: GroupSortOrderItem,
+    primarySum: GroupSortOrderItem,
+    secondarySum: GroupSortOrderItem,
 }
 export enum ItemSortType { Date, Plays, Name, ArtistName, Playtime }
 export interface SortOperation {
@@ -53,7 +53,10 @@ export enum SkipFilterType { All, NoSkips, OnlySkips }
 export enum SearchType { All, SongName, ArtistName, AlbumName }
 export interface FilterOperation {
     filterSkipsBy: SkipFilterType,
+    excludeSkipsFromTotal: boolean,
+    minimumPlays: number,
+    excludeMinPlaysFromTotal: boolean,
     searchTerm: string,
     searchBy: SearchType,
-    rerankSearch: boolean,
+    excludeSearchFromTotal: boolean,
 }

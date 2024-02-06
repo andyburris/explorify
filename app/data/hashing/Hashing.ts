@@ -68,15 +68,17 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
         { value: operations.group.combineAcrossGroups, numberOfBits: 1 },
 
         { value: operations.filter.filterSkipsBy, numberOfBits: 2 },
+        { value: operations.filter.excludeSkipsFromTotal, numberOfBits: 1 },
+        { value: operations.filter.excludeMinPlaysFromTotal, numberOfBits: 1 },
         { value: operations.filter.searchBy, numberOfBits: 2 },
-        { value: operations.filter.rerankSearch, numberOfBits: 1 },
+        { value: operations.filter.excludeSearchFromTotal, numberOfBits: 1 },
         
         hashGroupSort(operations.sort.sortGroupsBy),
         { value: operations.sort.sortItemsBy, numberOfBits: 3 },
         { value: operations.sort.sortItemsAscending, numberOfBits: 1 },
 
-        { value: operations.viewOptions.primaryInfo, numberOfBits: 2 },
-        { value: (operations.viewOptions.secondaryInfo ?? -1) + 1, numberOfBits: 2 },
+        { value: operations.viewOptions.primaryInfo, numberOfBits: 3 },
+        { value: (operations.viewOptions.secondaryInfo ?? -1) + 1, numberOfBits: 3 },
         { value: operations.viewOptions.showSearch, numberOfBits: 1 },
         { value: operations.viewOptions.showItems, numberOfBits: 1 },
         { value: operations.viewOptions.showItemRanks, numberOfBits: 1 },
@@ -118,15 +120,17 @@ export function parseHash(hash: string): Operations {
                 { setter: (n) => operations.group.combineAcrossGroups = !!n, numberOfBits: 1 },
         
                 { setter: (n) => operations.filter.filterSkipsBy = n as SkipFilterType, numberOfBits: 2 },
+                { setter: (n) => operations.filter.excludeSkipsFromTotal = !!n, numberOfBits: 1 },
+                { setter: (n) => operations.filter.excludeMinPlaysFromTotal = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.filter.searchBy = n as SearchType, numberOfBits: 2 },
-                { setter: (n) => operations.filter.rerankSearch = !!n, numberOfBits: 1 },
+                { setter: (n) => operations.filter.excludeSearchFromTotal = !!n, numberOfBits: 1 },
                 
                 applyGroupSort(operations.sort.sortGroupsBy),
                 { setter: (n) => operations.sort.sortItemsBy = n as ItemSortType, numberOfBits: 3 },
                 { setter: (n) => operations.sort.sortItemsAscending = !!n, numberOfBits: 1 },
         
-                { setter: (n) => operations.viewOptions.primaryInfo = n, numberOfBits: 2 },
-                { setter: (n) => operations.viewOptions.secondaryInfo = (n == 0 ? null : n - 1 as ViewInfoType), numberOfBits: 2 },
+                { setter: (n) => operations.viewOptions.primaryInfo = n, numberOfBits: 3 },
+                { setter: (n) => operations.viewOptions.secondaryInfo = (n == 0 ? null : n - 1 as ViewInfoType), numberOfBits: 3 },
                 { setter: (n) => operations.viewOptions.showSearch = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.showItems = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.showItemRanks = !!n, numberOfBits: 1 },
@@ -214,8 +218,8 @@ function hashGroupSortDirections(sortOrder: GroupSortOrder): HashSegment {
         { value: sortOrder.artist.isAscending, numberOfBits: 1 },
         { value: sortOrder.song.isAscending, numberOfBits: 1 },
         { value: sortOrder.album.isAscending, numberOfBits: 1 },
-        { value: sortOrder.totalPlays.isAscending, numberOfBits: 1 },
-        { value: sortOrder.totalPlaytime.isAscending, numberOfBits: 1 },
+        { value: sortOrder.primarySum.isAscending, numberOfBits: 1 },
+        { value: sortOrder.secondarySum.isAscending, numberOfBits: 1 },
     ]
     return { value: segmentsToHashNumber(segments), numberOfBits: countBits(segments)}
 }
@@ -230,8 +234,8 @@ function applyGroupSortDirections(sortOrder: GroupSortOrder): HashSegmentSetter 
         { setter: (n) => sortOrder.artist.isAscending = !!n, numberOfBits: 1 },
         { setter: (n) => sortOrder.song.isAscending = !!n, numberOfBits: 1 },
         { setter: (n) => sortOrder.album.isAscending = !!n, numberOfBits: 1 },
-        { setter: (n) => sortOrder.totalPlays.isAscending = !!n, numberOfBits: 1 },
-        { setter: (n) => sortOrder.totalPlaytime.isAscending = !!n, numberOfBits: 1 },
+        { setter: (n) => sortOrder.primarySum.isAscending = !!n, numberOfBits: 1 },
+        { setter: (n) => sortOrder.secondarySum.isAscending = !!n, numberOfBits: 1 },
     ]
     return { setter: (n) => applyHashToSegments(n, segments), numberOfBits: countBits(segments) }
 }

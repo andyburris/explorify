@@ -18,17 +18,19 @@ export function GroupHeader({ group, viewOptions }: { group: Group, viewOptions:
                 <div className="px-3 py-1.5 border border-neutral-200 rounded-full items-center text-neutral-500 flex-shrink-0">
                     { viewOptions.primaryInfo == ViewInfoType.Playtime
                         ? <div className="flex gap-0.5 items-center">
-                            <p className="font-semibold hidden sm:block">{millisToMinsSecs(group.totalPlaytimeMs)}</p>
-                            <p className="font-semibold sm:hidden">{millisToMinsSecs(group.totalPlaytimeMs, true)}</p>
+                            <p className="font-semibold hidden sm:block">{millisToMinsSecs(group.playtime)}</p>
+                            <p className="font-semibold sm:hidden">{millisToMinsSecs(group.playtime, true)}</p>
                             <Clock className="" size="16px" weight="bold"/>
                         </div>
-                        : <div className="flex gap-0.5 items-center">
+                    : (viewOptions.primaryInfo == ViewInfoType.Date || viewOptions.primaryInfo == ViewInfoType.Plays)
+                        ? <div className="flex gap-0.5 items-center">
                             <p>
-                                <span className="font-medium">{group.totalPlays}</span>
-                                <span className="text-neutral-500 max-sm:hidden">{group.totalPlays == 1 ? " play" : " plays"}</span>
+                                <span className="font-medium">{group.plays}</span>
+                                <span className="text-neutral-500 max-sm:hidden">{group.plays == 1 ? " play" : " plays"}</span>
                             </p>
                             <Play className="sm:hidden" size="16px" weight="bold"/>
                         </div>
+                        : <p>{(group.percent(viewOptions.primaryInfo) * 100).toFixed(2)}%</p>
                     }
                     
                 </div>

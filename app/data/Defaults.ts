@@ -13,8 +13,8 @@ export const simpleSortGroupsDate = {
     artist: { index: 6, isAscending: true },
     song: { index: 5, isAscending: true },
     album: { index: 7, isAscending: true },
-    totalPlays: { index: 8, isAscending: true },
-    totalPlaytime: { index: 9, isAscending: true },
+    primarySum: { index: 8, isAscending: true },
+    secondarySum: { index: 9, isAscending: true },
 }
 export const simpleSortGroupsSong = {
     hour: { index: 7, isAscending: true },
@@ -25,20 +25,20 @@ export const simpleSortGroupsSong = {
     artist: { index: 1, isAscending: true },
     song: { index: 0, isAscending: true },
     album: { index: 2, isAscending: true },
-    totalPlays: { index: 8, isAscending: true },
-    totalPlaytime: { index: 9, isAscending: true },
+    primarySum: { index: 8, isAscending: true },
+    secondarySum: { index: 9, isAscending: true },
 }
 export const simpleSortGroupsPlays = {
-    hour: { index: 8, isAscending: true },
-    dayOfWeek: { index: 7, isAscending: true },
-    date: { index: 6, isAscending: true },
-    month: { index: 5, isAscending: true },
-    year: { index: 4, isAscending: true },
-    artist: { index: 2, isAscending: true },
-    song: { index: 1, isAscending: true },
-    album: { index: 3, isAscending: true },
-    totalPlays: { index: 0, isAscending: false },
-    totalPlaytime: { index: 9, isAscending: false },
+    hour: { index: 9, isAscending: true },
+    dayOfWeek: { index: 8, isAscending: true },
+    date: { index: 7, isAscending: true },
+    month: { index: 6, isAscending: true },
+    year: { index: 5, isAscending: true },
+    artist: { index: 3, isAscending: true },
+    song: { index: 2, isAscending: true },
+    album: { index: 4, isAscending: true },
+    primarySum: { index: 0, isAscending: false },
+    secondarySum: { index: 1, isAscending: false },
 }
 
 export const defaultPresets: Preset[] = [
@@ -56,9 +56,12 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
+                excludeSkipsFromTotal: true,
+                minimumPlays: 0,
+                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                rerankSearch: false,
+                excludeSearchFromTotal: false,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
@@ -90,9 +93,12 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
+                excludeSkipsFromTotal: true,
+                minimumPlays: 0,
+                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                rerankSearch: false,
+                excludeSearchFromTotal: false,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
@@ -123,9 +129,12 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
+                excludeSkipsFromTotal: true,
+                minimumPlays: 0,
+                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                rerankSearch: false,
+                excludeSearchFromTotal: false,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
@@ -137,7 +146,7 @@ export const defaultPresets: Preset[] = [
                 showGroupSum: true,
                 showItems: true,
                 showItemRanks: true,
-                previewGroups: false,
+                previewGroups: true,
                 primaryInfo: ViewInfoType.Plays,
                 secondaryInfo: null,
             },
@@ -157,9 +166,12 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.OnlySkips,
+                excludeSkipsFromTotal: true,
+                minimumPlays: 8,
+                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                rerankSearch: false,
+                excludeSearchFromTotal: false,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsDate,
@@ -191,9 +203,12 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.All,
+                excludeSkipsFromTotal: true,
+                minimumPlays: 0,
+                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                rerankSearch: false,
+                excludeSearchFromTotal: false,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsDate,
@@ -225,9 +240,12 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
+                excludeSkipsFromTotal: true,
+                minimumPlays: 0,
+                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                rerankSearch: false,
+                excludeSearchFromTotal: false,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsDate,
@@ -259,9 +277,12 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
+                excludeSkipsFromTotal: true,
+                minimumPlays: 0,
+                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                rerankSearch: false,
+                excludeSearchFromTotal: false,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,

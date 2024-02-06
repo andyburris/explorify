@@ -2,7 +2,13 @@ export enum ViewInfoType {
     Date,
     Plays,
     Playtime,
+    PercentTotalPlays,
+    PercentTotalPlaytime,
+    PercentGroupPlays,
+    PercentGroupPlaytime,
 }
+
+export type ViewInfoTypePercent = ViewInfoType.PercentTotalPlays | ViewInfoType.PercentTotalPlaytime | ViewInfoType.PercentGroupPlays | ViewInfoType.PercentGroupPlaytime
 
 export interface ViewOptions {
     showSearch: boolean,

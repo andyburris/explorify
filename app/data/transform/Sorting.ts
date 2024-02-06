@@ -1,14 +1,15 @@
 import { TrackCombination, ArtistCombination } from "../model/Combination"
 import { Group, GroupKey } from "../model/Group"
 import { SortOperation, ItemSortType, GroupSortOrder, GroupSortOrderItem, GroupType } from "../model/Operations"
+import { ViewInfoType, ViewOptions } from "../model/ViewOptions"
 
-export function applySort(groups: Group[], sortOperation: SortOperation) {
-    sortGroups(groups, sortOperation.sortGroupsBy)
+export function applySort(groups: Group[], sortOperation: SortOperation, viewOptions: ViewOptions) {
+    sortGroups(groups, sortOperation.sortGroupsBy, viewOptions)
     groups.forEach(g => {
         g.combinations.sort((a, b) => {
             switch(sortOperation.sortItemsBy) {
                 case ItemSortType.Date: return (sortOperation.sortItemsAscending) ? a.listens[0].timestamp.getTime() - b.listens[0].timestamp.getTime() : b.listens[0].timestamp.getTime() - a.listens[0].timestamp.getTime()
-                case ItemSortType.Plays: return (sortOperation.sortItemsAscending) ? a.listens.length - b.listens.length : b.listens.length - a.listens.length
+                case ItemSortType.Plays: return (sortOperation.sortItemsAscending) ? a.plays - b.plays : b.plays - a.plays
                 case ItemSortType.Name: {
                     return (a instanceof TrackCombination)
                         ? a.trackName.localeCompare((b as TrackCombination).trackName) * ((sortOperation.sortItemsAscending) ? 1 : -1)
@@ -19,7 +20,7 @@ export function applySort(groups: Group[], sortOperation: SortOperation) {
                         ? a.artistName.localeCompare((b as TrackCombination).artistName) * ((sortOperation.sortItemsAscending) ? 1 : -1)
                         : (a as ArtistCombination).artistName.localeCompare((b as ArtistCombination).artistName)  * ((sortOperation.sortItemsAscending) ? 1 : -1)
                 }
-                case ItemSortType.Playtime: return (sortOperation.sortItemsAscending) ? a.totalPlaytimeMs - b.totalPlaytimeMs : b.totalPlaytimeMs - a.totalPlaytimeMs
+                case ItemSortType.Playtime: return (sortOperation.sortItemsAscending) ? a.playtime - b.playtime : b.playtime - a.playtime
             }
         })
         g.combinations.forEach((c, i) => c.index = i)
@@ -33,12 +34,35 @@ export function sortItemsInOrder(order: GroupSortOrder): [string, GroupSortOrder
     .toSorted(([k1, v1], [k2, v2]) => v1.index - v2.index)
     // .filter(([key, _]) => groups[0].key[key as keyof GroupKey] !== null)
 }
-function sortGroups(groups: Group[], groupSortOrder: GroupSortOrder) {
+function sortGroups(groups: Group[], groupSortOrder: GroupSortOrder, viewOptions: ViewOptions) {
     const sortFunctionsInOrder: GroupSortFunction[] = 
         sortItemsInOrder(groupSortOrder)
-        .map(([key, groupSortItem]) => {
-            const sortFunction: (isAscending: boolean) => GroupSortFunction = sortFunctionMap.get(key)!
-            return sortFunction(groupSortItem.isAscending)
+        .map<GroupSortFunction>(([key, groupSortItem]) => {
+            if(key == "primarySum") {
+                switch(viewOptions.primaryInfo) {
+                    case ViewInfoType.Plays: return groupByPlays(groupSortItem.isAscending)
+                    case ViewInfoType.Playtime: return groupByPlaytime(groupSortItem.isAscending)
+                    case ViewInfoType.PercentTotalPlays: return groupByPercentTotalPlays(groupSortItem.isAscending)
+                    case ViewInfoType.PercentTotalPlaytime: return groupByPercentTotalPlaytime(groupSortItem.isAscending)
+                    case ViewInfoType.PercentGroupPlays: return groupByPercentGroupPlays(groupSortItem.isAscending)
+                    case ViewInfoType.PercentGroupPlaytime: return groupByPercentGroupPlaytime(groupSortItem.isAscending)
+                    default: return sortInPlace(groupSortItem.isAscending)
+                }
+            } else if (key == "secondarySum") {
+                switch(viewOptions.secondaryInfo) {
+                    case ViewInfoType.Date: return groupByDate(groupSortItem.isAscending)
+                    case ViewInfoType.Plays: return groupByPlays(groupSortItem.isAscending)
+                    case ViewInfoType.Playtime: return groupByPlaytime(groupSortItem.isAscending)
+                    case ViewInfoType.PercentTotalPlays: return groupByPercentTotalPlays(groupSortItem.isAscending)
+                    case ViewInfoType.PercentTotalPlaytime: return groupByPercentTotalPlaytime(groupSortItem.isAscending)
+                    case ViewInfoType.PercentGroupPlays: return groupByPercentGroupPlays(groupSortItem.isAscending)
+                    case ViewInfoType.PercentGroupPlaytime: return groupByPercentGroupPlaytime(groupSortItem.isAscending)
+                    default: return sortInPlace(groupSortItem.isAscending)
+                }
+            } else {
+                const sortFunction: (isAscending: boolean) => GroupSortFunction = sortFunctionMap.get(key)!
+                return sortFunction(groupSortItem.isAscending)    
+            }
         })
     groups.sort((g1, g2) => {
         for(var i = 0; i < sortFunctionsInOrder.length; i++) {
@@ -73,12 +97,27 @@ const groupByMonth = (isAscending: boolean) => isAscending
 const groupByYear = (isAscending: boolean) => isAscending 
     ? (g1: Group, g2: Group) => ((g1.key.year ?? g1.combinations[0].listens[0].timestamp.getFullYear()) - (g2.key.year ?? g2.combinations[0].listens[0].timestamp.getFullYear()))
     : (g1: Group, g2: Group) => ((g2.key.year ?? g2.combinations[0].listens[0].timestamp.getFullYear()) - (g1.key.year ?? g1.combinations[0].listens[0].timestamp.getFullYear()))
+
 const groupByPlays = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.totalPlays - g2.totalPlays)
-    : (g1: Group, g2: Group) => (g2.totalPlays - g1.totalPlays)
+    ? (g1: Group, g2: Group) => (g1.plays - g2.plays)
+    : (g1: Group, g2: Group) => (g2.plays - g1.plays)
 const groupByPlaytime = (isAscending: boolean) => isAscending 
-    ? (g1: Group, g2: Group) => (g1.totalPlaytimeMs - g2.totalPlaytimeMs)
-    : (g1: Group, g2: Group) => (g2.totalPlaytimeMs - g1.totalPlaytimeMs)
+    ? (g1: Group, g2: Group) => (g1.playtime - g2.playtime)
+    : (g1: Group, g2: Group) => (g2.playtime - g1.playtime)
+const groupByPercentTotalPlays = (isAscending: boolean) => isAscending 
+    ? (g1: Group, g2: Group) => (g1.totalPlayPercent - g2.totalPlayPercent)
+    : (g1: Group, g2: Group) => (g2.totalPlayPercent - g1.totalPlayPercent)
+const groupByPercentTotalPlaytime = (isAscending: boolean) => isAscending 
+    ? (g1: Group, g2: Group) => (g1.totalPlaytimePercent - g2.totalPlaytimePercent)
+    : (g1: Group, g2: Group) => (g2.totalPlaytimePercent - g1.totalPlaytimePercent)
+const groupByPercentGroupPlays = (isAscending: boolean) => isAscending 
+    ? (g1: Group, g2: Group) => (g1.groupPlayPercent - g2.groupPlayPercent)
+    : (g1: Group, g2: Group) => (g2.groupPlayPercent - g1.groupPlayPercent)
+const groupByPercentGroupPlaytime = (isAscending: boolean) => isAscending 
+    ? (g1: Group, g2: Group) => (g1.groupPlaytimePercent - g2.groupPlaytimePercent)
+    : (g1: Group, g2: Group) => (g2.groupPlaytimePercent - g1.groupPlaytimePercent)
+
+const sortInPlace = (isAscending: boolean) => (g1: Group, g2: Group) => 0
 
 const sortFunctionMap: Map<string, (isAscending: boolean) => GroupSortFunction> = new Map([
     ["song", groupBySong],
@@ -89,6 +128,4 @@ const sortFunctionMap: Map<string, (isAscending: boolean) => GroupSortFunction> 
     ["date", groupByDate],
     ["month", groupByMonth],
     ["year", groupByYear],
-    ["totalPlays", groupByPlays],
-    ["totalPlaytime", groupByPlaytime],
 ])

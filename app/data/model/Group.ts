@@ -1,6 +1,7 @@
 import { Base64 } from "../utils/base64";
 import { Combination } from "./Combination";
 import { GroupType } from "./Operations";
+import { ViewInfoType, ViewInfoTypePercent } from "./ViewOptions";
 
 export class GroupKey {
     public constructor(
@@ -39,15 +40,44 @@ export function groupKeyFromHashCode(hashCode: string) {
 
 export class Group {
     public id: string = crypto.randomUUID()
-    public totalPlays: number
-    public totalPlaytimeMs: number
+    
+    public plays: number = -1
+    private visiblePlays: number = -1
+    public playtime: number = -1
+    private visiblePlaytime: number = -1
+    
+    public totalPlayPercent: number = -1
+    public totalPlaytimePercent: number = -1
+    public groupPlayPercent: number = -1
+    public groupPlaytimePercent: number = -1
+
     constructor(
         public type: GroupType,
         public key: GroupKey,
         public combinations: Combination[],
     ){
-        this.totalPlays = combinations.reduce((acc, c) => acc + c.listens.length, 0)
-        this.totalPlaytimeMs = combinations.reduce((acc, c) => acc + c.totalPlaytimeMs, 0)
+        this.plays = this.combinations.reduce((acc, c) => acc + c.plays, 0)
+        this.playtime = this.combinations.reduce((acc, c) => acc + c.playtime, 0)
+    }
+
+    recalculateTotals(totalPlays: number, totalPlaytime: number) {
+        this.visiblePlays = this.combinations.reduce((acc, c) => acc + c.visiblePlays, 0)
+        this.visiblePlaytime = this.combinations.reduce((acc, c) => acc + c.visiblePlaytime, 0)
+
+        this.totalPlayPercent = this.visiblePlays / totalPlays
+        this.totalPlaytimePercent = this.visiblePlaytime / totalPlaytime
+        this.groupPlayPercent = this.visiblePlays / this.plays
+        this.groupPlaytimePercent = this.visiblePlays / this.playtime
+    }
+
+    percent(primaryInfo: ViewInfoTypePercent): number {
+        switch(primaryInfo) {
+            case ViewInfoType.PercentTotalPlays: return this.totalPlayPercent
+            case ViewInfoType.PercentTotalPlaytime: return this.totalPlaytimePercent
+            case ViewInfoType.PercentGroupPlays: return this.groupPlayPercent
+            case ViewInfoType.PercentGroupPlaytime: return this.groupPlaytimePercent
+            default: return -1
+        }
     }
 
     headerStrings(short?: boolean): { primary: string, secondary: string | undefined } {
