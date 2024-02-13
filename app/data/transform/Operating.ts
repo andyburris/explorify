@@ -1,9 +1,9 @@
-import { GroupType, CombineInto, CombineType, Operations, GroupOperation, FilterOperation, SkipFilterType, SearchType } from "../model/Operations";
+import { GroupType, CombineInto, CombineType, Operations, GroupOperation, FilterOperation, SkipFilterType, SearchType, InfoOperation } from "../model/Operations";
 import { Group, GroupKey, groupKeyFromHashCode } from "../model/Group";
 import { HistoryEntry } from "../model/HistoryEntry";
 import { Combination, ArtistCombination, TrackCombination } from "../model/Combination";
 import { applySort } from "./Sorting";
-import { ViewState } from "../model/Listen";
+import { Listen, ViewState } from "../model/Listen";
 
 function toGroupKey(listen: HistoryEntry, type: GroupType): GroupKey {
     return new GroupKey(
@@ -19,23 +19,22 @@ function toGroupKey(listen: HistoryEntry, type: GroupType): GroupKey {
 }
 
 export function applyOperations(listens: HistoryEntry[], operations: Operations): Group[] {
-    const filtered = filterValidItems(listens, operations.filter)
-    const grouped = groupItems(filtered, operations.group)
-    applyHidden(grouped, operations.filter, filtered.length, filtered.reduce((acc, l) => acc + l.millisecondsPlayed, 0))
-    applySort(grouped, operations.sort, operations.viewOptions)
+    // const filtered = filterValidItems(listens, operations.filter)
+    const filtered = listens
+    const grouped = groupItems(filtered, operations.group) //TODO: only apply when new groupings exist
+    applyFiltersAndPercents(grouped, operations.filter, operations.info)
+    applySort(grouped, operations.sort, operations.info)
     const filteredRanks = filterHiddenRanks(grouped, operations.filter)
     return filteredRanks
 }
 
-function filterValidItems(items: HistoryEntry[], filterOperation: FilterOperation): HistoryEntry[] {
-    const filteredSkips = filterOperation.excludeSkipsFromTotal
-        ? items.filter(he => filterSkip(he, filterOperation))
-        : items
-    const filteredSearch = filterOperation.excludeSearchFromTotal
-        ? filteredSkips.filter(he => filterSearch(he, filterOperation))
-        : filteredSkips
-    return filteredSearch
-}
+// function filterValidItems(items: HistoryEntry[], filterOperation: FilterOperation): HistoryEntry[] {
+//     if(!filterOperation.hideFilteredPlays) return items 
+
+//     const filteredSkips = items.filter(he => filterSkip(he, filterOperation))
+//     const filteredSearch = filteredSkips.filter(he => filterSearch(he, filterOperation))
+//     return filteredSearch
+// }
 
 function filterSkip(listen: HistoryEntry, filterOperation: FilterOperation): boolean {
     switch(filterOperation.filterSkipsBy) {
@@ -53,20 +52,29 @@ function filterSearch(listen: HistoryEntry, operation: FilterOperation) : boolea
     }
 }
 
-function applyHidden(groups: Group[], operation: FilterOperation, totalPlays: number, totalPlaytime: number) {
+function applyFiltersAndPercents(groups: Group[], operation: FilterOperation, infoOperation: InfoOperation) {
     groups.forEach(g => {
         g.combinations.forEach(c => {
             c.listens.forEach(l => {
-                if(l.viewState == ViewState.Invalid) return
-                const hideSearch = (!operation.excludeSearchFromTotal) ? !filterSearch(l, operation) : false
-                const hideSkip = (!operation.excludeSkipsFromTotal) ? !filterSkip(l, operation) : false
-                l.viewState = (hideSearch || hideSkip) ? ViewState.Hidden : ViewState.Visible
+                // if(l.viewState == ViewState.Invalid) return
+                // const hideSearch = (!operation.excludeSearchFromTotal) ? !filterSearch(l, operation) : false
+                // const hideSkip = (!operation.excludeSkipsFromTotal) ? !filterSkip(l, operation) : false
+                // l.viewState = (hideSearch || hideSkip) ? ViewState.Hidden : ViewState.Visible
+                l.hiddenSearched = !filterSearch(l, operation)
+                l.hiddenSkip = !filterSkip(l, operation)
             })
-            c.recalculateTotals(totalPlays, totalPlaytime, g.plays, g.playtime)
-            //todo: calculate group plays/playtime before percents
+            c.recalculateVisible()
+            c.recalculateDenominator(infoOperation.primaryPercent)
+            // c.hiddenMinListens = c.visiblePlays < operation.minimumPlays
         })   
-        g.recalculateTotals(totalPlays, totalPlaytime)
+        g.recalculateVisible()
+        g.recalculateDenominators()
     })
+
+    const totalPlays = groups.reduce((acc, g) => acc + g.playsDenominator, 0)
+    const totalPlaytime = groups.reduce((acc, g) => acc + g.playtimeDenominator, 0)
+
+    groups.forEach(g => g.recalculatePercents(infoOperation.primaryPercent, totalPlays, totalPlaytime))
 }
 
 function filterHiddenRanks(groups: Group[], operation: FilterOperation): Group[]{
@@ -77,7 +85,7 @@ function filterHiddenRanks(groups: Group[], operation: FilterOperation): Group[]
         })
         g.combinations = g.combinations.filter(c => c.listens.length > 0)
         return g
-    })
+    }).filter(g => g.visiblePlays >= operation.minimumPlays)
 }
 
 function groupItems(items: HistoryEntry[], groupOperation: GroupOperation): Group[] {
@@ -101,7 +109,7 @@ function groupItems(items: HistoryEntry[], groupOperation: GroupOperation): Grou
         })
 }
 
-function toListen(entry: HistoryEntry) { return { ...entry, viewState: ViewState.Visible } }
+function toListen(entry: HistoryEntry): Listen { return { ...entry, hiddenSkip: false, hiddenSearched: false } }
 function combineItems(items: HistoryEntry[], groupOperation: GroupOperation): Combination[] {
     const combinationMap: Map<string, HistoryEntry[]> = items.reduce((groups, entry) => {
         const key = (groupOperation.combineBy == CombineType.None) ? entry.id : (groupOperation.combineBy == CombineType.SameArtist) ? entry.artistName.toLowerCase() : `${entry.trackName} - ${entry.artistName}`.toLowerCase()

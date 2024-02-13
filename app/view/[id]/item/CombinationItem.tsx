@@ -1,14 +1,12 @@
 import { ActionButton } from "@/app/common/button/ActionButton";
-import { HistoryEntry } from "@/app/data/model/HistoryEntry";
-import { ViewInfoType, ViewOptions } from "@/app/data/model/ViewOptions";
-import { CaretDown, CaretRight, DotsThreeVertical } from "phosphor-react-sc";
+import { ViewOptions } from "@/app/data/model/ViewOptions";
+import { CaretDown, CaretRight } from "phosphor-react-sc";
 import { SecondaryInfo, PrimaryInfo } from "./InfoChips";
-import { useState } from "react";
-import { ListenItem } from "./ListenItem";
 import { Combination, TrackCombination } from "@/app/data/model/Combination";
+import { InfoOperation } from "@/app/data/model/Operations";
 
-interface CombinationItemProps { combination: Combination, indexInGroup: number, viewOptions: ViewOptions, isExpanded: boolean, onToggleExpand: () => void }
-export function CombinationItem({ combination, indexInGroup, viewOptions, isExpanded, onToggleExpand }: CombinationItemProps) {
+interface CombinationItemProps { combination: Combination, indexInGroup: number, viewOptions: ViewOptions, infoOperation: InfoOperation, isExpanded: boolean, onToggleExpand: () => void }
+export function CombinationItem({ combination, indexInGroup, viewOptions, infoOperation, isExpanded, onToggleExpand }: CombinationItemProps) {
     const firstListen = combination.listens[0]
     return (
         <div className="flex items-center py-2 gap-4 min-h-[64px]">
@@ -29,8 +27,8 @@ export function CombinationItem({ combination, indexInGroup, viewOptions, isExpa
             
             <div className="flex gap-1 items-center flex-shrink-0">
                 <div className="flex flex-col-reverse items-end sm:flex-row gap-1 sm:gap-3 sm:items-center">
-                    { viewOptions.secondaryInfo != null && <SecondaryInfo combination={combination} secondaryInfo={viewOptions.secondaryInfo} /> }
-                    <PrimaryInfo combination={combination} primaryInfo={viewOptions.primaryInfo} />
+                    { infoOperation.secondaryInfo != null && <SecondaryInfo combination={combination} secondaryInfo={infoOperation.secondaryInfo} /> }
+                    <PrimaryInfo combination={combination} primaryInfo={infoOperation.primaryInfo} />
                 </div>
                 <ActionButton onClick={() => onToggleExpand()} icon={isExpanded ? <CaretDown/> : <CaretRight/>} hideShadow/>
             </div>

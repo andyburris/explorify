@@ -17,32 +17,12 @@ export function FilterOperationSelector({ currentOperation, onChangeOperation }:
                     selectedItem={currentOperation.filterSkipsBy}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, filterSkipsBy: n})}
                 />
-                <Combobox 
-                    options={[
-                        { value: true, label: "Exclude from total plays and ranks", key: "hidden", icon: <ListNumbers/> },
-                        { value: false, label: "Include in total plays and ranks", key: "validity", icon: <ListDashes/> },
-                    ]} 
-                    selectedValues={[currentOperation.excludeSkipsFromTotal]}
-                    onSelectValues={(n) => onChangeOperation({ ...currentOperation, excludeSkipsFromTotal: n[0] ?? currentOperation.excludeSkipsFromTotal})}
-                    multiSelect={false}
-                    placeholder="Search..."
-                />
             </OperationSection>
             <OperationSection title="Minimum plays" description="Filter out combinations with less than the given amount of plays">
                 <TextField 
                     placeholder="0" 
                     currentValue={currentOperation.minimumPlays > 0 ? `${currentOperation.minimumPlays}` : ""}
                     onChangeValue={v => onChangeOperation({ ...currentOperation, minimumPlays: parseInt(v) ?? currentOperation.minimumPlays}) }    
-                />
-                <Combobox 
-                    options={[
-                        { value: true, label: "Filter out of total plays and ranks", key: "hidden", icon: <ListNumbers/> },
-                        { value: false, label: "Don't filter out of total plays and ranks", key: "validity", icon: <ListDashes/> },
-                    ]} 
-                    selectedValues={[currentOperation.excludeMinPlaysFromTotal]}
-                    onSelectValues={(n) => onChangeOperation({ ...currentOperation, excludeMinPlaysFromTotal: n[0] ?? currentOperation.excludeMinPlaysFromTotal})}
-                    multiSelect={false}
-                    placeholder="Search..."
                 />
             </OperationSection>
             <OperationSection title="Search by">
@@ -62,12 +42,13 @@ export function FilterOperationSelector({ currentOperation, onChangeOperation }:
                     onSelect={(n) => onChangeOperation({ ...currentOperation, searchBy: n})}
                 />
                 <Combobox 
+                    //TODO: fix naming
                     options={[
                         { value: true, label: "Filter out of total plays and ranks", key: "hidden", icon: <ListNumbers/> },
                         { value: false, label: "Don't filter out of total plays and ranks", key: "validity", icon: <ListDashes/> },
                     ]} 
-                    selectedValues={[currentOperation.excludeSearchFromTotal]}
-                    onSelectValues={(n) => onChangeOperation({ ...currentOperation, excludeSearchFromTotal: n[0] ?? currentOperation.excludeSearchFromTotal})}
+                    selectedValues={[currentOperation.hideFilteredPlays]}
+                    onSelectValues={(n) => onChangeOperation({ ...currentOperation, hideFilteredPlays: n[0] ?? currentOperation.hideFilteredPlays})}
                     multiSelect={false}
                     placeholder="Search..."
                 />

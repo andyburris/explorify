@@ -75,7 +75,7 @@ export function ShareDialog({ preset, open, onOpenChange }: { preset: Preset, op
 
 function ToggleSection({title, description, checked, onCheckedChange}: { title: string, description: string, checked: boolean, onCheckedChange: (updated: boolean) => void}) {
     return (
-        <div className="flex items-center">
+        <div className="flex items-center gap-3">
             <div className="flex flex-col flex-grow">
                 <p className="font-semibold">{title}</p>
                 <p className="text-neutral-500">{description}</p>

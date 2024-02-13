@@ -5,7 +5,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@radix-ui/react-popover
 import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from "cmdk"
 import { Button } from "../../button/Button"
 import { cn } from "../utils/utils"
-import { ArrowsDownUp, ArrowsIn, ArrowsOut, CaretUpDown, Check, Minus, Plus } from "phosphor-react-sc"
+import { ArrowsDownUp, ArrowsIn, ArrowsOut, CaretDown, CaretUp, CaretUpDown, Check, Minus, Plus } from "phosphor-react-sc"
 import { ActionButton } from "../../button/ActionButton"
 
 export interface ComboboxOption<T> { key: string, label: string, value: T, icon: React.ReactNode }
@@ -29,7 +29,8 @@ export function Combobox<T>({ options, selectedValues, onSelectValues, placehold
               </div>)
             : placeholder}
         </div>
-        <Plus className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        { multiSelect ? <Plus className="ml-2 h-5 w-5 shrink-0 opacity-50" /> : <CaretDown className="ml-2 h-5 w-5 shrink-0 opacity-50" /> }
+        
       </div>
     )
   } else {
@@ -37,7 +38,7 @@ export function Combobox<T>({ options, selectedValues, onSelectValues, placehold
       <Command className="w-full p-0 border border-neutral-200 bg-white rounded-xl">
         <div className="flex items-center p-1 focus:ring-2 rounded-t-xl w-full border-b border-neutral-200">
           <CommandInput placeholder={placeholder} className="p-3 outline-none w-full bg-transparent"/>
-          <ActionButton onClick={() => setOpen(false)} icon={<Minus/>} hideShadow/>
+          <ActionButton onClick={() => setOpen(false)} icon={<CaretUp/>} hideShadow/>
         </div>
         <CommandEmpty className="p-3">No options found.</CommandEmpty>
         <CommandGroup>

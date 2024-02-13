@@ -20,7 +20,7 @@ export function InfoSelector({ preset, onChangePreset }: { preset: Preset, onCha
                     options={pickableIcons.map(pi => { return {key: pi.name, label: pi.name, value: pi.name, icon: pi.component() } })}
                     selectedValues={[pickableIcons.find(pi => pi.name.toLowerCase() == preset.icon)?.name].filter(i => i)}
                     onSelectValues={(v) => onChangePreset({ ...preset, icon: v[0] ?? preset.icon })}
-                    placeholder="Select icon..."
+                    placeholder="Search icons..."
                     multiSelect={false}/>
                 {preset.icon.trim().length <= 0 && <p className="text-red-700">A valid icon is required to save</p>}
             </OperationSection>

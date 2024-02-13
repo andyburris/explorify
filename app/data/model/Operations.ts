@@ -4,6 +4,7 @@ export interface Operations {
     group: GroupOperation,
     filter: FilterOperation,
     sort: SortOperation,
+    info: InfoOperation,
     viewOptions: ViewOptions,
 }
 
@@ -39,8 +40,9 @@ export interface GroupSortOrder {
     artist: GroupSortOrderItem,
     song: GroupSortOrderItem,
     album: GroupSortOrderItem,
-    primarySum: GroupSortOrderItem,
-    secondarySum: GroupSortOrderItem,
+    plays: GroupSortOrderItem,
+    playtime: GroupSortOrderItem,
+    percent: GroupSortOrderItem,
 }
 export enum ItemSortType { Date, Plays, Name, ArtistName, Playtime }
 export interface SortOperation {
@@ -53,10 +55,32 @@ export enum SkipFilterType { All, NoSkips, OnlySkips }
 export enum SearchType { All, SongName, ArtistName, AlbumName }
 export interface FilterOperation {
     filterSkipsBy: SkipFilterType,
-    excludeSkipsFromTotal: boolean,
     minimumPlays: number,
-    excludeMinPlaysFromTotal: boolean,
     searchTerm: string,
     searchBy: SearchType,
-    excludeSearchFromTotal: boolean,
+    hideFilteredPlays: boolean,
+}
+
+export enum InfoType {
+    Date,
+    Plays,
+    Playtime,
+    Percent,
+    Fraction,
+}
+export interface InfoOperation {
+    primaryInfo: InfoType,
+    primaryPercent: PercentInfo,
+    secondaryInfo: InfoType | null,
+}
+
+export enum PercentOf { Plays, Playtime }
+export enum PercentNumerator { All, Skipped, Searched }
+export enum PercentDenominator { All, SkipFilter, SearchFilter }
+export enum PercentGrouping { Total, Groups }
+export interface PercentInfo {
+    of: PercentOf,
+    numerator: PercentNumerator,
+    denominator: PercentDenominator,
+    grouping: PercentGrouping,
 }

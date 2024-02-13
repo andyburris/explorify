@@ -1,6 +1,5 @@
-import { CombineInto, CombineType, ItemSortType, SearchType, SkipFilterType } from "./model/Operations";
+import { CombineInto, CombineType, InfoType, ItemSortType, PercentDenominator, PercentGrouping, PercentInfo, PercentNumerator, PercentOf, SearchType, SkipFilterType } from "./model/Operations";
 import { Preset } from "./model/Preset";
-import { ViewInfoType } from "./model/ViewOptions";
 
 export const groupNone = { hour: false, dayOfWeek: false, date: false, month: false,year: false, artist: false, song: false, album: false, }
 
@@ -13,8 +12,9 @@ export const simpleSortGroupsDate = {
     artist: { index: 6, isAscending: true },
     song: { index: 5, isAscending: true },
     album: { index: 7, isAscending: true },
-    primarySum: { index: 8, isAscending: true },
-    secondarySum: { index: 9, isAscending: true },
+    plays: { index: 8, isAscending: true },
+    playtime: { index: 9, isAscending: true },
+    percent: { index: 10, isAscending: true }
 }
 export const simpleSortGroupsSong = {
     hour: { index: 7, isAscending: true },
@@ -25,8 +25,9 @@ export const simpleSortGroupsSong = {
     artist: { index: 1, isAscending: true },
     song: { index: 0, isAscending: true },
     album: { index: 2, isAscending: true },
-    primarySum: { index: 8, isAscending: true },
-    secondarySum: { index: 9, isAscending: true },
+    plays: { index: 8, isAscending: true },
+    playtime: { index: 9, isAscending: true },
+    percent: { index: 10, isAscending: true }
 }
 export const simpleSortGroupsPlays = {
     hour: { index: 9, isAscending: true },
@@ -37,8 +38,15 @@ export const simpleSortGroupsPlays = {
     artist: { index: 3, isAscending: true },
     song: { index: 2, isAscending: true },
     album: { index: 4, isAscending: true },
-    primarySum: { index: 0, isAscending: false },
-    secondarySum: { index: 1, isAscending: false },
+    plays: { index: 0, isAscending: false },
+    playtime: { index: 1, isAscending: false },
+    percent: { index: 10, isAscending: false }
+}
+const defaultPercentInfo: PercentInfo = {
+    of: PercentOf.Plays,
+    numerator: PercentNumerator.All,
+    denominator: PercentDenominator.All,
+    grouping: PercentGrouping.Total
 }
 
 export const defaultPresets: Preset[] = [
@@ -56,17 +64,20 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                excludeSkipsFromTotal: true,
                 minimumPlays: 0,
-                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                excludeSearchFromTotal: false,
+                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
+            },
+            info: {
+                primaryInfo: InfoType.Plays,
+                secondaryInfo: null,
+                primaryPercent: defaultPercentInfo,
             },
             viewOptions: {
                 showSearch: false,
@@ -74,8 +85,6 @@ export const defaultPresets: Preset[] = [
                 showItems: true,
                 showItemRanks: true,
                 previewGroups: false,
-                primaryInfo: ViewInfoType.Plays,
-                secondaryInfo: null,
             },
         },
     },
@@ -93,17 +102,20 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                excludeSkipsFromTotal: true,
                 minimumPlays: 0,
-                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                excludeSearchFromTotal: false,
+                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
+            },
+            info: {
+                primaryInfo: InfoType.Plays,
+                secondaryInfo: null,
+                primaryPercent: defaultPercentInfo,
             },
             viewOptions: {
                 showSearch: false,
@@ -111,8 +123,6 @@ export const defaultPresets: Preset[] = [
                 showItems: true,
                 showItemRanks: true,
                 previewGroups: false,
-                primaryInfo: ViewInfoType.Plays,
-                secondaryInfo: null,
             },
         },
     },    {
@@ -129,17 +139,20 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                excludeSkipsFromTotal: true,
                 minimumPlays: 0,
-                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                excludeSearchFromTotal: false,
+                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
+            },
+            info: {
+                primaryInfo: InfoType.Plays,
+                secondaryInfo: null,
+                primaryPercent: defaultPercentInfo,
             },
             viewOptions: {
                 showSearch: false,
@@ -147,8 +160,6 @@ export const defaultPresets: Preset[] = [
                 showItems: true,
                 showItemRanks: true,
                 previewGroups: true,
-                primaryInfo: ViewInfoType.Plays,
-                secondaryInfo: null,
             },
         },
     },
@@ -159,33 +170,51 @@ export const defaultPresets: Preset[] = [
         description: "The songs you’ve skipped the most",
         operations: {
             group: {
-                groupBy: { ...groupNone },
+                groupBy: { ...groupNone, artist: true, song: true },
                 combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
             },
             filter: {
                 filterSkipsBy: SkipFilterType.OnlySkips,
-                excludeSkipsFromTotal: true,
-                minimumPlays: 8,
-                excludeMinPlaysFromTotal: true,
+                minimumPlays: 10,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                excludeSearchFromTotal: false,
+                hideFilteredPlays: true,
             },
             sort: {
-                sortGroupsBy: simpleSortGroupsDate,
+                sortGroupsBy: {
+                    hour: { index: 10, isAscending: true },
+                    dayOfWeek: { index: 9, isAscending: true },
+                    date: { index: 8, isAscending: true },
+                    month: { index: 7, isAscending: true },
+                    year: { index: 6, isAscending: true },
+                    artist: { index: 4, isAscending: true },
+                    song: { index: 3, isAscending: true },
+                    album: { index: 5, isAscending: true },
+                    plays: { index: 1, isAscending: false },
+                    playtime: { index: 2, isAscending: false },
+                    percent: { index: 0, isAscending: false }
+                },
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
             },
+            info: {
+                primaryInfo: InfoType.Percent,
+                secondaryInfo: InfoType.Fraction,
+                primaryPercent: {
+                    of: PercentOf.Plays,
+                    numerator: PercentNumerator.Skipped,
+                    denominator: PercentDenominator.All,
+                    grouping: PercentGrouping.Groups,
+                },
+            },
             viewOptions: {
                 showSearch: false,
-                showGroupSum: false,
-                showItems: true,
+                showGroupSum: true,
+                showItems: false,
                 showItemRanks: true,
-                previewGroups: false,
-                primaryInfo: ViewInfoType.Plays,
-                secondaryInfo: null,
+                previewGroups: true,
             },
         },
     },
@@ -203,17 +232,20 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.All,
-                excludeSkipsFromTotal: true,
                 minimumPlays: 0,
-                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                excludeSearchFromTotal: false,
+                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsDate,
                 sortItemsBy: ItemSortType.Date,
                 sortItemsAscending: true,
+            },
+            info: {
+                primaryInfo: InfoType.Date,
+                secondaryInfo: null,
+                primaryPercent: defaultPercentInfo,
             },
             viewOptions: {
                 showSearch: false,
@@ -221,8 +253,6 @@ export const defaultPresets: Preset[] = [
                 showItems: true,
                 showItemRanks: false,
                 previewGroups: false,
-                primaryInfo: ViewInfoType.Date,
-                secondaryInfo: null,
             },
         },
     },
@@ -240,17 +270,20 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                excludeSkipsFromTotal: true,
                 minimumPlays: 0,
-                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                excludeSearchFromTotal: false,
+                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsDate,
                 sortItemsBy: ItemSortType.Date,
                 sortItemsAscending: true,
+            },
+            info: {
+                primaryInfo: InfoType.Date,
+                secondaryInfo: InfoType.Plays,
+                primaryPercent: defaultPercentInfo,
             },
             viewOptions: {
                 showSearch: false,
@@ -258,8 +291,6 @@ export const defaultPresets: Preset[] = [
                 showItems: true,
                 showItemRanks: false,
                 previewGroups: false,
-                primaryInfo: ViewInfoType.Date,
-                secondaryInfo: ViewInfoType.Plays,
             },
         },
     },
@@ -277,17 +308,20 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                excludeSkipsFromTotal: true,
                 minimumPlays: 0,
-                excludeMinPlaysFromTotal: true,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                excludeSearchFromTotal: false,
+                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
                 sortItemsBy: ItemSortType.Plays,
                 sortItemsAscending: false,
+            },
+            info: {
+                primaryInfo: InfoType.Plays,
+                secondaryInfo: InfoType.Date,
+                primaryPercent: defaultPercentInfo,
             },
             viewOptions: {
                 showSearch: false,
@@ -295,8 +329,6 @@ export const defaultPresets: Preset[] = [
                 showItems: true,
                 showItemRanks: true,
                 previewGroups: true,
-                primaryInfo: ViewInfoType.Plays,
-                secondaryInfo: ViewInfoType.Date,
             },
         },
     },

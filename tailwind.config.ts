@@ -39,6 +39,7 @@ const config: Config = {
       },
     },
   },
+  darkMode: "class",
   plugins: [require("nightwind")],
 }
 export default config

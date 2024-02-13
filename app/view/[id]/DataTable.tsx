@@ -10,6 +10,7 @@ import { ViewOptions } from '@/app/data/model/ViewOptions'
 import { ListenItem } from './item/ListenItem'
 import { ExpandItem } from './item/ExpandItem'
 import { Combination, ArtistCombination } from '@/app/data/model/Combination'
+import { InfoOperation } from '@/app/data/model/Operations'
 
 type ListItem = IndexedCombination | GroupData | IndexedHistoryEntry | ExpandGroup
 class GroupData { constructor(public group: Group) {} }
@@ -17,7 +18,7 @@ class IndexedCombination { constructor(public index: number, public combination:
 class IndexedHistoryEntry { constructor(public isFirst: boolean, public isLast: boolean, public listen: HistoryEntry, public showSong: boolean){} }
 class ExpandGroup { constructor(public group: Group, public isExpanded: boolean, public amountRemaining: number){} }
 
-export function DataTable({ groups, viewOptions, header }: { groups: Group[], viewOptions: ViewOptions, header: React.ReactNode }) {
+export function DataTable({ groups, viewOptions, infoOperation, header }: { groups: Group[], viewOptions: ViewOptions, infoOperation: InfoOperation, header: React.ReactNode }) {
   const [expandedGroups, setExpandedGroups] = useState<Group[]>([])
   const [expandedCombinations, setExpandedCombinations] = useState<Combination[]>([])
 
@@ -30,12 +31,13 @@ export function DataTable({ groups, viewOptions, header }: { groups: Group[], vi
       itemContent={(index) => {
         const listItem = flattened[index]
         return (listItem instanceof GroupData)
-          ? <GroupHeader group={listItem.group} viewOptions={viewOptions}/>
+          ? <GroupHeader group={listItem.group} viewOptions={viewOptions} infoOperation={infoOperation}/>
           : (listItem instanceof IndexedCombination)
           ? <CombinationItem 
               combination={listItem.combination} 
               indexInGroup={listItem.index} 
               viewOptions={viewOptions}
+              infoOperation={infoOperation}
               isExpanded={listItem.isExpanded}
               onToggleExpand={() => {
                 if(expandedCombinations.includes(listItem.combination)) {

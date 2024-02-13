@@ -29,6 +29,7 @@ export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset,
     const router = useRouter()
     
     const [loadedEntries, setLoadedEntries] = useState<HistoryEntry[] | undefined>();
+    // useEffect(() => { getListens().then(entries => { setLoadedEntries(entries.slice(0, 1000)) }) }, [])
     useEffect(() => { getListens().then(entries => { setLoadedEntries(entries) }) }, [])
 
     const [customizedPreset, setCustomizedPreset] = useState(initialPreset)
@@ -151,7 +152,7 @@ export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset,
     return (
         <Container>
             { filtered 
-                ? <DataTable groups={filtered} viewOptions={customizedPreset.operations.viewOptions} header={header}/> 
+                ? <DataTable groups={filtered} viewOptions={customizedPreset.operations.viewOptions} infoOperation={customizedPreset.operations.info} header={header}/> 
             : (loadedEntries === undefined)
                 ? <LazyList header={<div className="mb-10">{header}</div>} items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
                 : <LazyList header={<div className="mb-10">{header}</div>} items={new Array(1)} itemContent={(i) => <EmptyData/>}/>

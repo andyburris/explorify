@@ -1,6 +1,6 @@
 import { SegmentedControl } from "@/app/common/SegmentedControl";
 import { GroupSortOrder, GroupSortOrderItem, GroupType, ItemSortType, SortOperation } from "@/app/data/model/Operations";
-import { ArrowDown, ArrowUp, ArrowsCounterClockwise, Calendar, CalendarBlank, Clock, ClockCounterClockwise, Disc, Hourglass, MusicNote, PencilSimpleLine, Play, SortAscending, SortDescending, User } from "phosphor-react-sc";
+import { ArrowDown, ArrowUp, ArrowsCounterClockwise, Calendar, CalendarBlank, Clock, ClockCounterClockwise, Disc, Hourglass, MusicNote, PencilSimpleLine, Percent, Play, SortAscending, SortDescending, User } from "phosphor-react-sc";
 import { OperationSection, ResponsiveControl } from "./OperationsSelector";
 import { Combobox } from "@/app/common/components/ui/combobox";
 import { useState } from "react";
@@ -103,8 +103,9 @@ const sortOrderTypes: Map<String, GroupSortOrderType> = new Map([
     ["date", { icon: <Calendar/>, name: "Day of month", sortNames: ["Old-New", "New-Old"], } ],
     ["month", { icon: <Calendar/>, name: "Month", sortNames: ["Old-New", "New-Old"], } ],
     ["year", { icon: <ClockCounterClockwise/>, name: "Year", sortNames: ["Old-New", "New-Old"], } ],
-    ["primarySum", { icon: <Play/>, name: "Primary Info", sortNames: ["Least-Most", "Most-Least"], } ],
-    ["secondarySum", { icon: <Play/>, name: "Secondary Info", sortNames: ["Least-Most", "Most-Least"], } ],
+    ["plays", { icon: <Play/>, name: "Plays", sortNames: ["Least-Most", "Most-Least"], } ],
+    ["playtime", { icon: <Clock/>, name: "Playtime", sortNames: ["Least-Most", "Most-Least"], } ],
+    ["percent", { icon: <Percent/>, name: "Percent", sortNames: ["Least-Most", "Most-Least"], } ],
     ["song", { icon: <MusicNote/>, name: "Song name", sortNames: ["A-Z", "Z-A"], } ],
     ["album", { icon: <User/>, name: "Artist name", sortNames: ["A-Z", "Z-A"], } ],
     ["artist", { icon: <Disc/>, name: "Album name", sortNames: ["A-Z", "Z-A"], } ],

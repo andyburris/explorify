@@ -1,7 +1,6 @@
 import { Base64 } from "../utils/base64";
 import { Combination } from "./Combination";
-import { GroupType } from "./Operations";
-import { ViewInfoType, ViewInfoTypePercent } from "./ViewOptions";
+import { GroupType, PercentDenominator, PercentGrouping, PercentInfo, PercentOf } from "./Operations";
 
 export class GroupKey {
     public constructor(
@@ -42,14 +41,16 @@ export class Group {
     public id: string = crypto.randomUUID()
     
     public plays: number = -1
-    private visiblePlays: number = -1
     public playtime: number = -1
-    private visiblePlaytime: number = -1
+
+    public visiblePlays: number = -1
+    public visiblePlaytime: number = -1
     
-    public totalPlayPercent: number = -1
-    public totalPlaytimePercent: number = -1
-    public groupPlayPercent: number = -1
-    public groupPlaytimePercent: number = -1
+    public numerator: number = -1
+    public denominator: number = -1
+    public playsDenominator: number = -1
+    public playtimeDenominator: number = -1
+    public percent: number = -1
 
     constructor(
         public type: GroupType,
@@ -60,24 +61,23 @@ export class Group {
         this.playtime = this.combinations.reduce((acc, c) => acc + c.playtime, 0)
     }
 
-    recalculateTotals(totalPlays: number, totalPlaytime: number) {
+    recalculateVisible() {
         this.visiblePlays = this.combinations.reduce((acc, c) => acc + c.visiblePlays, 0)
         this.visiblePlaytime = this.combinations.reduce((acc, c) => acc + c.visiblePlaytime, 0)
-
-        this.totalPlayPercent = this.visiblePlays / totalPlays
-        this.totalPlaytimePercent = this.visiblePlaytime / totalPlaytime
-        this.groupPlayPercent = this.visiblePlays / this.plays
-        this.groupPlaytimePercent = this.visiblePlays / this.playtime
     }
+    recalculateDenominators() {
+        this.playsDenominator = this.combinations.reduce((acc, c) => acc + c.denominatorListens.length, 0)
+        this.playtimeDenominator = this.combinations.reduce((acc, c) => acc + c.denominatorListens.reduce((acc, l) => acc + l.millisecondsPlayed, 0), 0)
+    }
+    recalculatePercents(percentInfo: PercentInfo, totalPlays: number, totalPlaytime: number) {
+        this.combinations.forEach(c => c.recalculatePercents(percentInfo, totalPlays, totalPlaytime, this.playsDenominator, this.playtimeDenominator))
 
-    percent(primaryInfo: ViewInfoTypePercent): number {
-        switch(primaryInfo) {
-            case ViewInfoType.PercentTotalPlays: return this.totalPlayPercent
-            case ViewInfoType.PercentTotalPlaytime: return this.totalPlaytimePercent
-            case ViewInfoType.PercentGroupPlays: return this.groupPlayPercent
-            case ViewInfoType.PercentGroupPlaytime: return this.groupPlaytimePercent
-            default: return -1
+        this.numerator = this.combinations.reduce((acc, c) => acc + c.numerator, 0)
+        switch(percentInfo.grouping) {
+            case PercentGrouping.Total: this.denominator = (percentInfo.of == PercentOf.Plays) ? totalPlays : totalPlaytime; break;
+            case PercentGrouping.Groups: this.denominator = (percentInfo.of == PercentOf.Plays) ? this.playsDenominator : this.playtimeDenominator; break;
         }
+        this.percent = this.numerator / this.denominator
     }
 
     headerStrings(short?: boolean): { primary: string, secondary: string | undefined } {

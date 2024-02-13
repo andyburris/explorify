@@ -1,7 +1,6 @@
 import { assert } from "console";
 import { defaultPresets, groupNone } from "../Defaults";
-import { CombineInto, CombineType, GroupSortOrder, GroupSortOrderItem, GroupType, ItemSortType, Operations, SearchType, SkipFilterType } from "../model/Operations";
-import { ViewInfoType } from "../model/ViewOptions";
+import { CombineInto, CombineType, GroupSortOrder, GroupSortOrderItem, GroupType, InfoType, ItemSortType, Operations, PercentInfo, SearchType, SkipFilterType } from "../model/Operations";
 import { factorial, hashSortedIndices, unhashSortedIndices } from "./HashSort";
 import { DEBUG } from "../utils/debug";
 import { Preset } from "../model/Preset";
@@ -68,17 +67,17 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
         { value: operations.group.combineAcrossGroups, numberOfBits: 1 },
 
         { value: operations.filter.filterSkipsBy, numberOfBits: 2 },
-        { value: operations.filter.excludeSkipsFromTotal, numberOfBits: 1 },
-        { value: operations.filter.excludeMinPlaysFromTotal, numberOfBits: 1 },
         { value: operations.filter.searchBy, numberOfBits: 2 },
-        { value: operations.filter.excludeSearchFromTotal, numberOfBits: 1 },
+        { value: operations.filter.hideFilteredPlays, numberOfBits: 1 },
         
         hashGroupSort(operations.sort.sortGroupsBy),
         { value: operations.sort.sortItemsBy, numberOfBits: 3 },
         { value: operations.sort.sortItemsAscending, numberOfBits: 1 },
 
-        { value: operations.viewOptions.primaryInfo, numberOfBits: 3 },
-        { value: (operations.viewOptions.secondaryInfo ?? -1) + 1, numberOfBits: 3 },
+        { value: operations.info.primaryInfo, numberOfBits: 3 },
+        { value: (operations.info.secondaryInfo ?? -1) + 1, numberOfBits: 3 },
+        hashPercentInfo(operations.info.primaryPercent),
+
         { value: operations.viewOptions.showSearch, numberOfBits: 1 },
         { value: operations.viewOptions.showItems, numberOfBits: 1 },
         { value: operations.viewOptions.showItemRanks, numberOfBits: 1 },
@@ -89,8 +88,9 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
     const asBigint = segmentsToHashBigint(segments)
     if(inBinary == true) return asBigint.toString(2).padStart(numberOfBits, '0')
     const hashString = version + asBigint.toString(36).padStart(numberOfBits / 5, '0')
+    const minString = `m${operations.filter.minimumPlays}`
     if(DEBUG && JSON.stringify(operations) != JSON.stringify(parseHash(hashString))) throw Error(`Incorrect hashing/unhashing algorithm: operations = ${JSON.stringify(operations, null, 2)}, unhashed = ${JSON.stringify(parseHash(hashString), null, 2)}`)
-    return hashString
+    return hashString + minString
 }
 
 function parseBigInt(str: string, radix: number): bigint {
@@ -107,7 +107,8 @@ export function parsePresetHash(hash: string) {
 export function parseHash(hash: string): Operations {
     const operations: Operations = JSON.parse(JSON.stringify(defaultPresets[0].operations));
     const version = parseInt(hash.at(0)!, 36)
-    const operationsHash = hash.substring(1)
+    const minSeparatorIndex = hash.lastIndexOf('m')
+    const operationsHash = hash.substring(1, minSeparatorIndex)
     const hashNumber = parseBigInt(operationsHash, 36)
     if(DEBUG && operationsHash != hashNumber.toString(36).padStart(operationsHash.length, '0')) throw Error(`parseBigInt not working: operationsHash = ${operationsHash}, hashNumber = ${hashNumber.toString(36).padStart(operationsHash.length, '0')}`)
     let segments: HashSegmentSetter[]
@@ -120,17 +121,17 @@ export function parseHash(hash: string): Operations {
                 { setter: (n) => operations.group.combineAcrossGroups = !!n, numberOfBits: 1 },
         
                 { setter: (n) => operations.filter.filterSkipsBy = n as SkipFilterType, numberOfBits: 2 },
-                { setter: (n) => operations.filter.excludeSkipsFromTotal = !!n, numberOfBits: 1 },
-                { setter: (n) => operations.filter.excludeMinPlaysFromTotal = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.filter.searchBy = n as SearchType, numberOfBits: 2 },
-                { setter: (n) => operations.filter.excludeSearchFromTotal = !!n, numberOfBits: 1 },
+                { setter: (n) => operations.filter.hideFilteredPlays = !!n, numberOfBits: 1 },
                 
                 applyGroupSort(operations.sort.sortGroupsBy),
                 { setter: (n) => operations.sort.sortItemsBy = n as ItemSortType, numberOfBits: 3 },
                 { setter: (n) => operations.sort.sortItemsAscending = !!n, numberOfBits: 1 },
         
-                { setter: (n) => operations.viewOptions.primaryInfo = n, numberOfBits: 3 },
-                { setter: (n) => operations.viewOptions.secondaryInfo = (n == 0 ? null : n - 1 as ViewInfoType), numberOfBits: 3 },
+                { setter: (n) => operations.info.primaryInfo = n, numberOfBits: 3 },
+                { setter: (n) => operations.info.secondaryInfo = (n == 0 ? null : n - 1 as InfoType), numberOfBits: 3 },
+                parsePercentInfo(operations.info.primaryPercent),
+                
                 { setter: (n) => operations.viewOptions.showSearch = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.showItems = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.showItemRanks = !!n, numberOfBits: 1 },
@@ -142,7 +143,30 @@ export function parseHash(hash: string): Operations {
         default: throw Error(`unsupported version: ${version}`)
     }
     applyHashBigintToSegments(hashNumber, segments)
+
+    const min = parseInt(hash.substring(minSeparatorIndex + 1))
+    operations.filter.minimumPlays = min
+    
     return operations
+}
+
+function hashPercentInfo(percentInfo: PercentInfo): HashSegment {
+    const segments: HashSegment[] = [
+        { value: percentInfo.numerator, numberOfBits: 2 },
+        { value: percentInfo.denominator, numberOfBits: 2 },
+        { value: percentInfo.grouping, numberOfBits: 1 },
+        { value: percentInfo.of, numberOfBits: 1 },
+    ]
+    return { value: segmentsToHashNumber(segments), numberOfBits: countBits(segments)}
+}
+function parsePercentInfo(percentInfo: PercentInfo): HashSegmentSetter {
+    const segments: HashSegmentSetter[] = [
+        { setter: (n) => percentInfo.numerator = n, numberOfBits: 2 },
+        { setter: (n) => percentInfo.denominator = n, numberOfBits: 2 },
+        { setter: (n) => percentInfo.grouping = n, numberOfBits: 1 },
+        { setter: (n) => percentInfo.of = n, numberOfBits: 1 },
+    ]
+    return { setter: (n) => applyHashToSegments(n, segments), numberOfBits: countBits(segments) }   
 }
 
 function hashGroupType(groupType: GroupType): HashSegment {
@@ -218,8 +242,9 @@ function hashGroupSortDirections(sortOrder: GroupSortOrder): HashSegment {
         { value: sortOrder.artist.isAscending, numberOfBits: 1 },
         { value: sortOrder.song.isAscending, numberOfBits: 1 },
         { value: sortOrder.album.isAscending, numberOfBits: 1 },
-        { value: sortOrder.primarySum.isAscending, numberOfBits: 1 },
-        { value: sortOrder.secondarySum.isAscending, numberOfBits: 1 },
+        { value: sortOrder.plays.isAscending, numberOfBits: 1 },
+        { value: sortOrder.playtime.isAscending, numberOfBits: 1 },
+        { value: sortOrder.percent.isAscending, numberOfBits: 1 },
     ]
     return { value: segmentsToHashNumber(segments), numberOfBits: countBits(segments)}
 }
@@ -234,8 +259,9 @@ function applyGroupSortDirections(sortOrder: GroupSortOrder): HashSegmentSetter 
         { setter: (n) => sortOrder.artist.isAscending = !!n, numberOfBits: 1 },
         { setter: (n) => sortOrder.song.isAscending = !!n, numberOfBits: 1 },
         { setter: (n) => sortOrder.album.isAscending = !!n, numberOfBits: 1 },
-        { setter: (n) => sortOrder.primarySum.isAscending = !!n, numberOfBits: 1 },
-        { setter: (n) => sortOrder.secondarySum.isAscending = !!n, numberOfBits: 1 },
+        { setter: (n) => sortOrder.plays.isAscending = !!n, numberOfBits: 1 },
+        { setter: (n) => sortOrder.playtime.isAscending = !!n, numberOfBits: 1 },
+        { setter: (n) => sortOrder.percent.isAscending = !!n, numberOfBits: 1 },
     ]
     return { setter: (n) => applyHashToSegments(n, segments), numberOfBits: countBits(segments) }
 }

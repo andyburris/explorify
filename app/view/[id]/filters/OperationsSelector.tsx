@@ -60,8 +60,10 @@ export function OperationsSelector({ currentPreset, onChangePreset, currentTab, 
                 </Tabs.Content>
                 <Tabs.Content value={OperationType.View} className="p-4">
                     <ViewOptionsSelector
-                        currentOperation={currentOperations.viewOptions}
-                        onChangeOperation={vo => onChangeOperations({...currentOperations, viewOptions: vo})}
+                        currentViewOptions={currentOperations.viewOptions}
+                        onChangeViewOptions={vo => onChangeOperations({...currentOperations, viewOptions: vo})}
+                        currentInfoOperation={currentOperations.info}
+                        onChangeInfoOperation={i => onChangeOperations({...currentOperations, info: i})}
                     />
                 </Tabs.Content>
             </Tabs.Root>

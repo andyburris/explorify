@@ -5,10 +5,11 @@ import { useEffect, useState } from "react";
 import { Group } from "../data/model/Group";
 import { applyOperations } from "../data/transform/Operating";
 import { PickedIcon } from "../common/PickedIcon";
-import { ViewInfoType, ViewOptions } from "../data/model/ViewOptions";
+import { ViewOptions } from "../data/model/ViewOptions";
 import { Clock, Play } from "phosphor-react-sc";
 import { Combination, TrackCombination, ArtistCombination } from "../data/model/Combination";
 import { millisToMinsSecs } from "../view/[id]/item/ListenItem";
+import { InfoOperation, InfoType } from "../data/model/Operations";
 
 export function PresetPreview({ preset, listens }: { preset: Preset, listens: HistoryEntry[] }) {
     const [previewItems, setPreviewItems] = useState<Combination[] | Group[] | null>(null)
@@ -46,6 +47,7 @@ export function PresetPreview({ preset, listens }: { preset: Preset, listens: Hi
                                 combinationOrGroup={c} 
                                 index={i} 
                                 viewOptions={preset.operations.viewOptions}
+                                infoOperation={preset.operations.info}
                                 key={i}
                             />)}
                     </div>
@@ -59,7 +61,7 @@ const formatOptions: Intl.DateTimeFormatOptions = {
     month: "numeric",
     year: "2-digit",
 }
-function PreviewItem({ combinationOrGroup, index, viewOptions }: { combinationOrGroup: Combination | Group, index: number, viewOptions: ViewOptions }) {
+function PreviewItem({ combinationOrGroup, index, viewOptions, infoOperation }: { combinationOrGroup: Combination | Group, index: number, viewOptions: ViewOptions, infoOperation: InfoOperation }) {
     return (
         <div className="flex gap-2 w-full last:opacity-25 last:h-0">
             { viewOptions.showItemRanks &&
@@ -72,13 +74,13 @@ function PreviewItem({ combinationOrGroup, index, viewOptions }: { combinationOr
                 }
             </p>
             {
-                viewOptions.primaryInfo == ViewInfoType.Plays
-                    ? combinationOrGroup instanceof Group
-                        ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.plays} </p><Play weight="bold" size="16px"/></div>
-                        : <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.listens.length} </p><Play weight="bold" size="16px"/></div>
-                : viewOptions.primaryInfo == ViewInfoType.Playtime
-                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{millisToMinsSecs(combinationOrGroup.playtime, true)} </p><Clock weight="bold" size="16px"/></div>
-                    : combinationOrGroup instanceof Group
+                infoOperation.primaryInfo == InfoType.Plays
+                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{combinationOrGroup.visiblePlays} </p><Play weight="bold" size="16px"/></div>
+                : infoOperation.primaryInfo == InfoType.Playtime
+                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{millisToMinsSecs(combinationOrGroup.visiblePlaytime, true)} </p><Clock weight="bold" size="16px"/></div>
+                : infoOperation.primaryInfo == InfoType.Percent
+                    ? <div className="flex items-center text-green-700 gap-0.5 h-fit"><p>{(combinationOrGroup.percent * 100).toFixed(2)}%</p></div>
+                : combinationOrGroup instanceof Group
                         ? <></>
                         : <p className="text-green-700">{combinationOrGroup.listens[0].timestamp.toLocaleDateString('en-US', formatOptions)}</p>
             }
