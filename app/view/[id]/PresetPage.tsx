@@ -26,7 +26,7 @@ import { ShareDialog } from "./ShareDialog"
 import { DEBUG } from "@/app/data/utils/debug"
 import Link from "next/link"
 
-export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset, isShared: boolean }) {
+export function PresetPage({ initialPreset, isShared, customizeInitial }: { initialPreset: Preset, isShared: boolean, customizeInitial?: boolean }) {
     const router = useRouter()
     
     const [loadedEntries, setLoadedEntries] = useState<HistoryEntry[] | undefined>();
@@ -40,7 +40,7 @@ export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset,
     const hasChanged = JSON.stringify(initialPreset) != JSON.stringify(customizedPreset)
     const isValid = (customizedPreset.name.trim().length != 0 && customizedPreset.description.trim().length != 0 && customizedPreset.icon.trim().length != 0 && customizedPreset.id.trim().length != 0)
 
-    const [isCustomizing, setCustomizing] = useState(false)
+    const [isCustomizing, setCustomizing] = useState(customizeInitial ?? false)
     const [currentTab, setCurrentTab] = useState(OperationType.Info)
     const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
     const [isShareDialogOpen, setShareDialogOpen] = useState(false)
