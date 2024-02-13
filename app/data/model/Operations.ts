@@ -58,7 +58,6 @@ export interface FilterOperation {
     minimumPlays: number,
     searchTerm: string,
     searchBy: SearchType,
-    hideFilteredPlays: boolean,
 }
 
 export enum InfoType {

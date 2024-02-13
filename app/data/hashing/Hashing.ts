@@ -68,7 +68,6 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
 
         { value: operations.filter.filterSkipsBy, numberOfBits: 2 },
         { value: operations.filter.searchBy, numberOfBits: 2 },
-        { value: operations.filter.hideFilteredPlays, numberOfBits: 1 },
         
         hashGroupSort(operations.sort.sortGroupsBy),
         { value: operations.sort.sortItemsBy, numberOfBits: 3 },
@@ -122,7 +121,6 @@ export function parseHash(hash: string): Operations {
         
                 { setter: (n) => operations.filter.filterSkipsBy = n as SkipFilterType, numberOfBits: 2 },
                 { setter: (n) => operations.filter.searchBy = n as SearchType, numberOfBits: 2 },
-                { setter: (n) => operations.filter.hideFilteredPlays = !!n, numberOfBits: 1 },
                 
                 applyGroupSort(operations.sort.sortGroupsBy),
                 { setter: (n) => operations.sort.sortItemsBy = n as ItemSortType, numberOfBits: 3 },

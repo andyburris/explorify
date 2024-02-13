@@ -2,10 +2,12 @@ import { ViewOptions } from "@/app/data/model/ViewOptions";
 import { OperationSection, ResponsiveControl } from "./OperationsSelector";
 import { Calendar, Clock, Divide, EyeSlash, List, ListNumbers, MagnifyingGlass, Percent, Play, PlusCircle, SkipForward, SquaresFour } from "phosphor-react-sc";
 import { Combobox } from "@/app/common/components/ui/combobox";
-import { InfoOperation, InfoType, PercentDenominator, PercentGrouping, PercentNumerator, PercentOf } from "@/app/data/model/Operations";
+import { InfoOperation, InfoType, Operations, PercentDenominator, PercentGrouping, PercentNumerator, PercentOf, SkipFilterType } from "@/app/data/model/Operations";
 
 
-export function ViewOptionsSelector({ currentViewOptions, onChangeViewOptions, currentInfoOperation, onChangeInfoOperation }: { currentViewOptions: ViewOptions, onChangeViewOptions: (newFilter: ViewOptions) => void, currentInfoOperation: InfoOperation, onChangeInfoOperation: (newOperation: InfoOperation) => void}) {
+export function ViewOptionsSelector({ currentOperations, onChangeViewOptions, onChangeInfoOperation }: { currentOperations: Operations, onChangeViewOptions: (newFilter: ViewOptions) => void, onChangeInfoOperation: (newOperation: InfoOperation) => void}) {
+    const currentViewOptions = currentOperations.viewOptions
+    const currentInfoOperation = currentOperations.info
     return (
         <div className="flex flex-col gap-6">
             <OperationSection title="Primary info">
@@ -55,7 +57,12 @@ export function ViewOptionsSelector({ currentViewOptions, onChangeViewOptions, c
                         <ResponsiveControl 
                             items={[
                                 { value: PercentNumerator.All, label: "All", key: "All", icon: <Play/> },
-                                { value: PercentNumerator.Skipped, label: "Skipped", key: "Skipped", icon: <SkipForward/> }, //TODO: rename based on filter
+                                { 
+                                    value: PercentNumerator.Skipped, 
+                                    label: (currentOperations.filter.filterSkipsBy == SkipFilterType.OnlySkips ? "Skips" : currentOperations.filter.filterSkipsBy == SkipFilterType.NoSkips ? "Unskipped" : "All"), 
+                                    key: "Skipped", 
+                                    icon: <SkipForward/>
+                                }, 
                                 { value: PercentNumerator.Searched, label: "Searched", key: "Searched", icon: <MagnifyingGlass/> },
                             ]}
                             selectedItem={currentInfoOperation.primaryPercent.numerator}
@@ -74,7 +81,12 @@ export function ViewOptionsSelector({ currentViewOptions, onChangeViewOptions, c
                         <ResponsiveControl 
                             items={[
                                 { value: PercentDenominator.All, label: "All", key: "All", icon: <Play/> },
-                                { value: PercentDenominator.SkipFilter, label: "Skipped", key: "Skipped", icon: <SkipForward/> },
+                                { 
+                                    value: PercentDenominator.SkipFilter, 
+                                    label: (currentOperations.filter.filterSkipsBy == SkipFilterType.OnlySkips ? "Skipped" : currentOperations.filter.filterSkipsBy == SkipFilterType.NoSkips ? "Unskipped" : "All"), 
+                                    key: "Skipped", 
+                                    icon: <SkipForward/>
+                                },
                                 { value: PercentDenominator.SearchFilter, label: "Searched", key: "Searched", icon: <MagnifyingGlass/> },
                             ]}
                             selectedItem={currentInfoOperation.primaryPercent.denominator}

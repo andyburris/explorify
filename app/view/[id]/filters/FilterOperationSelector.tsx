@@ -41,17 +41,6 @@ export function FilterOperationSelector({ currentOperation, onChangeOperation }:
                     selectedItem={currentOperation.searchBy}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, searchBy: n})}
                 />
-                <Combobox 
-                    //TODO: fix naming
-                    options={[
-                        { value: true, label: "Filter out of total plays and ranks", key: "hidden", icon: <ListNumbers/> },
-                        { value: false, label: "Don't filter out of total plays and ranks", key: "validity", icon: <ListDashes/> },
-                    ]} 
-                    selectedValues={[currentOperation.hideFilteredPlays]}
-                    onSelectValues={(n) => onChangeOperation({ ...currentOperation, hideFilteredPlays: n[0] ?? currentOperation.hideFilteredPlays})}
-                    multiSelect={false}
-                    placeholder="Search..."
-                />
             </OperationSection>
         </div>
     )
