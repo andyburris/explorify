@@ -7,8 +7,8 @@ import { IconLogo } from "@/app/common/Logo"
 import { LinkButton, StaticButton } from "@/app/common/button/Button"
 import { getListens } from "@/app/data/persist/Database"
 import { HistoryEntry } from "@/app/data/model/HistoryEntry"
-import { ArrowCounterClockwise, ArrowLeft, DotsThreeVertical, FloppyDiskBack, Link, Moon, PencilSimple, Play, Share, SquaresFour } from "phosphor-react-sc"
-import { useEffect, useMemo, useState } from "react"
+import { ArrowCounterClockwise, ArrowLeft, ArrowRight, DotsThreeVertical, FileDashed, FloppyDiskBack, Hash, Moon, MusicNotesPlus, PencilSimple, Play, Share, SquaresFour, Upload } from "phosphor-react-sc"
+import React, { useEffect, useMemo, useState } from "react"
 import { DataTable } from "./DataTable"
 import { applyGroupOperation, applyNonGroupOperations, applyOperations } from "@/app/data/transform/Operating"
 import { LazyList } from "../../common/LazyList"
@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation"
 import { usePresets } from "@/app/data/utils/presetUtils"
 import { ShareDialog } from "./ShareDialog"
 import { DEBUG } from "@/app/data/utils/debug"
+import Link from "next/link"
 
 export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset, isShared: boolean }) {
     const router = useRouter()
@@ -106,7 +107,7 @@ export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset,
                                         title: filtered === undefined ? "Loading..." : `${filtered.length.toLocaleString()} group${filtered.length == 0 ? "" : "s"}`,
                                     },
                                     {
-                                        icon: <Link/>,
+                                        icon: <Hash/>,
                                         title: `${hashOperations(customizedPreset.operations)}`,
                                         hide: !DEBUG,
                                     },
@@ -152,11 +153,13 @@ export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset,
 
     return (
         <Container>
-            { filtered 
-                ? <DataTable groups={filtered} viewOptions={customizedPreset.operations.viewOptions} infoOperation={customizedPreset.operations.info} header={header}/> 
-            : (loadedEntries === undefined)
+            { loadedEntries === undefined
                 ? <LazyList header={<div className="mb-10">{header}</div>} items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
-                : <LazyList header={<div className="mb-10">{header}</div>} items={new Array(1)} itemContent={(i) => <EmptyData/>}/>
+            : loadedEntries.length <= 0
+                ? <LazyList header={<div className="mb-10">{header}</div>} items={new Array(1)} itemContent={(i) => <EmptyData/>}/>
+            : filtered 
+                ? <DataTable groups={filtered} viewOptions={customizedPreset.operations.viewOptions} infoOperation={customizedPreset.operations.info} header={header}/> 
+                : <LazyList header={<div className="mb-10">{header}</div>} items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
             }
         </Container>
     )
@@ -164,8 +167,34 @@ export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset,
 
 function EmptyData() {
     return (
-        <div className="p-4 rounded-2xl bg-neutral-50">
-            
+        <div className="flex flex-col gap-6 p-6 rounded-3xl bg-white shadow-outset">
+            <div className="flex flex-col gap-4">
+                <MusicNotesPlus weight="duotone" className="text-neutral-500 text-3xl"/>
+                <div className="flex flex-col">
+                    <p className="font-serif font-semibold text-3xl tracking-tight">You haven’t imported your listens yet</p>
+                    <p className="text-neutral-500">To explore your listening history in Quantify, you need to request and download your extended listening history from Spotify. It takes ~2 weeks to receive your data.</p>
+                </div>
+            </div>
+            <div className="flex flex-col gap-4">
+                <a href="https://www.spotify.com/us/account/privacy/">
+                    <EmptyDataButton icon={<FileDashed/>} title="Don’t have your listening history?" description={<p>Request it from Spotify here. Be sure to request your <strong>extended</strong> listening history.</p>}/>
+                </a>
+                <Link href="/import">
+                    <EmptyDataButton icon={<Upload/>} title="Already have your listening history?" description={<p>Import your .zip file to Quantify!</p>}/>
+                </Link>
+            </div>
+        </div>
+    )
+}
+function EmptyDataButton({ icon, title, description }: { icon: React.ReactNode, title: string, description: React.ReactNode }) {
+    return (
+        <div className="flex items-center gap-4 p-4 bg-green-50 border border-green-200 rounded-2xl text-green-700 cursor-pointer">
+            <div className="flex-shrink-0">{icon}</div>
+            <div className="text-green-900 flex-shrink w-full">
+                <p className="font-serif font-semibold text-2xl tracking-tight">{title}</p>
+                {description}
+            </div>
+            <ArrowRight className="flex-shrink-0" />
         </div>
     )
 }
