@@ -67,7 +67,6 @@ export const defaultPresets: Preset[] = [
                 minimumPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
@@ -105,7 +104,6 @@ export const defaultPresets: Preset[] = [
                 minimumPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
@@ -142,7 +140,6 @@ export const defaultPresets: Preset[] = [
                 minimumPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
@@ -180,7 +177,6 @@ export const defaultPresets: Preset[] = [
                 minimumPlays: 10,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: {
@@ -235,7 +231,6 @@ export const defaultPresets: Preset[] = [
                 minimumPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsDate,
@@ -273,7 +268,6 @@ export const defaultPresets: Preset[] = [
                 minimumPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsDate,
@@ -311,7 +305,6 @@ export const defaultPresets: Preset[] = [
                 minimumPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
-                hideFilteredPlays: true,
             },
             sort: {
                 sortGroupsBy: simpleSortGroupsPlays,
