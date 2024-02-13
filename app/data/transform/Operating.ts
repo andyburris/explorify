@@ -19,12 +19,18 @@ function toGroupKey(listen: HistoryEntry, type: GroupType): GroupKey {
 }
 
 export function applyOperations(listens: HistoryEntry[], operations: Operations): Group[] {
+    return applyNonGroupOperations(applyGroupOperation(listens, operations.group), operations)
+}
+
+export function applyGroupOperation(listens: HistoryEntry[], groupOperation: GroupOperation): Group[] {
     // const filtered = filterValidItems(listens, operations.filter)
-    const filtered = listens
-    const grouped = groupItems(filtered, operations.group) //TODO: only apply when new groupings exist
-    applyFiltersAndPercents(grouped, operations.filter, operations.info)
-    applySort(grouped, operations.sort, operations.info)
-    const filteredRanks = filterHiddenRanks(grouped, operations.filter)
+    return groupItems(listens, groupOperation) 
+}
+
+export function applyNonGroupOperations(groups: Group[], operations: Operations): Group[] {
+    applyFiltersAndPercents(groups, operations.filter, operations.info)
+    applySort(groups, operations.sort, operations.info)
+    const filteredRanks = filterHiddenRanks(groups, operations.filter)
     return filteredRanks
 }
 
@@ -79,11 +85,11 @@ function applyFiltersAndPercents(groups: Group[], operation: FilterOperation, in
 
 function filterHiddenRanks(groups: Group[], operation: FilterOperation): Group[]{
     return groups.map(g => {
-        g.combinations = g.combinations.map(c => {
-            c.listens = c.listens.filter(l => filterSearch(l, operation))
-            return c
-        })
-        g.combinations = g.combinations.filter(c => c.listens.length > 0)
+        // g.combinations = g.combinations.map(c => {
+        //     c.listens = c.listens.filter(l => filterSearch(l, operation))
+        //     return c
+        // })
+        // g.combinations = g.combinations.filter(c => c.listens.length > 0)
         return g
     }).filter(g => g.visiblePlays >= operation.minimumPlays)
 }

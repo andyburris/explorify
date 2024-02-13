@@ -10,7 +10,7 @@ import { HistoryEntry } from "@/app/data/model/HistoryEntry"
 import { ArrowCounterClockwise, ArrowLeft, DotsThreeVertical, FloppyDiskBack, Link, Moon, PencilSimple, Play, Share, SquaresFour } from "phosphor-react-sc"
 import { useEffect, useMemo, useState } from "react"
 import { DataTable } from "./DataTable"
-import { applyOperations } from "@/app/data/transform/Operating"
+import { applyGroupOperation, applyNonGroupOperations, applyOperations } from "@/app/data/transform/Operating"
 import { LazyList } from "../../common/LazyList"
 import { OperationType, OperationsSelector } from "./filters/OperationsSelector"
 import { ActionButton } from "@/app/common/button/ActionButton"
@@ -33,7 +33,8 @@ export function PresetPage({ initialPreset, isShared }: { initialPreset: Preset,
     useEffect(() => { getListens().then(entries => { setLoadedEntries(entries) }) }, [])
 
     const [customizedPreset, setCustomizedPreset] = useState(initialPreset)
-    const filtered = useMemo(() => (loadedEntries === undefined) ? undefined : applyOperations(loadedEntries, customizedPreset.operations), [loadedEntries, customizedPreset.operations]) 
+    const grouped = useMemo(() => (loadedEntries === undefined) ? undefined : applyGroupOperation(loadedEntries, customizedPreset.operations.group), [loadedEntries, customizedPreset.operations.group]) 
+    const filtered = useMemo(() => (grouped === undefined) ? undefined : applyNonGroupOperations([...grouped], customizedPreset.operations), [grouped, customizedPreset.operations]) 
     const overwriting = usePresets()?.find(p => p.id == customizedPreset.id)
     const hasChanged = JSON.stringify(initialPreset) != JSON.stringify(customizedPreset)
     const isValid = (customizedPreset.name.trim().length != 0 && customizedPreset.description.trim().length != 0 && customizedPreset.icon.trim().length != 0 && customizedPreset.id.trim().length != 0)

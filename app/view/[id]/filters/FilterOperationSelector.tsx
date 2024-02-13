@@ -7,7 +7,7 @@ import { Combobox } from "@/app/common/components/ui/combobox";
 export function FilterOperationSelector({ currentOperation, onChangeOperation }: { currentOperation: FilterOperation, onChangeOperation: (newFilter: FilterOperation) => void }) {
     return (
         <div className="flex flex-col gap-6">
-            <OperationSection title="Filter skips by" description="Spotify counts plays as songs you played for at least 30 seconds">
+            <OperationSection title="Filter skips by" description="Spotify counts skips as songs you played for less than 30 seconds">
                 <ResponsiveControl 
                     items={[
                         { value: SkipFilterType.All, label: "All", key: "All", icon: <List/> },
@@ -18,7 +18,7 @@ export function FilterOperationSelector({ currentOperation, onChangeOperation }:
                     onSelect={(n) => onChangeOperation({ ...currentOperation, filterSkipsBy: n})}
                 />
             </OperationSection>
-            <OperationSection title="Minimum plays" description="Filter out combinations with less than the given amount of plays">
+            <OperationSection title="Minimum group plays" description="Hide groups with less than the given amount of plays (not including plays filtered out by skips and search).">
                 <TextField 
                     placeholder="0" 
                     currentValue={currentOperation.minimumPlays > 0 ? `${currentOperation.minimumPlays}` : ""}

@@ -18,7 +18,9 @@ export function GroupHeader({ group, viewOptions, infoOperation }: { group: Grou
             </div>
             { viewOptions.showGroupSum &&
                 <div className="flex flex-col-reverse items-end sm:flex-row gap-1 sm:gap-3 sm:items-center text-neutral-500">
-                    { (infoOperation.secondaryInfo != null && infoOperation.primaryInfo != InfoType.Date) && <InfoContent combinationOrGroup={group} infoType={infoOperation.secondaryInfo} /> }
+                    { (infoOperation.secondaryInfo != null && infoOperation.primaryInfo != InfoType.Date && infoOperation.secondaryInfo != InfoType.Date) && 
+                        <InfoContent combinationOrGroup={group} infoType={infoOperation.secondaryInfo} />
+                    }
                     <div className="px-3 py-1.5 border border-neutral-200 rounded-full items-center flex-shrink-0">
                         <InfoContent combinationOrGroup={group} infoType={infoOperation.primaryInfo == InfoType.Date ? (infoOperation.secondaryInfo ?? InfoType.Plays) : infoOperation.primaryInfo} />                    
                     </div>

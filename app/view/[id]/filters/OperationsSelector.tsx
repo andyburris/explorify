@@ -97,9 +97,9 @@ export function OperationSection({ title, description, children }: { title: stri
             </div>
             { (descriptionExpanded && description) && 
                 <div className="flex gap-3 p-3 rounded-xl border border-green-200 bg-green-50 text-green-700 items-center">
-                    <Question/>
-                    <p className="">{description}</p> 
-                    <ActionButton onClick={() => setDescriptionExpanded(false)} icon={<X/>} hideShadow className="!text-green-700 hover:text-green-900 hover:bg-green-100"/>
+                    <Question className="flex-shrink-0"/>
+                    <p className="w-full">{description}</p> 
+                    <ActionButton onClick={() => setDescriptionExpanded(false)} icon={<X/>} hideShadow className="!text-green-700 hover:text-green-900 !hover:bg-green-200 flex-shrink-0"/>
                 </div>
             }
             {children}
