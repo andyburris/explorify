@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { LinkButton } from "../common/button/Button";
 
 export function ManageData({ open, onOpenChange }: DialogProps) {
-    const router = useRouter()
+    // const router = useRouter()
     return (
         <CommonDialog
             title="Manage data"
@@ -34,7 +34,7 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
                         text="Reset" 
                         onClick={() => {
                             resetPresets()
-                            router.refresh()
+                            // router.refresh()
                         }}
                         />
                 }
@@ -48,7 +48,7 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
                         text="Delete" 
                         onClick={() => {
                             clearListens()
-                            router.refresh()
+                            // router.refresh()
                         }}
                         />
                 }
