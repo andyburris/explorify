@@ -86,7 +86,7 @@ function flattenGroups(
 }
 
 function flattenCombinations(combination: Combination, isExpanded: boolean): ListItem[] {
-  const indexedCombination = new IndexedCombination(combination.index, combination, isExpanded)
+  const indexedCombination = new IndexedCombination(combination.rank, combination, isExpanded)
   const listens = (isExpanded) ? combination.listens.map((l, i) => new IndexedHistoryEntry(i == 0, i == combination.listens.length - 1, l, combination instanceof ArtistCombination)) : []
   return [indexedCombination, ...listens]
 }
