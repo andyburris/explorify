@@ -62,7 +62,7 @@ export function saveListens(listens: HistoryEntry[]) {
         })
 }
 
-export function clearListens() {
+export async function clearListens() {
     const start = Date.now()
     return getDatabase()
         .then(db => {

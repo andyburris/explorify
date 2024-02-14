@@ -5,9 +5,12 @@ import { clearListens } from "../data/persist/Database";
 import { resetPresets } from "../data/persist/PresetRepository";
 import { useRouter } from "next/navigation";
 import { LinkButton } from "../common/button/Button";
+import { useState } from "react";
 
 export function ManageData({ open, onOpenChange }: DialogProps) {
     const router = useRouter()
+
+    const [deleteInProgress, setDeleteInProgress] = useState(false)
     return (
         <CommonDialog
             title="Manage data"
@@ -45,10 +48,12 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
                 button={
                     <ActionButton 
                         icon={<Trash/>} 
-                        text="Delete" 
-                        onClick={() => {
-                            clearListens()
-                            router.refresh()
+                        text={deleteInProgress ? "Deleting..." : "Delete" }
+                        enabled={!deleteInProgress}
+                        onClick={async () => {
+                            setDeleteInProgress(true)
+                            await clearListens()
+                            router.push("/")
                         }}
                         />
                 }
