@@ -12,7 +12,6 @@ import nightwind from "nightwind/helper"
 import Link from "next/link";
 import { Preset } from "../data/model/Preset";
 import { clearPresets, resetPresets } from "../data/persist/PresetRepository";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { ManageData } from "./ManageData";
 
@@ -40,7 +39,7 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                                 {
                                     icon: <Upload size="24px"/>,
                                     title: "Manage data",
-                                    onClick: () => { setManageDataOpen(true) }
+                                    onClick: () => { /*setManageDataOpen(true)*/ }
                                 },
                                 {
                                     icon: <Moon size="24px"/>,
