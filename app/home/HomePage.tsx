@@ -52,7 +52,7 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                     </div>
                 }
             />
-            { manageDataOpen && <ManageData open={manageDataOpen} onOpenChange={setManageDataOpen}/> }
+            { <ManageData open={manageDataOpen} onOpenChange={setManageDataOpen}/> }
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8">
                 {presets.map((preset) => <PresetPreview key={preset.name} preset={preset} listens={listens} />)}
                 <Link 
