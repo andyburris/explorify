@@ -14,7 +14,8 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
             open={open}
             onOpenChange={onOpenChange}
         >
-            <DataSection
+            <div></div>
+            {/* <DataSection
                 title="Import new listens"
                 description="If you've exported new data from Spotify, you can reimport a new .zip file"
                 button={
@@ -52,7 +53,7 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
                         }}
                         />
                 }
-            />
+            /> */}
         </CommonDialog>
     )
 }
