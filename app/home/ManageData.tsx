@@ -3,7 +3,6 @@ import { CommonDialog, DialogProps } from "../common/CommonDialog";
 import { ActionButton } from "../common/button/ActionButton";
 import { clearListens } from "../data/persist/Database";
 import { resetPresets } from "../data/persist/PresetRepository";
-import { useRouter } from "next/navigation";
 import { LinkButton } from "../common/button/Button";
 
 export function ManageData({ open, onOpenChange }: DialogProps) {
