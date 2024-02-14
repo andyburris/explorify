@@ -9,15 +9,21 @@ export function GroupHeader({ group, viewOptions, infoOperation }: { group: Grou
     const { primary, secondary } = group.headerStrings()
     return (
         <div className="flex justify-between items-center pb-2 pt-12 gap-3">
-            <div className="flex items-center -ml-4 gap-3 w-full">
-                <div className="h-6 w-1 rounded-full bg-green-600 nightwind-prevent"></div>
+            <div className={"flex items-center w-full " + (viewOptions.showGroupRanks ? "gap-4" : "gap-3")}>
+                { viewOptions.showGroupRanks
+                    ? <div className="flex items-center justify-center h-10 w-10 rounded-lg flex-shrink-0 bg-green-600 nightwind-prevent text-white text-sm font-semibold">
+                        {group.rank + 1}
+                    </div>
+                    : <div className="h-6 w-1 -ml-4 rounded-full bg-green-600 nightwind-prevent"></div>
+                }
+                
                 <div className="flex flex-col w-full flex-shrink">
                     <p className="font-serif tracking-tight text-4xl font-bold break-words">{primary}</p>
                     <p className="text-neutral-500 break-words">{secondary}</p>
                 </div>
             </div>
             { viewOptions.showGroupSum &&
-                <div className="flex flex-col-reverse items-end sm:flex-row gap-1 sm:gap-3 sm:items-center text-neutral-500">
+                <div className="flex flex-col-reverse flex-shrink-0 items-end sm:flex-row gap-1 sm:gap-3 sm:items-center text-neutral-500">
                     { (infoOperation.secondaryInfo != null && infoOperation.primaryInfo != InfoType.Date && infoOperation.secondaryInfo != InfoType.Date) && 
                         <InfoContent combinationOrGroup={group} infoType={infoOperation.secondaryInfo} />
                     }

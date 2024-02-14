@@ -29,9 +29,10 @@ export function applyGroupOperation(listens: HistoryEntry[], groupOperation: Gro
 
 export function applyNonGroupOperations(groups: Group[], operations: Operations): Group[] {
     applyFiltersAndPercents(groups, operations.filter, operations.info)
-    applySort(groups, operations.sort, operations.info)
-    const filteredRanks = filterHiddenRanks(groups, operations.filter)
-    return filteredRanks
+    const filteredMinPlays = groups.filter(g => g.visiblePlays > operations.filter.minimumPlays)
+    applySort(filteredMinPlays, operations.sort, operations.info)
+    // const filteredRanks = filterHiddenRanks(groups, operations.filter)
+    return filteredMinPlays
 }
 
 // function filterValidItems(items: HistoryEntry[], filterOperation: FilterOperation): HistoryEntry[] {
@@ -124,9 +125,9 @@ function combineItems(items: HistoryEntry[], groupOperation: GroupOperation): Co
     }, new Map())
     return Array.from(combinationMap).map(([key, entries]) => {
         entries.sort((a, b) => (groupOperation.combineInto == CombineInto.EarliestPlay) ? a.timestamp.getTime() - b.timestamp.getTime() : b.timestamp.getTime() - a.timestamp.getTime())
-        if(groupOperation.combineBy == CombineType.SameArtist) return new ArtistCombination(0, entries[0].artistName, entries.map(toListen))
+        if(groupOperation.combineBy == CombineType.SameArtist) return new ArtistCombination(entries[0].artistName, entries.map(toListen))
         
         const firstListen = entries[0]
-        return new TrackCombination(0, firstListen.trackName, firstListen.artistName, firstListen.albumName, firstListen.uri, entries.map(toListen))
+        return new TrackCombination(firstListen.trackName, firstListen.artistName, firstListen.albumName, firstListen.uri, entries.map(toListen))
     })
 }

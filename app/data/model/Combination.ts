@@ -6,6 +6,8 @@ import { FilterOperation, PercentDenominator, PercentGrouping, PercentInfo, Perc
 export class TrackCombination implements Combination {
     public id: string = crypto.randomUUID()
     
+    public rank: number = -1
+
     public plays: number = -1
     public playtime: number = -1
 
@@ -19,7 +21,6 @@ export class TrackCombination implements Combination {
     public percent: number = -1
 
     constructor(
-        public index: number,
         public trackName: string,
         public artistName: string,
         public albumName: string,
@@ -69,6 +70,8 @@ export class TrackCombination implements Combination {
 export class ArtistCombination implements Combination {
     public id: string = crypto.randomUUID()
 
+    public rank: number = -1
+
     public plays: number = -1
     public playtime: number = -1
 
@@ -82,7 +85,6 @@ export class ArtistCombination implements Combination {
     public percent: number = -1
 
     constructor(
-        public index: number,
         public artistName: string,
         public listens: Listen[],
     ) {
@@ -118,7 +120,7 @@ export class ArtistCombination implements Combination {
 }
 export interface Combination {
     id: string,
-    index: number,
+    rank: number,
     listens: Listen[],
     plays: number,
     playtime: number,

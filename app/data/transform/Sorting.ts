@@ -4,7 +4,7 @@ import { SortOperation, ItemSortType, GroupSortOrder, GroupSortOrderItem, GroupT
 
 export function applySort(groups: Group[], sortOperation: SortOperation, infoOperation: InfoOperation) {
     sortGroups(groups, sortOperation.sortGroupsBy, infoOperation)
-    groups.forEach(g => {
+    groups.forEach((g, i) => {
         g.combinations.sort((a, b) => {
             switch(sortOperation.sortItemsBy) {
                 case ItemSortType.Date: return (sortOperation.sortItemsAscending) ? a.listens[0].timestamp.getTime() - b.listens[0].timestamp.getTime() : b.listens[0].timestamp.getTime() - a.listens[0].timestamp.getTime()
@@ -22,7 +22,8 @@ export function applySort(groups: Group[], sortOperation: SortOperation, infoOpe
                 case ItemSortType.Playtime: return (sortOperation.sortItemsAscending) ? a.visiblePlaytime - b.visiblePlaytime : b.visiblePlaytime - a.visiblePlaytime
             }
         })
-        g.combinations.forEach((c, i) => c.index = i)
+        g.combinations.forEach((c, i) => c.rank = i)
+        g.rank = i
     })
 }
 

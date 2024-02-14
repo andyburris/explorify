@@ -52,6 +52,8 @@ export class Group {
     public playtimeDenominator: number = -1
     public percent: number = -1
 
+    public rank: number = -1
+
     constructor(
         public type: GroupType,
         public key: GroupKey,

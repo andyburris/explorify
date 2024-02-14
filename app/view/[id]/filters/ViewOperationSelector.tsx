@@ -115,6 +115,16 @@ export function ViewOptionsSelector({ currentOperations, onChangeViewOptions, on
                     onSelect={(n) => onChangeViewOptions({ ...currentViewOptions, showItems: n})}
                 />
             </OperationSection>
+            <OperationSection title="Show group ranks">
+                <ResponsiveControl 
+                    items={[
+                        { value: true, label: "Yes", key: "Yes", icon: <ListNumbers/> },
+                        { value: false, label: "No", key: "No", icon: <EyeSlash/> },
+                    ]} 
+                    selectedItem={currentViewOptions.showGroupRanks}
+                    onSelect={(n) => onChangeViewOptions({ ...currentViewOptions, showGroupRanks: n})}
+                />
+            </OperationSection>
             <OperationSection title="Show item ranks">
                 <ResponsiveControl 
                     items={[

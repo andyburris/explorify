@@ -79,6 +79,7 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
 
         { value: operations.viewOptions.showSearch, numberOfBits: 1 },
         { value: operations.viewOptions.showItems, numberOfBits: 1 },
+        { value: operations.viewOptions.showGroupRanks, numberOfBits: 1 },
         { value: operations.viewOptions.showItemRanks, numberOfBits: 1 },
         { value: operations.viewOptions.showGroupSum, numberOfBits: 1 },
         { value: operations.viewOptions.previewGroups, numberOfBits: 1 },
@@ -132,6 +133,7 @@ export function parseHash(hash: string): Operations {
                 
                 { setter: (n) => operations.viewOptions.showSearch = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.showItems = !!n, numberOfBits: 1 },
+                { setter: (n) => operations.viewOptions.showGroupRanks = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.showItemRanks = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.showGroupSum = !!n, numberOfBits: 1 },
                 { setter: (n) => operations.viewOptions.previewGroups = !!n, numberOfBits: 1 },        

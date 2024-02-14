@@ -64,7 +64,7 @@ const formatOptions: Intl.DateTimeFormatOptions = {
 function PreviewItem({ combinationOrGroup, index, viewOptions, infoOperation }: { combinationOrGroup: Combination | Group, index: number, viewOptions: ViewOptions, infoOperation: InfoOperation }) {
     return (
         <div className="flex gap-2 w-full last:opacity-25 last:h-0">
-            { viewOptions.showItemRanks &&
+            { ((combinationOrGroup instanceof Group && viewOptions.showGroupRanks) || (!(combinationOrGroup instanceof Group) && viewOptions.showItemRanks)) &&
                 <p className=" tabular-nums text-green-700">{index + 1}.</p>
             }
             <p className="text-green-900 font-medium flex-grow overflow-hidden truncate h-fit">
