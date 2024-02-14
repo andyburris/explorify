@@ -10,34 +10,56 @@ import { ViewOptions } from '@/app/data/model/ViewOptions'
 import { ListenItem } from './item/ListenItem'
 import { ExpandItem } from './item/ExpandItem'
 import { Combination, ArtistCombination } from '@/app/data/model/Combination'
-import { InfoOperation } from '@/app/data/model/Operations'
+import { InfoOperation, Operations } from '@/app/data/model/Operations'
+import { NoResultsItem } from './item/NoResultsItem'
 
-type ListItem = IndexedCombination | GroupData | IndexedHistoryEntry | ExpandGroup
+export interface DisplayOperation { viewOptions: ViewOptions, infoOperation: InfoOperation }
+
+type ListItem = IndexedCombination | GroupData | IndexedHistoryEntry | ExpandGroup | NoResults
 class GroupData { constructor(public group: Group) {} }
 class IndexedCombination { constructor(public index: number, public combination: Combination, public isExpanded: boolean){} }
 class IndexedHistoryEntry { constructor(public isFirst: boolean, public isLast: boolean, public listen: HistoryEntry, public showSong: boolean){} }
 class ExpandGroup { constructor(public group: Group, public isExpanded: boolean, public amountRemaining: number){} }
+class NoResults { constructor(){} }
 
-export function DataTable({ groups, viewOptions, infoOperation, header }: { groups: Group[], viewOptions: ViewOptions, infoOperation: InfoOperation, header: React.ReactNode }) {
+export function DataTable({ groups, operations, header, scrollToItem }: { groups: Group[], operations: Operations, header: React.ReactNode, scrollToItem?: Group | Combination }) {
+  const displayOperation: DisplayOperation = { viewOptions: operations.viewOptions, infoOperation: operations.info }
+  
   const [expandedGroups, setExpandedGroups] = useState<Group[]>([])
   const [expandedCombinations, setExpandedCombinations] = useState<Combination[]>([])
 
-  const flattened: ListItem[] = flattenGroups(groups, viewOptions, expandedCombinations, expandedGroups)
+  const flattened: ListItem[] = flattenGroups(groups, operations.viewOptions, expandedCombinations, expandedGroups)
+
+  let scrollToIndex = undefined
+  if(scrollToItem !== undefined) {
+    console.log(`finding index for scrollToItem = ${scrollToItem}`)
+    if(scrollToItem instanceof Group) {
+      scrollToIndex = flattened.findIndex(li => (li instanceof GroupData) && li.group == scrollToItem)
+      console.log(`found index = ${scrollToIndex}`)
+    } else {
+      const combinationParentGroup = groups.find(g => g.combinations.includes(scrollToItem))
+      if(combinationParentGroup) {
+        if(!expandedGroups.includes(combinationParentGroup)) setExpandedGroups([...expandedGroups, combinationParentGroup])
+        scrollToIndex = flattened.findIndex(li => (li instanceof IndexedCombination) && li.combination == scrollToItem)
+        console.log(`found index = ${scrollToIndex}`)
+      }
+    }
+  }
 
   return (
     <LazyList 
       header={header}
       items={flattened} 
+      scrollToIndex={scrollToIndex}
       itemContent={(index) => {
         const listItem = flattened[index]
         return (listItem instanceof GroupData)
-          ? <GroupHeader group={listItem.group} viewOptions={viewOptions} infoOperation={infoOperation}/>
+          ? <GroupHeader group={listItem.group} displayOperation={displayOperation}/>
           : (listItem instanceof IndexedCombination)
           ? <CombinationItem 
               combination={listItem.combination} 
-              indexInGroup={listItem.index} 
-              viewOptions={viewOptions}
-              infoOperation={infoOperation}
+              indexInGroup={listItem.combination.rank} 
+              displayOperation={displayOperation}
               isExpanded={listItem.isExpanded}
               onToggleExpand={() => {
                 if(expandedCombinations.includes(listItem.combination)) {
@@ -48,17 +70,18 @@ export function DataTable({ groups, viewOptions, infoOperation, header }: { grou
               }}/>
           : (listItem instanceof IndexedHistoryEntry)
             ? <ListenItem listen={listItem.listen} isFirst={listItem.isFirst} isLast={listItem.isLast} previewSongInfo={listItem.showSong}/>
-          : <ExpandItem 
-              amountRemaining={listItem.amountRemaining} 
-              isExpanded={listItem.isExpanded} 
-              onClick={() => {
-                if(expandedGroups.includes(listItem.group)) {
-                  setExpandedGroups(expandedGroups.filter(c => c != listItem.group))
-                } else {
-                  setExpandedGroups([...expandedGroups, listItem.group])
-                }
-              }
-        } />
+          : (listItem instanceof ExpandGroup)
+            ? <ExpandItem 
+                amountRemaining={listItem.amountRemaining} 
+                isExpanded={listItem.isExpanded} 
+                onClick={() => {
+                  if(expandedGroups.includes(listItem.group)) {
+                    setExpandedGroups(expandedGroups.filter(c => c != listItem.group))
+                  } else {
+                    setExpandedGroups([...expandedGroups, listItem.group])
+                  }
+                }} />
+            : <NoResultsItem/>
       }}/>
   )
 }
@@ -70,7 +93,7 @@ function flattenGroups(
   expandedCombinations: Combination[],
   expandedGroups: Group[],
 ): ListItem[] {
-  return groups.flatMap((g) => {
+  const allItems = groups.flatMap((g) => {
     const groupData = new GroupData(g)
     const isExpanded = expandedGroups.includes(g)
     const shownCombinations = isExpanded ? [...g.combinations] : [...g.combinations.slice(0, amountToShowCollapsed), ]
@@ -83,6 +106,8 @@ function flattenGroups(
       : [] 
     return [groupData, ...indexedCombinations, ...expandItem]
    } )
+   if(allItems.length > 0) return allItems
+   else return [new NoResults()]
 }
 
 function flattenCombinations(combination: Combination, isExpanded: boolean): ListItem[] {

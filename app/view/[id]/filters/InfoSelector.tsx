@@ -5,6 +5,7 @@ import { pickableIcons } from "@/app/common/PickedIcon";
 import { Combobox } from "@/app/common/components/ui/combobox";
 
 export function InfoSelector({ preset, onChangePreset }: { preset: Preset, onChangePreset: (preset: Preset) => void }) {
+    const hostname = process.env.NODE_ENV == 'production' ? "https://quantize.netlify.app" : "https://localhost:3000"
     return (
         <div className="flex flex-col gap-6">
             <OperationSection title="Name">
@@ -27,7 +28,7 @@ export function InfoSelector({ preset, onChangePreset }: { preset: Preset, onCha
             <OperationSection title="Identifier">
                 <TextField placeholder="ID" currentValue={preset.id} onChangeValue={(v) => onChangePreset({ ...preset, id: v })}/>
                 <div className="flex justify-between flex-wrap">
-                    <p><span className="text-neutral-500">https://quantize.music/view/</span><span className="font-semibold">{preset.id}</span></p>
+                    <p><span className="text-neutral-500">{hostname}/view/</span><span className="font-semibold">{preset.id}</span></p>
                     {preset.id.trim().length <= 0 && <p className="text-red-700">A valid ID is required to save</p>}
                 </div>
             </OperationSection>

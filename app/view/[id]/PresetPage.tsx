@@ -7,9 +7,9 @@ import { IconLogo } from "@/app/common/Logo"
 import { LinkButton, StaticButton } from "@/app/common/button/Button"
 import { getListens } from "@/app/data/persist/Database"
 import { HistoryEntry } from "@/app/data/model/HistoryEntry"
-import { ArrowCounterClockwise, ArrowLeft, ArrowRight, DotsThreeVertical, FileDashed, FloppyDiskBack, Hash, Moon, MusicNotesPlus, PencilSimple, Play, Share, SquaresFour, Upload } from "phosphor-react-sc"
+import { ArrowCounterClockwise, ArrowLeft, ArrowRight, CaretDoubleDown, DotsThreeVertical, FileDashed, FloppyDiskBack, Hash, Moon, MusicNotesPlus, PencilSimple, Play, Share, SquaresFour, Upload } from "phosphor-react-sc"
 import React, { useEffect, useMemo, useState } from "react"
-import { DataTable } from "./DataTable"
+import { DataTable, DisplayOperation } from "./DataTable"
 import { applyGroupOperation, applyNonGroupOperations, applyOperations } from "@/app/data/transform/Operating"
 import { LazyList } from "../../common/LazyList"
 import { OperationType, OperationsSelector } from "./filters/OperationsSelector"
@@ -25,6 +25,10 @@ import { usePresets } from "@/app/data/utils/presetUtils"
 import { ShareDialog } from "./ShareDialog"
 import { DEBUG } from "@/app/data/utils/debug"
 import Link from "next/link"
+import { JumpTo } from "./JumpTo"
+import { it } from "node:test"
+import { Group } from "@/app/data/model/Group"
+import { Combination } from "@/app/data/model/Combination"
 
 export function PresetPage({ initialPreset, isShared, customizeInitial }: { initialPreset: Preset, isShared: boolean, customizeInitial?: boolean }) {
     const router = useRouter()
@@ -39,11 +43,14 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
     const overwriting = usePresets()?.find(p => p.id == customizedPreset.id)
     const hasChanged = JSON.stringify(initialPreset) != JSON.stringify(customizedPreset)
     const isValid = (customizedPreset.name.trim().length != 0 && customizedPreset.description.trim().length != 0 && customizedPreset.icon.trim().length != 0 && customizedPreset.id.trim().length != 0)
+    const displayOperation: DisplayOperation = { viewOptions: customizedPreset.operations.viewOptions, infoOperation: customizedPreset.operations.info }
 
     const [isCustomizing, setCustomizing] = useState(customizeInitial ?? false)
     const [currentTab, setCurrentTab] = useState(OperationType.Info)
     const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
     const [isShareDialogOpen, setShareDialogOpen] = useState(false)
+    const [isJumpToOpen, setJumpToOpen] = useState(false)
+    const [scrollToItem, setScrollToItem] = useState<Group | Combination | undefined>(undefined)
 
     const header = (
         <div className="flex flex-col gap-8">
@@ -77,22 +84,6 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
                                 />
                             }
 
-                            { (loadedEntries != undefined && isSaveDialogOpen) &&
-                                <SaveDialog
-                                open={isSaveDialogOpen}
-                                onOpenChange={(open) => { setSaveDialogOpen(open) }}
-                                onSave={p => { savePreset(p); setSaveDialogOpen(false); router.push(`/view/${p.id}`) }}
-                                preset={customizedPreset}
-                                listens={loadedEntries} />
-                            }
-
-                            { isShareDialogOpen &&
-                                <ShareDialog
-                                open={isShareDialogOpen}
-                                onOpenChange={(open) => { setShareDialogOpen(open) }}
-                                preset={customizedPreset} />
-                            }
-
                             {/* <p className="text-neutral-500 tabular-nums">{hashOperations(customizedFilters)} • {hashOperations(customizedFilters, true)}</p> */}
 
                             <Dropdown
@@ -104,12 +95,17 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
                                     },
                                     {
                                         icon: <SquaresFour/>,
-                                        title: filtered === undefined ? "Loading..." : `${filtered.length.toLocaleString()} group${filtered.length == 0 ? "" : "s"}`,
+                                        title: filtered === undefined ? "Loading..." : `${filtered.length.toLocaleString()} group${filtered.length == 1 ? "" : "s"}`,
                                     },
                                     {
                                         icon: <Hash/>,
                                         title: `${hashOperations(customizedPreset.operations)}`,
                                         hide: !DEBUG,
+                                    },
+                                    {
+                                        icon: <CaretDoubleDown/>,
+                                        title: "Jump to",
+                                        onClick: () => setJumpToOpen(true),
                                     },
                                     {
                                         icon: <Share/>,
@@ -127,6 +123,21 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
                     }
                 />
             </div>
+            { (loadedEntries != undefined && isSaveDialogOpen) &&
+                <SaveDialog
+                open={isSaveDialogOpen}
+                onOpenChange={(open) => { setSaveDialogOpen(open) }}
+                onSave={p => { savePreset(p); setSaveDialogOpen(false); router.push(`/view/${p.id}`) }}
+                preset={customizedPreset}
+                listens={loadedEntries} />
+            }
+
+            { isShareDialogOpen &&
+                <ShareDialog
+                open={isShareDialogOpen}
+                onOpenChange={(open) => { setShareDialogOpen(open) }}
+                preset={customizedPreset} />
+            }
             { (isShared && !isCustomizing) && 
                 <div className="flex items-center gap-4 p-4 rounded-2xl bg-green-50 w-full text-green-700 border border-green-200">
                     <Share/>
@@ -148,18 +159,29 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
                     placeholder="Search..."
                     onChangeValue={v => setCustomizedPreset({ ...customizedPreset, operations: { ...customizedPreset.operations, filter: { ...customizedPreset.operations.filter, searchTerm: v }}})} />
             }
+            { (filtered && isJumpToOpen) && 
+                <JumpTo 
+                    groups={filtered} 
+                    displayOperation={displayOperation} 
+                    onJump={async (item) => { 
+                        setScrollToItem(item) 
+                        setTimeout(() => setScrollToItem(undefined), 100)
+                        console.log(`set scrollToItem = ${scrollToItem}`)
+                    }} 
+                    onClose={() => setJumpToOpen(false)}
+                /> 
+            }
+            
         </div>
     )
 
     return (
         <Container>
-            { loadedEntries === undefined
+            { (loadedEntries === undefined || filtered === undefined)
                 ? <LazyList header={<div className="mb-10">{header}</div>} items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
             : loadedEntries.length <= 0
                 ? <LazyList header={<div className="mb-10">{header}</div>} items={new Array(1)} itemContent={(i) => <EmptyData/>}/>
-            : filtered 
-                ? <DataTable groups={filtered} viewOptions={customizedPreset.operations.viewOptions} infoOperation={customizedPreset.operations.info} header={header}/> 
-                : <LazyList header={<div className="mb-10">{header}</div>} items={new Array(50)} itemContent={(i) => <div className="h-8 w-full rounded-full bg-neutral-100 my-2"></div>}/>
+            : <DataTable groups={filtered} operations={customizedPreset.operations} header={header} scrollToItem={scrollToItem}/> 
             }
         </Container>
     )

@@ -4,15 +4,16 @@ import { CaretDown, CaretRight } from "phosphor-react-sc";
 import { SecondaryInfo, PrimaryInfo } from "./InfoChips";
 import { Combination, TrackCombination } from "@/app/data/model/Combination";
 import { InfoOperation } from "@/app/data/model/Operations";
+import { DisplayOperation } from "../DataTable";
 
-interface CombinationItemProps { combination: Combination, indexInGroup: number, viewOptions: ViewOptions, infoOperation: InfoOperation, isExpanded: boolean, onToggleExpand: () => void }
-export function CombinationItem({ combination, indexInGroup, viewOptions, infoOperation, isExpanded, onToggleExpand }: CombinationItemProps) {
+interface CombinationItemProps { combination: Combination, indexInGroup: number, displayOperation: DisplayOperation, isExpanded?: boolean, onToggleExpand: () => void }
+export function CombinationItem({ combination, indexInGroup, displayOperation, isExpanded, onToggleExpand }: CombinationItemProps) {
     const firstListen = combination.listens[0]
     return (
         <div className="flex items-center py-2 gap-4 min-h-[64px]">
-            { viewOptions.showItemRanks && 
-                <div className="flex items-center justify-center w-10 bg-neutral-100 -ml-4 sm:ml-0 h-8 sm:h-10 rounded-e-2xl sm:rounded-md">
-                    <p className="text-neutral-500 text-center text-sm font-medium">{indexInGroup + 1}</p>
+            { displayOperation.viewOptions.showItemRanks && 
+                <div className="flex items-center justify-center w-8 bg-neutral-100 -ml-4 sm:ml-0 h-8 sm:h-8 rounded-e-2xl sm:rounded-md">
+                    <p className={"text-neutral-500 text-center font-medium " + ((indexInGroup + 1) < 100 ? "text-sm" : "text-xs")}>{indexInGroup + 1}</p>
                 </div>
             }
 
@@ -27,10 +28,10 @@ export function CombinationItem({ combination, indexInGroup, viewOptions, infoOp
             
             <div className="flex gap-1 items-center flex-shrink-0">
                 <div className="flex flex-col-reverse items-end sm:flex-row gap-1 sm:gap-3 sm:items-center">
-                    { infoOperation.secondaryInfo != null && <SecondaryInfo combination={combination} secondaryInfo={infoOperation.secondaryInfo} /> }
-                    <PrimaryInfo combination={combination} primaryInfo={infoOperation.primaryInfo} />
+                    { displayOperation.infoOperation.secondaryInfo != null && <SecondaryInfo combination={combination} secondaryInfo={displayOperation.infoOperation.secondaryInfo} /> }
+                    <PrimaryInfo combination={combination} primaryInfo={displayOperation.infoOperation.primaryInfo} />
                 </div>
-                <ActionButton onClick={() => onToggleExpand()} icon={isExpanded ? <CaretDown/> : <CaretRight/>} hideShadow/>
+                { isExpanded !== undefined && <ActionButton onClick={() => onToggleExpand()} icon={isExpanded ? <CaretDown/> : <CaretRight/>} hideShadow/> }
             </div>
         </div>
     )

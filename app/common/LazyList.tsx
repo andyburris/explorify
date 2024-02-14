@@ -8,10 +8,11 @@ export interface LazyListProps<T> {
   itemContent: (itemIndex: number) => React.ReactNode, 
   estimateSize?: number | ((rowIndex: number) => number), 
   className?: string
-  header?: React.ReactNode
+  header?: React.ReactNode,
+  scrollToIndex?: number,
 }
 
-export function LazyList<T>({ items, itemContent, estimateSize, className, header }: LazyListProps<T>) {
+export function LazyList<T>({ items, itemContent, estimateSize, className, header, scrollToIndex }: LazyListProps<T>) {
   const hasHeader = header !== undefined
 
   // The scrollable element for your list
@@ -25,6 +26,12 @@ export function LazyList<T>({ items, itemContent, estimateSize, className, heade
     overscan: 10,
     // scrollMargin: savedMargin,
   })
+
+  useEffect(() => { 
+    if(scrollToIndex !== undefined) {
+      rowVirtualizer.scrollToIndex(scrollToIndex + (hasHeader ? 1 : 0), { align: 'center' })
+    }
+  }, [scrollToIndex])
 
   return (
     <>
