@@ -9,7 +9,14 @@ const nextConfig = {
                 permanent: true,
             }
         ]
-    }
+    },
+    webpack: (
+        config,
+        { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
+      ) => {
+        config.optimization.minimize = false
+        return config
+      },
 }
 
 module.exports = nextConfig
