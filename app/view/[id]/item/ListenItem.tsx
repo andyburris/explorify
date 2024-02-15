@@ -34,13 +34,13 @@ export function ListenItem({ listen, isFirst, isLast, previewSongInfo }: { liste
 
                     </div>
                     <div className="flex gap-1">
-                        <div 
+                        <button 
                             className="flex gap-1.5 px-3 py-1.5 bg-neutral-100 rounded-full items-center text-neutral-500 cursor-pointer"
                             onClick={() => setExpanded(!isExpanded)}
                         >
                             <span className="text-md">{ isExpanded ? <Minus/> : <Plus/>}</span>
                             <span className="max-sm:hidden">{isExpanded ? "Show less" : "More"}</span>
-                        </div>
+                        </button>
                     </div>
                     
                 </div>

@@ -171,7 +171,10 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
                         setTimeout(() => setScrollToItem(undefined), 100)
                         console.log(`set scrollToItem = ${scrollToItem}`)
                     }} 
-                    onClose={() => setJumpToOpen(false)}
+                    onClose={() => {
+                        setJumpToOpen(false)
+                        setJumpToSearchTerm("")
+                    }}
                 /> 
             }
             

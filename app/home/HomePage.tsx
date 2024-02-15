@@ -58,6 +58,7 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                 <Link 
                     className="flex flex-col p-6 gap-2 min-h-[256px] justify-center items-center bg-neutral-50 border border-neutral-200 text-neutral-500 rounded-2xl" 
                     href="/customize"
+                    scroll={true}
                 >
                     <ListPlus size="32px"/>
                     <p>Add custom</p>

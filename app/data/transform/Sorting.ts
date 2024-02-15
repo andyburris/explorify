@@ -22,7 +22,7 @@ export function applySort(groups: Group[], sortOperation: SortOperation, infoOpe
                 case ItemSortType.Playtime: return (sortOperation.sortItemsAscending) ? a.visiblePlaytime - b.visiblePlaytime : b.visiblePlaytime - a.visiblePlaytime
             }
         })
-        g.combinations.forEach((c, i) => c.rank = i)
+        g.combinations.filter(c => c.visiblePlays > 0).forEach((c, i) => c.rank = i)
         g.rank = i
     })
 }

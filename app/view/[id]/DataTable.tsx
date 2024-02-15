@@ -73,6 +73,7 @@ export function DataTable({ groups, operations, header, scrollToItem }: { groups
             ? <ListenItem listen={listItem.listen} isFirst={listItem.isFirst} isLast={listItem.isLast} previewSongInfo={listItem.showSong}/>
           : (listItem instanceof ExpandGroup)
             ? <ExpandItem 
+                key={listItem.group.id}
                 amountRemaining={listItem.amountRemaining} 
                 isExpanded={listItem.isExpanded} 
                 onClick={() => {
@@ -103,7 +104,7 @@ function flattenGroups(
     const expandItem = needsExpandItem
       ? isExpanded
         ? [new ExpandGroup(g, true, 0)]
-        : [new ExpandGroup(g, false, g.combinations.length - amountToShowCollapsed)]
+        : [new ExpandGroup(g, false, g.combinations.filter(c => c.visiblePlays > 0).length - amountToShowCollapsed)]
       : [] 
     return [groupData, ...indexedCombinations, ...expandItem]
    } )
@@ -112,6 +113,7 @@ function flattenGroups(
 }
 
 function flattenCombinations(combination: Combination, isExpanded: boolean): ListItem[] {
+  if(combination.visiblePlays <= 0) return []
   const indexedCombination = new IndexedCombination(combination.rank, combination, isExpanded)
   const listens = (isExpanded) ? combination.listens.map((l, i) => new IndexedListen(i == 0, i == combination.listens.length - 1, l, combination instanceof ArtistCombination)) : []
   return [indexedCombination, ...listens]

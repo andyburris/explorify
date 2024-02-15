@@ -95,8 +95,8 @@ export const defaultPresets: Preset[] = [
         description: "The artists you’ve listened to the most",
         operations: {
             group: {
-                groupBy: { ...groupNone },
-                combineBy: CombineType.SameArtist,
+                groupBy: { ...groupNone, artist: true },
+                combineBy: CombineType.SameSong,
                 combineInto: CombineInto.EarliestPlay,
                 combineAcrossGroups: false,
             },
@@ -120,9 +120,9 @@ export const defaultPresets: Preset[] = [
                 showSearch: false,
                 showGroupSum: true,
                 showItems: true,
-                showGroupRanks: false,
+                showGroupRanks: true,
                 showItemRanks: true,
-                previewGroups: false,
+                previewGroups: true,
             },
         },
     },    {

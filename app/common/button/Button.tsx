@@ -45,10 +45,10 @@ export function LinkButton(props: LinkButtonProps) {
 export function StaticButton(props: ButtonProps) {
     const { text, icon } = props
     return (
-        <a 
+        <div 
         className={buttonClassName(props) + " cursor-pointer"}>
             {icon && icon}
             {text && (<span className="text-base font-medium">{text}</span>)}
-        </a>
+        </div>
     )
 }

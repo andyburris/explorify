@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ActionButton } from "@/app/common/button/ActionButton";
-import { Plus, X } from "phosphor-react-sc";
+import { CaretDoubleUp, Plus, X } from "phosphor-react-sc";
 import { Group } from "@/app/data/model/Group";
 import { ArtistCombination, Combination, TrackCombination } from "@/app/data/model/Combination";
 import { GroupHeader } from "./item/GroupHeaderItem";
@@ -15,7 +15,8 @@ export function JumpTo({ searchTerm, groups, displayOperation, onSearchTermChang
     const filteredItems: JumpToItem[] = groups.flatMap(g => {
         const filteredCombinations = g.combinations.filter(c => combinationMatchesSearch(c, searchTerm))
         const jumpToGroup = new JumpToGroup(g, groupMatchesSearch(g, searchTerm))
-        if(filteredCombinations.length > 0 || jumpToGroup.matchesSearch) return [jumpToGroup, ...filteredCombinations]
+        const shownCombinations = displayOperation.viewOptions.showItems ? filteredCombinations : []
+        if(shownCombinations.length > 0 || jumpToGroup.matchesSearch) return [jumpToGroup, ...shownCombinations]
         else return []
     })
     const shownItems = filteredItems.slice(0, 15)
@@ -25,11 +26,12 @@ export function JumpTo({ searchTerm, groups, displayOperation, onSearchTermChang
             <div className="flex gap-2 pr-2 items-center">
                 <input 
                     placeholder="Jump to..." 
-                    className={"p-4 bg-transparent w-full rounded-tl-2xl " + (searchTerm.length > 0 ? "" : "rounded-bl-2xl") }
+                    className={"p-4 bg-transparent w-full rounded-tl-2xl outline-none " + (searchTerm.length > 0 ? "" : "rounded-bl-2xl") }
                     value={searchTerm} 
                     onChange={e => onSearchTermChange(e.target.value)}
                     />
-                <ActionButton onClick={onClose} icon={<X/>} hideShadow className="flex-shrink-0"/>
+                { searchTerm.length > 0 && <ActionButton onClick={() => onSearchTermChange("")} icon={<X/>} hideShadow className="flex-shrink-0"/> }
+                <ActionButton onClick={onClose} icon={<CaretDoubleUp/>} hideShadow className="flex-shrink-0"/>
             </div>
             { searchTerm.length > 0 && 
                 <div className="border-t border-neutral-200 pb-2 overflow-hidden px-2">
@@ -45,10 +47,10 @@ export function JumpTo({ searchTerm, groups, displayOperation, onSearchTermChang
                         
                         const margin = (index != 0) 
                             ? (i instanceof JumpToGroup && i.matchesSearch)
-                                ? " -mt-2 ml-12"
+                                ? " -mt-2" + (displayOperation.viewOptions.showGroupRanks ? " ml-12" : "")
                                 : ""
                             : (i instanceof JumpToGroup && i.matchesSearch)
-                                ? " -mt-8 ml-12"
+                                ? " -mt-8" + (displayOperation.viewOptions.showGroupRanks ? " ml-12" : "")
                                 : " -mt-2"
                         return (
                             <div 
