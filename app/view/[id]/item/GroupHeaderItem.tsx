@@ -9,7 +9,7 @@ import { DisplayOperation } from "../DataTable";
 export function GroupHeader({ group, displayOperation }: { group: Group, displayOperation: DisplayOperation }) {
     const { primary, secondary } = group.headerStrings()
     return (
-        <div className="flex justify-between items-center pb-2 pt-12 gap-3">
+        <div className="flex justify-between items-center py-2 mt-10 gap-3">
             <div className={"flex items-center w-full " + (displayOperation.viewOptions.showGroupRanks ? "gap-4" : "gap-3")}>
                 { displayOperation.viewOptions.showGroupRanks
                     ? <div className={"flex items-center justify-center w-8 flex-shrink-0 bg-green-600 nightwind-prevent text-white font-semibold -ml-4 sm:-ml-12 h-8 sm:h-8 rounded-e-2xl sm:rounded-md " + ((group.rank + 1) < 100 ? "text-sm" : "text-xs")}>

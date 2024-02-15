@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ActionButton } from "@/app/common/button/ActionButton";
-import { X } from "phosphor-react-sc";
+import { Plus, X } from "phosphor-react-sc";
 import { Group } from "@/app/data/model/Group";
 import { ArtistCombination, Combination, TrackCombination } from "@/app/data/model/Combination";
 import { GroupHeader } from "./item/GroupHeaderItem";
@@ -9,8 +9,9 @@ import { DisplayOperation } from "./DataTable";
 
 type JumpToItem = JumpToGroup | Combination
 class JumpToGroup { public constructor(public group: Group, public matchesSearch: boolean){} }
-export function JumpTo({ groups, displayOperation, onJump, onClose }: { groups: Group[], displayOperation: DisplayOperation, onJump: (item: Group | Combination) => void, onClose: () => void }) {
-    const [searchTerm, setSearchTerm] = useState("")
+
+export interface JumpToProps { searchTerm: string, groups: Group[], displayOperation: DisplayOperation, onSearchTermChange: (term: string) => void, onJump: (item: Group | Combination) => void, onClose: () => void }
+export function JumpTo({ searchTerm, groups, displayOperation, onSearchTermChange, onJump, onClose }: JumpToProps) {
     const filteredItems: JumpToItem[] = groups.flatMap(g => {
         const filteredCombinations = g.combinations.filter(c => combinationMatchesSearch(c, searchTerm))
         const jumpToGroup = new JumpToGroup(g, groupMatchesSearch(g, searchTerm))
@@ -26,12 +27,12 @@ export function JumpTo({ groups, displayOperation, onJump, onClose }: { groups: 
                     placeholder="Jump to..." 
                     className={"p-4 bg-transparent w-full rounded-tl-2xl " + (searchTerm.length > 0 ? "" : "rounded-bl-2xl") }
                     value={searchTerm} 
-                    onChange={e => setSearchTerm(e.target.value)}
+                    onChange={e => onSearchTermChange(e.target.value)}
                     />
                 <ActionButton onClick={onClose} icon={<X/>} hideShadow className="flex-shrink-0"/>
             </div>
             { searchTerm.length > 0 && 
-                <div className="border-t border-neutral-200 pb-2 overflow-hidden">
+                <div className="border-t border-neutral-200 pb-2 overflow-hidden px-2">
                     {shownItems.map((i, index) => {
                         let content: React.ReactNode
                         if(i instanceof JumpToGroup) {
@@ -42,10 +43,29 @@ export function JumpTo({ groups, displayOperation, onJump, onClose }: { groups: 
                             content = <CombinationItem combination={i} indexInGroup={i.rank} displayOperation={displayOperation} onToggleExpand={() => {}} />
                         }
                         
-                        return <div key={index} className={"px-4 hover:bg-neutral-50 cursor-pointer" + (index == 0 ? " -mt-6" : "")} onClick={() => onJump((i instanceof JumpToGroup ? i.group : i))}>
-                            {content}
-                        </div>
+                        const margin = (index != 0) 
+                            ? (i instanceof JumpToGroup && i.matchesSearch)
+                                ? " -mt-2 ml-12"
+                                : ""
+                            : (i instanceof JumpToGroup && i.matchesSearch)
+                                ? " -mt-8 ml-12"
+                                : " -mt-2"
+                        return (
+                            <div 
+                                key={index} 
+                                className={"px-2 rounded-xl hover:bg-neutral-100 cursor-pointer" + margin} 
+                                onClick={() => onJump((i instanceof JumpToGroup ? i.group : i))}
+                                >
+                                {content}
+                            </div>
+                        )
                     })}
+                    { shownItems.length < filteredItems.length &&
+                        <div className="flex p-2 gap-4 items-center text-neutral-500">
+                            <div className="flex items-center justify-center h-8 w-8 rounded-md bg-neutral-100 text-lg"><Plus/></div>
+                            <p className="font-semibold">{filteredItems.length - shownItems.length} more items, search more to see more</p>
+                        </div>
+                    }
                     { shownItems.length == 0 &&
                         <p className="p-4 pb-2">No results</p>
                     }
@@ -57,7 +77,7 @@ export function JumpTo({ groups, displayOperation, onJump, onClose }: { groups: 
 
 function UnmatchedGroupHeader({ group }: { group: Group }) {
     const { primary, secondary } = group.headerStrings()
-    return <div className="pb-2 pt-11">
+    return <div className="py-2 mt-4">
         <p className="text-neutral-500"><span className="font-semibold">{primary}</span> {secondary}</p>
     </div>
 }

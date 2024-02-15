@@ -12,13 +12,14 @@ import { ExpandItem } from './item/ExpandItem'
 import { Combination, ArtistCombination } from '@/app/data/model/Combination'
 import { InfoOperation, Operations } from '@/app/data/model/Operations'
 import { NoResultsItem } from './item/NoResultsItem'
+import { Listen } from '@/app/data/model/Listen'
 
 export interface DisplayOperation { viewOptions: ViewOptions, infoOperation: InfoOperation }
 
-type ListItem = IndexedCombination | GroupData | IndexedHistoryEntry | ExpandGroup | NoResults
+type ListItem = IndexedCombination | GroupData | IndexedListen | ExpandGroup | NoResults
 class GroupData { constructor(public group: Group) {} }
 class IndexedCombination { constructor(public index: number, public combination: Combination, public isExpanded: boolean){} }
-class IndexedHistoryEntry { constructor(public isFirst: boolean, public isLast: boolean, public listen: HistoryEntry, public showSong: boolean){} }
+class IndexedListen { constructor(public isFirst: boolean, public isLast: boolean, public listen: Listen, public showSong: boolean){} }
 class ExpandGroup { constructor(public group: Group, public isExpanded: boolean, public amountRemaining: number){} }
 class NoResults { constructor(){} }
 
@@ -68,7 +69,7 @@ export function DataTable({ groups, operations, header, scrollToItem }: { groups
                   setExpandedCombinations([...expandedCombinations, listItem.combination])
                 }
               }}/>
-          : (listItem instanceof IndexedHistoryEntry)
+          : (listItem instanceof IndexedListen)
             ? <ListenItem listen={listItem.listen} isFirst={listItem.isFirst} isLast={listItem.isLast} previewSongInfo={listItem.showSong}/>
           : (listItem instanceof ExpandGroup)
             ? <ExpandItem 
@@ -112,6 +113,6 @@ function flattenGroups(
 
 function flattenCombinations(combination: Combination, isExpanded: boolean): ListItem[] {
   const indexedCombination = new IndexedCombination(combination.rank, combination, isExpanded)
-  const listens = (isExpanded) ? combination.listens.map((l, i) => new IndexedHistoryEntry(i == 0, i == combination.listens.length - 1, l, combination instanceof ArtistCombination)) : []
+  const listens = (isExpanded) ? combination.listens.map((l, i) => new IndexedListen(i == 0, i == combination.listens.length - 1, l, combination instanceof ArtistCombination)) : []
   return [indexedCombination, ...listens]
 }

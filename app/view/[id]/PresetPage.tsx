@@ -50,6 +50,7 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
     const [isSaveDialogOpen, setSaveDialogOpen] = useState(false)
     const [isShareDialogOpen, setShareDialogOpen] = useState(false)
     const [isJumpToOpen, setJumpToOpen] = useState(false)
+    const [jumpToSearchTerm, setJumpToSearchTerm] = useState("")
     const [scrollToItem, setScrollToItem] = useState<Group | Combination | undefined>(undefined)
 
     const header = (
@@ -161,8 +162,10 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
             }
             { (filtered && isJumpToOpen) && 
                 <JumpTo 
+                    searchTerm={jumpToSearchTerm}
                     groups={filtered} 
                     displayOperation={displayOperation} 
+                    onSearchTermChange={t => setJumpToSearchTerm(t)}
                     onJump={async (item) => { 
                         setScrollToItem(item) 
                         setTimeout(() => setScrollToItem(undefined), 100)

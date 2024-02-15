@@ -1,4 +1,5 @@
 import { EndReason, HistoryEntry, StartReason } from "@/app/data/model/HistoryEntry";
+import { Listen } from "@/app/data/model/Listen";
 import { Cloud, CloudSlash, Devices, Hourglass, Link, Minus, MusicNote, Play, Plus, Shuffle, SkipForward, Stop, User, VinylRecord } from "phosphor-react-sc";
 import { useState } from "react";
 
@@ -15,11 +16,11 @@ const timeFormatOptions: Intl.DateTimeFormatOptions = {
     second: "2-digit"
 }
 
-export function ListenItem({ listen, isFirst, isLast, previewSongInfo }: { listen: HistoryEntry, isFirst: boolean, isLast: boolean, previewSongInfo: boolean }) {
+export function ListenItem({ listen, isFirst, isLast, previewSongInfo }: { listen: Listen, isFirst: boolean, isLast: boolean, previewSongInfo: boolean }) {
     const [isExpanded, setExpanded] = useState(false)
 
     return (
-        <div className="flex gap-3">
+        <div className={"flex gap-3" + ((listen.hiddenSearched || listen.hiddenSkip) ? " opacity-50": " opacity-100")}>
             <div className="flex flex-col items-center">
                 <div className={"w-[1px] h-5 flex-shrink-0" + (isFirst ? "" : "  bg-neutral-200")}></div>
                 <div className="w-2 h-2 bg-neutral-200 rounded-full flex-shrink-0"></div>
