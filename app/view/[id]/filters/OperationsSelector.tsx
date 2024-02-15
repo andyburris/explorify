@@ -113,7 +113,7 @@ export function ResponsiveControl<T>({ items, selectedItem, onSelect }: { items:
             <SegmentedControl items={items} selectedItem={selectedItem} onSelect={onSelect} />
         </div>
         <div className="sm:hidden">
-            <Combobox options={items} selectedValues={[selectedItem]} onSelectValues={(v) => onSelect(v[0] ?? selectedItem)} placeholder="Search..." multiSelect={false}/>
+            <Combobox options={items} selectedValues={[selectedItem]} onSelectValues={(v) => onSelect(v.length > 0 ? v[0] : selectedItem)} placeholder="Search..." multiSelect={false}/>
         </div>
         </>
     )
