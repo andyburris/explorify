@@ -219,6 +219,61 @@ export const defaultPresets: Preset[] = [
         },
     },
     {
+        id: "least-skipped",
+        name: "Least Skipped",
+        icon: "skipforward",
+        description: "The songs you never skip",
+        operations: {
+            group: {
+                groupBy: { ...groupNone, artist: true, song: true },
+                combineBy: CombineType.SameSong,
+                combineInto: CombineInto.EarliestPlay,
+                combineAcrossGroups: false,
+            },
+            filter: {
+                filterSkipsBy: SkipFilterType.NoSkips,
+                minimumPlays: 15,
+                searchTerm: "",
+                searchBy: SearchType.All,
+            },
+            sort: {
+                sortGroupsBy: {
+                    hour: { index: 10, isAscending: true },
+                    dayOfWeek: { index: 9, isAscending: true },
+                    date: { index: 8, isAscending: true },
+                    month: { index: 7, isAscending: true },
+                    year: { index: 6, isAscending: true },
+                    artist: { index: 4, isAscending: true },
+                    song: { index: 3, isAscending: true },
+                    album: { index: 5, isAscending: true },
+                    plays: { index: 1, isAscending: false },
+                    playtime: { index: 2, isAscending: false },
+                    percent: { index: 0, isAscending: false }
+                },
+                sortItemsBy: ItemSortType.Plays,
+                sortItemsAscending: false,
+            },
+            info: {
+                primaryInfo: InfoType.Percent,
+                secondaryInfo: InfoType.Fraction,
+                primaryPercent: {
+                    of: PercentOf.Plays,
+                    numerator: PercentNumerator.Skipped,
+                    denominator: PercentDenominator.All,
+                    grouping: PercentGrouping.Groups,
+                },
+            },
+            viewOptions: {
+                showSearch: false,
+                showGroupSum: true,
+                showItems: false,
+                showGroupRanks: true,
+                showItemRanks: true,
+                previewGroups: true,
+            },
+        },
+    },
+    {
         id: "listening-history",
         name: "Listening History",
         icon: "headphones",

@@ -52,8 +52,7 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
                         enabled={!deleteInProgress}
                         onClick={async () => {
                             setDeleteInProgress(true)
-                            await clearListens()
-                            router.push("/")
+                            clearListens().then(() => router.push("/"))
                         }}
                         />
                 }

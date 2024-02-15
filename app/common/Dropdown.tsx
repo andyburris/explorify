@@ -15,14 +15,14 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
             {trigger}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
-            <DropdownMenu.Content className="bg-white shadow-outset py-2 rounded-2xl w-64 overflow-hidden" align='end' sideOffset={8}>
+            <DropdownMenu.Content className="bg-white shadow-outset p-1 rounded-2xl w-64 overflow-hidden" align='end' sideOffset={8}>
                 {menuItems.filter(i => i.hide != true).map((item) => 
                     <DropdownMenu.Item 
                         key={item.title} 
                         onClick={item.onClick !== undefined ? () => item.onClick?.() : undefined}
                         disabled={item.onClick === undefined}
                         asChild={item.linkPath !== undefined}
-                        className="outline-none focus:bg-neutral-100"
+                        className="outline-none focus:bg-neutral-100 rounded-xl"
                     >
                         { item.linkPath &&
                             <Link href={item.linkPath}><ItemContent item={item}/></Link>
@@ -40,7 +40,7 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
 
 function ItemContent({ item }: { item: DropdownItem }) {
     return (
-        <div className={"flex gap-3 px-4 py-3 items-center" + ((item.onClick === undefined && item.linkPath === undefined) ? " cursor-default" : " hover:bg-neutral-100 focus:bg-neutral-100 cursor-pointer")}>
+        <div className={"flex gap-3 px-3 py-3 items-center rounded-xl" + ((item.onClick === undefined && item.linkPath === undefined) ? " cursor-default" : " cursor-pointer")}>
             <div className="text-2xl text-neutral-500">
                 {item.icon}
             </div>

@@ -207,7 +207,7 @@ function EmptyData() {
                 <a href="https://www.spotify.com/us/account/privacy/">
                     <EmptyDataButton icon={<FileDashed/>} title="Don’t have your listening history?" description={<p>Request it from Spotify here. Be sure to request your <strong>extended</strong> listening history.</p>}/>
                 </a>
-                <Link href="/import">
+                <Link href="/">
                     <EmptyDataButton icon={<Upload/>} title="Already have your listening history?" description={<p>Import your .zip file to Quantify!</p>}/>
                 </Link>
             </div>
