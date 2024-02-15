@@ -194,7 +194,7 @@ function GroupSortItem({ id, icon, name, isAscending, sortNames, isEnabled, canI
     return (
         <div 
             ref={setNodeRef}
-            className="flex gap-1 items-center w-full pr-1"
+            className="flex gap-1 items-center w-full pr-1 touch-none"
             style={style} 
             {...attributes}
             >
