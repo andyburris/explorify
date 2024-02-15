@@ -52,7 +52,9 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
                         enabled={!deleteInProgress}
                         onClick={async () => {
                             setDeleteInProgress(true)
-                            clearListens().then(() => router.push("/"))
+                            clearListens()
+                            .then(() => new Promise(resolve => setTimeout(resolve, 250)))
+                            .then(() => router.push("/"))
                         }}
                         />
                 }
