@@ -25,7 +25,7 @@ export function getPresets(): Preset[] {
         .toSorted((a, b) => a.index - b.index)
     
 }
-export function savePreset(preset: Preset) {
+export function savePreset(preset: Preset, index?: number) {
     const key = `preset-${preset.id}`
     const existingPresetIndex = getPresets().findIndex(p => p.id == preset.id)
     const savedPreset: SavedPreset = { 
@@ -34,13 +34,17 @@ export function savePreset(preset: Preset) {
         description: preset.description, 
         icon: preset.icon, 
         operationsHash: hashOperations(preset.operations),
-        index: existingPresetIndex != -1 ? existingPresetIndex : getPresets().length
+        index: index ?? (existingPresetIndex != -1 ? existingPresetIndex : getPresets().length)
     }
     localStorage[key] = JSON.stringify(savedPreset)
 }
 
 export function saveDefaultPresets() {
     defaultPresets.forEach(p => savePreset(p))
+}
+
+export function deletePreset(p: Preset) {
+    localStorage.removeItem(`preset-${p.id}`)
 }
 
 export function clearPresets() {

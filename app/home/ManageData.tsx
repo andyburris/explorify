@@ -29,20 +29,6 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
                 }
             />
             <DataSection
-                title="Reset presets"
-                description="Resets all presets to the website defaults. This will remove any custom presets you have, so be sure to copy their links beforehand to not lose them permanently!"
-                button={
-                    <ActionButton 
-                        icon={<ArrowCounterClockwise/>} 
-                        text="Reset" 
-                        onClick={() => {
-                            resetPresets()
-                            router.refresh()
-                        }}
-                        />
-                }
-            />
-            <DataSection
                 title="Delete listening history"
                 description="Clears your listening history. This does not delete the .zip file you originally imported. As always, your listening history is never uploaded to any servers."
                 button={

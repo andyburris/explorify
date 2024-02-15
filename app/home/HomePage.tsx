@@ -11,14 +11,19 @@ import { PresetPreview } from "./PresetPreview";
 import nightwind from "nightwind/helper"
 import Link from "next/link";
 import { Preset } from "../data/model/Preset";
-import { clearPresets, resetPresets } from "../data/persist/PresetRepository";
-import { useRouter } from "next/router";
+import { clearPresets, deletePreset, resetPresets, savePreset } from "../data/persist/PresetRepository";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ManageData } from "./ManageData";
 import { DEBUG } from "../data/utils/debug";
+import { EditPresets } from "./EditPresets";
 
 export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[], presets: Preset[], onClear: () => void }) {
+    const router = useRouter()
+    
+    const [orderedPresets, setOrderedPresets] = useState(presets)
     const [manageDataOpen, setManageDataOpen] = useState(false)
+    const [editPresetsOpen, setEditPresetsOpen] = useState(false)
     return (
         <Container>
             <Header
@@ -36,8 +41,7 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                                 {
                                     icon: <Pencil size="24px"/>,
                                     title: "Edit presets",
-                                    onClick: () => {},
-                                    hide: !DEBUG,
+                                    onClick: () => { setEditPresetsOpen(true) },
                                 },
                                 {
                                     icon: <Upload size="24px"/>,
@@ -54,9 +58,28 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                     </div>
                 }
             />
-            { manageDataOpen && <ManageData open={manageDataOpen} onOpenChange={setManageDataOpen}/> }
+            <EditPresets 
+                presets={orderedPresets} 
+                onDeletePreset={preset => {
+                    const newPresets = orderedPresets.filter(p => p.id != preset.id)
+                    setOrderedPresets(newPresets)
+                    deletePreset(preset)
+                    newPresets.forEach((p, i) => savePreset(p, i))
+                }}
+                onPresetOrderChange={ps => {
+                    ps.forEach((p, i) => savePreset(p, i))
+                    setOrderedPresets(ps)
+                }}
+                onResetPresets={() => {
+                    resetPresets()
+                    router.refresh()
+                }}
+                open={editPresetsOpen} 
+                onOpenChange={setEditPresetsOpen}
+                />
+            <ManageData open={manageDataOpen} onOpenChange={setManageDataOpen}/>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8">
-                {presets.map((preset) => <PresetPreview key={preset.name} preset={preset} listens={listens} />)}
+                {orderedPresets.map((preset) => <PresetPreview key={preset.name} preset={preset} listens={listens} />)}
                 <Link 
                     className="flex flex-col p-6 gap-2 min-h-[256px] justify-center items-center bg-neutral-50 border border-neutral-200 text-neutral-500 rounded-2xl" 
                     href="/customize"
