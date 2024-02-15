@@ -43,10 +43,10 @@ export function Combobox<T>({ options, selectedValues, onSelectValues, placehold
         <ActionButton onClick={() => setOpen(false)} icon={<CaretUp/>} hideShadow/>
       </div>
       <CommandEmpty className="p-3">No options found.</CommandEmpty>
-      <CommandGroup>
+      <CommandGroup className="p-1">
         {options.map((option) => (
           <CommandItem
-            className="flex gap-3 items-center p-3 data-[selected=true]:bg-neutral-100 cursor-pointer"
+            className="flex gap-3 items-center px-3 py-3 rounded-lg data-[selected=true]:bg-neutral-100 cursor-pointer"
             key={option.key}
             value={option.key}
             onSelect={(currentValue) => {

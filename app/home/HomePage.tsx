@@ -15,6 +15,7 @@ import { clearPresets, resetPresets } from "../data/persist/PresetRepository";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { ManageData } from "./ManageData";
+import { DEBUG } from "../data/utils/debug";
 
 export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[], presets: Preset[], onClear: () => void }) {
     const [manageDataOpen, setManageDataOpen] = useState(false)
@@ -35,7 +36,8 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                                 {
                                     icon: <Pencil size="24px"/>,
                                     title: "Edit presets",
-                                    onClick: () => {}
+                                    onClick: () => {},
+                                    hide: !DEBUG,
                                 },
                                 {
                                     icon: <Upload size="24px"/>,

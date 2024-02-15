@@ -46,7 +46,7 @@ export function GroupOperationSelector({ currentOperation, onChangeOperation }: 
                     ]}
                     selectedValues={toIndividuals(currentOperation.groupBy)}
                     multiSelect={true}
-                    placeholder="Select group..."
+                    placeholder="Search group types..."
                     onSelectValues={n => onChangeOperation({ ...currentOperation, groupBy: fromIndividuals(n)})}
                 />
             </OperationSection>

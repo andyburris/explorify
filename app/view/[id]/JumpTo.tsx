@@ -6,6 +6,7 @@ import { ArtistCombination, Combination, TrackCombination } from "@/app/data/mod
 import { GroupHeader } from "./item/GroupHeaderItem";
 import { CombinationItem } from "./item/CombinationItem";
 import { DisplayOperation } from "./DataTable";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "cmdk";
 
 type JumpToItem = JumpToGroup | Combination
 class JumpToGroup { public constructor(public group: Group, public matchesSearch: boolean){} }
@@ -22,19 +23,20 @@ export function JumpTo({ searchTerm, groups, displayOperation, onSearchTermChang
     const shownItems = filteredItems.slice(0, 15)
     
     return (
-        <div className="flex flex-col shadow-outset bg-white rounded-2xl overflow-hidden">
+        <Command shouldFilter={false} className="flex flex-col shadow-outset bg-white rounded-2xl overflow-hidden">
             <div className="flex gap-2 pr-2 items-center">
-                <input 
+                <CommandInput 
                     placeholder="Jump to..." 
                     className={"p-4 bg-transparent w-full rounded-tl-2xl outline-none " + (searchTerm.length > 0 ? "" : "rounded-bl-2xl") }
                     value={searchTerm} 
-                    onChange={e => onSearchTermChange(e.target.value)}
+                    onValueChange={v => onSearchTermChange(v)}
+                    autoFocus
                     />
                 { searchTerm.length > 0 && <ActionButton onClick={() => onSearchTermChange("")} icon={<X/>} hideShadow className="flex-shrink-0"/> }
                 <ActionButton onClick={onClose} icon={<CaretDoubleUp/>} hideShadow className="flex-shrink-0"/>
             </div>
             { searchTerm.length > 0 && 
-                <div className="border-t border-neutral-200 pb-2 overflow-hidden px-2">
+                <CommandGroup className="border-t border-neutral-200 pb-2 overflow-hidden px-2">
                     {shownItems.map((i, index) => {
                         let content: React.ReactNode
                         if(i instanceof JumpToGroup) {
@@ -53,13 +55,14 @@ export function JumpTo({ searchTerm, groups, displayOperation, onSearchTermChang
                                 ? " -mt-8" + (displayOperation.viewOptions.showGroupRanks ? " ml-12" : "")
                                 : " -mt-2"
                         return (
-                            <div 
-                                key={index} 
-                                className={"px-2 rounded-xl hover:bg-neutral-100 cursor-pointer" + margin} 
-                                onClick={() => onJump((i instanceof JumpToGroup ? i.group : i))}
+                            <CommandItem 
+                                key={(i instanceof JumpToGroup ? i.group.id : i.id)} 
+                                value={(i instanceof JumpToGroup ? i.group.id : i.id)}
+                                className={"px-2 rounded-xl data-[selected=true]:bg-neutral-100 cursor-pointer" + margin} 
+                                onSelect={(v) => onJump((i instanceof JumpToGroup ? i.group : i))}
                                 >
                                 {content}
-                            </div>
+                            </CommandItem>
                         )
                     })}
                     { shownItems.length < filteredItems.length &&
@@ -68,12 +71,12 @@ export function JumpTo({ searchTerm, groups, displayOperation, onSearchTermChang
                             <p className="font-semibold">{filteredItems.length - shownItems.length} more items, search more to see more</p>
                         </div>
                     }
-                    { shownItems.length == 0 &&
-                        <p className="p-4 pb-2">No results</p>
-                    }
-                </div>
+                    <CommandEmpty>
+                        <p className="px-2 pt-4 pb-2">No results</p>
+                    </CommandEmpty>
+                </CommandGroup>
             }
-        </div>
+        </Command>
     )
 }
 

@@ -57,17 +57,7 @@ export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: Hist
                 }
                 <ActionButton 
                 text={ isProcessing ? "Processing" : "Process" }
-                icon={isProcessing ? <Spinner>
-                    <animateTransform
-                        attributeName="transform"
-                        attributeType="XML"
-                        type="rotate"
-                        dur="1s"
-                        from="0 0 0"
-                        to="360 0 0"
-                        repeatCount="indefinite"
-                    ></animateTransform>
-                </Spinner> : <Upload/>} 
+                icon={isProcessing ? <Spinner className="animate-spin"/> : <Upload/>} 
                 className="w-fit"
                 enabled={!isProcessing && file !== undefined}
                 onClick={() => {
