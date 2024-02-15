@@ -2,22 +2,9 @@ import { useState } from "react";
 import { CommonDialog, DialogProps } from "../common/CommonDialog";
 import { PickedIcon } from "../common/PickedIcon";
 import { Preset } from "../data/model/Preset";
-import {
-    DndContext, 
-    closestCenter,
-    KeyboardSensor,
-    PointerSensor,
-    useSensor,
-    useSensors,
-  } from '@dnd-kit/core';
-  import {
-    arrayMove,
-    SortableContext,
-    sortableKeyboardCoordinates,
-    verticalListSortingStrategy,
-    useSortable
-  } from '@dnd-kit/sortable';
-  import {CSS} from '@dnd-kit/utilities';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
 import { ArrowCounterClockwise, DotsSixVertical, Trash } from "phosphor-react-sc";
 import { ActionButton } from "../common/button/ActionButton";
 
@@ -61,7 +48,6 @@ export function EditPresets({ presets, open, onOpenChange, onPresetOrderChange, 
                         if(active.id !== over?.id) {
                             const oldIndex = presets.findIndex(p => p.id == active.id)
                             const newIndex = presets.findIndex(p => p.id == over?.id)
-                            console.log(`dropping ${oldIndex + 1}. ${active.id} to index ${newIndex + 1}`)
                             onPresetOrderChange(arrayMove(presets, oldIndex, newIndex))
                         }
                     }}
@@ -78,19 +64,8 @@ export function EditPresets({ presets, open, onOpenChange, onPresetOrderChange, 
 }
 
 function EditPresetItem({ preset, id, index, onDelete }: { preset: Preset, id: string, index: number, onDelete: () => void }) {
-    const {
-        active,
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-    } = useSortable({id: id});
-    
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
+    const { active, attributes, listeners, setNodeRef, transform, transition } = useSortable({id: id})
+    const style = { transform: CSS.Transform.toString(transform), transition }
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     return (

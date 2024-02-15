@@ -37,7 +37,7 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
     // useEffect(() => { getListens().then(entries => { setLoadedEntries(entries.slice(0, 1000)) }) }, [])
     useEffect(() => { getListens().then(entries => { setLoadedEntries(entries) }) }, [])
 
-    const [customizedPreset, setCustomizedPreset] = useState(initialPreset)
+    const [customizedPreset, setCustomizedPreset] = useState(JSON.parse(JSON.stringify(initialPreset)))
     const grouped = useMemo(() => (loadedEntries === undefined) ? undefined : applyGroupOperation(loadedEntries, customizedPreset.operations.group), [loadedEntries, customizedPreset.operations.group]) 
     const filtered = useMemo(() => (grouped === undefined) ? undefined : applyNonGroupOperations([...grouped], customizedPreset.operations), [grouped, customizedPreset.operations]) 
     const overwriting = usePresets()?.find(p => p.id == customizedPreset.id)
@@ -68,7 +68,7 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
                             <ActionButton 
                                 onClick={() => { 
                                     if(isCustomizing) {
-                                        setCustomizedPreset(initialPreset)
+                                        setCustomizedPreset(JSON.parse(JSON.stringify(initialPreset)))
                                         setCustomizing(false)
                                     } else { setCustomizing(true) }
                                 }}

@@ -1,12 +1,16 @@
 import { SegmentedControl } from "@/app/common/SegmentedControl";
 import { GroupSortOrder, GroupSortOrderItem, GroupType, ItemSortType, SortOperation } from "@/app/data/model/Operations";
-import { ArrowDown, ArrowUp, ArrowsCounterClockwise, Calendar, CalendarBlank, Clock, ClockCounterClockwise, Disc, Hourglass, MusicNote, PencilSimpleLine, Percent, Play, SortAscending, SortDescending, User } from "phosphor-react-sc";
+import { ArrowDown, ArrowUp, ArrowsCounterClockwise, Calendar, CalendarBlank, Clock, ClockCounterClockwise, Disc, DotsSixVertical, Hourglass, MusicNote, PencilSimpleLine, Percent, Play, SortAscending, SortDescending, User } from "phosphor-react-sc";
 import { OperationSection, ResponsiveControl } from "./OperationsSelector";
 import { Combobox } from "@/app/common/components/ui/combobox";
 import { useState } from "react";
 import { ActionButton } from "@/app/common/button/ActionButton";
 import { sortItemsInOrder } from "@/app/data/transform/Sorting";
 import { simpleSortGroupsDate, simpleSortGroupsPlays, simpleSortGroupsSong } from "@/app/data/Defaults";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { restrictToParentElement } from '@dnd-kit/modifiers'
+import {CSS} from '@dnd-kit/utilities';
 
 export function SortOperationSelector({ currentOperation, groupType, onChangeOperation }: { currentOperation: SortOperation, groupType: GroupType, onChangeOperation: (newFilter: SortOperation) => void }) {
     const [isCustomGroupSort, setCustomGroupSort] = useState(false)
@@ -107,57 +111,72 @@ const sortOrderTypes: Map<String, GroupSortOrderType> = new Map([
     ["playtime", { icon: <Clock/>, name: "Playtime", sortNames: ["Least-Most", "Most-Least"], } ],
     ["percent", { icon: <Percent/>, name: "Percent", sortNames: ["Least-Most", "Most-Least"], } ],
     ["song", { icon: <MusicNote/>, name: "Song name", sortNames: ["A-Z", "Z-A"], } ],
-    ["album", { icon: <User/>, name: "Artist name", sortNames: ["A-Z", "Z-A"], } ],
-    ["artist", { icon: <Disc/>, name: "Album name", sortNames: ["A-Z", "Z-A"], } ],
+    ["artist", { icon: <User/>, name: "Artist name", sortNames: ["A-Z", "Z-A"], } ],
+    ["album", { icon: <Disc/>, name: "Album name", sortNames: ["A-Z", "Z-A"], } ],
 ])
 function GroupSortSelector({ currentSort, currentGroupType, onChangeSort }: { currentSort: GroupSortOrder, currentGroupType: GroupType, onChangeSort: (updated: GroupSortOrder) => void }) {
-    const sortTypesInOrder: [string, GroupSortOrderType, GroupSortOrderItem][] = sortItemsInOrder(currentSort).map(([key, item]) => [key, sortOrderTypes.get(key)!, item])
+    const sortTypesInOrder: { id: string, sortType: GroupSortOrderType, item: GroupSortOrderItem }[] = sortItemsInOrder(currentSort).map(([key, item]) => { return { id: key, sortType: sortOrderTypes.get(key)!, item: item } })
+    
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
 
     return (
-        <div className="flex flex-col border border-neutral-200 rounded-xl">
-            { sortTypesInOrder.map(([key, sortType, item]) => {
-                const isAscending = currentSort[key as keyof GroupSortOrder].isAscending
-                return (
-                    <GroupSortItem 
-                    key={key}
-                    icon={sortType.icon} 
-                    name={sortType.name} 
-                    sortNames={sortType.sortNames} 
-                    isEnabled={true}
-                    isAscending={isAscending}
-                    canIncreasePriority={item.index > 0}
-                    canDecreasePriority={item.index < sortOrderTypes.size - 1}
-                    onInvert={() => {
+        <div className="flex flex-col border border-neutral-200 rounded-xl p-1">
+            <DndContext 
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                modifiers={[restrictToParentElement]}
+                onDragEnd={(e) => {
+                    const { active, over } = e
+                    if(active.id !== over?.id) {
+                        const oldIndex = sortTypesInOrder.findIndex(st => st.id == active.id)
+                        const newIndex = sortTypesInOrder.findIndex(st => st.id == over?.id)
+
+
+                        const newOrder = arrayMove(sortTypesInOrder, oldIndex, newIndex)
                         const updated: GroupSortOrder = { ...currentSort }
-                        updated[key as keyof GroupSortOrder].isAscending = !isAscending
+                        newOrder.forEach((st, i) => updated[st.id as keyof GroupSortOrder].index = i)
                         onChangeSort(updated)
-                    }}
-                    onIncreasePriority={() => {
-                        const currentIndex = item.index
-                        const updated: GroupSortOrder = { ...currentSort }
-                        const swapKey: string = Object.entries(currentSort).find(([key, item]) => item.index == currentIndex - 1)![0]
-                        
-                        updated[swapKey as keyof GroupSortOrder].index = currentIndex
-                        updated[key as keyof GroupSortOrder].index = currentIndex - 1
-                        onChangeSort(updated)
-                    }}
-                    onDecreasePriority={() => {
-                        const currentIndex = item.index
-                        const updated: GroupSortOrder = { ...currentSort }
-                        const swapKey: string = Object.entries(currentSort).find(([key, item]) => item.index == currentIndex + 1)![0]
-                        
-                        updated[swapKey as keyof GroupSortOrder].index = currentIndex
-                        updated[key as keyof GroupSortOrder].index = currentIndex + 1
-                        onChangeSort(updated)
-                    }}
-                />
-                )
-            })}
+                    }
+                }}
+                >
+                <SortableContext 
+                    items={sortTypesInOrder}
+                    strategy={verticalListSortingStrategy}>
+                        {sortTypesInOrder.map(st => {
+                            const { id, sortType, item } = st
+                            const isAscending = currentSort[id as keyof GroupSortOrder].isAscending
+                            return (
+                                <GroupSortItem 
+                                key={id}
+                                id={id}
+                                icon={sortType.icon} 
+                                name={sortType.name} 
+                                sortNames={sortType.sortNames} 
+                                isEnabled={true}
+                                isAscending={isAscending}
+                                canIncreasePriority={item.index > 0}
+                                canDecreasePriority={item.index < sortOrderTypes.size - 1}
+                                onInvert={() => {
+                                    const updated: GroupSortOrder = { ...currentSort }
+                                    updated[id as keyof GroupSortOrder].isAscending = !isAscending
+                                    onChangeSort(updated)
+                                }}
+                            />)
+                        })
+                    }
+                </SortableContext>
+            </DndContext>
         </div>
     )
 }
 
 interface GroupSortItemProps { 
+    id: string,
     icon: React.ReactNode, 
     name: string, 
     isAscending: boolean, 
@@ -166,23 +185,31 @@ interface GroupSortItemProps {
     canIncreasePriority: boolean,
     canDecreasePriority: boolean,
     onInvert: () => void,
-    onIncreasePriority: () => void,
-    onDecreasePriority: () => void,
 }
-function GroupSortItem({ icon, name, isAscending, sortNames, isEnabled, canIncreasePriority, canDecreasePriority, onInvert, onIncreasePriority, onDecreasePriority }: GroupSortItemProps) {
+function GroupSortItem({ id, icon, name, isAscending, sortNames, isEnabled, canIncreasePriority, canDecreasePriority, onInvert }: GroupSortItemProps) {
+    const { active, attributes, listeners, setNodeRef, transform, transition } = useSortable({id: id})
+    const style = { transform: CSS.Transform.toString(transform), transition }
+
     const [ascendingName, descendingName] = sortNames
     return (
-        <div className="flex gap-3 px-3 py-2 rounded-xl items-center w-full">
-            <div className="text-neutral-500 text-xl">{icon}</div>
-            <p className={"flex-grow" + (isEnabled ? "" : " opacity-70")}>
-                <span className="min-w-min">{name}</span>
-                <span className="text-neutral-500"> ∙ {isAscending ? ascendingName : descendingName}</span>
-            </p>
-            <div className="flex">
-                <ActionButton hideShadow icon={<ArrowsCounterClockwise/>} onClick={() => onInvert()} />
-                <ActionButton hideShadow icon={<ArrowUp/>} onClick={() => onIncreasePriority()} enabled={canIncreasePriority} />
-                <ActionButton hideShadow icon={<ArrowDown/>} onClick={() => onDecreasePriority()} enabled={canDecreasePriority} />
+        <div 
+            ref={setNodeRef}
+            className="flex gap-1 items-center w-full pr-1"
+            style={style} 
+            {...attributes}
+            >
+            <div 
+                className={"flex gap-3 px-3 py-3 rounded-xl items-center w-full " + (active?.id === undefined ? "hover:bg-neutral-100 focus:bg-neutral-100" : active.id == id ? "bg-neutral-100 ring-2 ring-offset-2 ring-neutral-200 z-10" : "")}
+                {...listeners}
+                >
+                <div className="text-neutral-500 text-xl">{icon}</div>
+                <p className={"flex-grow" + (isEnabled ? "" : " opacity-70")}>
+                    <span className="min-w-min">{name}</span>
+                    <span className="text-neutral-500"> ∙ {isAscending ? ascendingName : descendingName}</span>
+                </p>
+                <DotsSixVertical className="text-neutral-500 text-2xl"/>
             </div>
+            <ActionButton hideShadow icon={<ArrowsCounterClockwise/>} onClick={() => onInvert()} />
         </div>
     )
 }
