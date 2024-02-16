@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, FileArchive, FileZip, Spinner, Upload, Warning } from "phosphor-react-sc"
+import { ArrowLeft, FileArchive, FileZip, Info, Spinner, Upload, Warning } from "phosphor-react-sc"
 import { Button, LinkButton } from "../common/button/Button"
 import { Container } from "../common/Container"
 import { Logo } from "../common/Logo"
@@ -35,7 +35,13 @@ export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: Hist
                 <div className="flex flex-col gap-3">
                     <p className="font-serif font-semibold text-2xl tracking-tight">How it works</p>
                     <div className="flex gap-3 flex-wrap justify-stretch items-stretch">
-                        <InstructionCard stepNumber={1} link="https://www.spotify.com/us/account/privacy/">Request your <b>extended</b> streaming history from Spotify</InstructionCard>
+                        <InstructionCard 
+                            stepNumber={1} 
+                            link="https://www.spotify.com/us/account/privacy/"
+                            // widget={<ActionButton onClick={() => {}} icon={<Info className="text-green-700"/>} hideShadow className="-mt-1 hover:bg-green-200"/>}
+                            >
+                                Request your <b>extended</b> streaming history from Spotify
+                            </InstructionCard>
                         <InstructionCard stepNumber={2}>Wait ~2 weeks to receive the .zip file</InstructionCard>
                         <InstructionCard stepNumber={3}>Import it below to start exploring your data!</InstructionCard>
                     </div>

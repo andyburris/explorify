@@ -4,31 +4,30 @@ import { Container } from "@/app/common/Container"
 import { Dropdown } from "@/app/common/Dropdown"
 import { Header } from "@/app/common/Header"
 import { IconLogo } from "@/app/common/Logo"
-import { LinkButton, StaticButton } from "@/app/common/button/Button"
-import { getListens } from "@/app/data/persist/Database"
-import { HistoryEntry } from "@/app/data/model/HistoryEntry"
-import { ArrowCounterClockwise, ArrowLeft, ArrowRight, CaretDoubleDown, DotsThreeVertical, FileDashed, FloppyDiskBack, Hash, Moon, MusicNotesPlus, PencilSimple, Play, Share, SquaresFour, Upload } from "phosphor-react-sc"
-import React, { useEffect, useMemo, useState } from "react"
-import { DataTable, DisplayOperation } from "./DataTable"
-import { applyGroupOperation, applyNonGroupOperations, applyOperations } from "@/app/data/transform/Operating"
-import { LazyList } from "../../common/LazyList"
-import { OperationType, OperationsSelector } from "./filters/OperationsSelector"
-import { ActionButton } from "@/app/common/button/ActionButton"
-import nightwindHelper from "nightwind/helper"
 import { TextField } from "@/app/common/TextField"
+import { ActionButton } from "@/app/common/button/ActionButton"
+import { LinkButton, StaticButton } from "@/app/common/button/Button"
 import { hashOperations } from "@/app/data/hashing/Hashing"
-import { SaveDialog } from "./SaveDialog"
-import { Preset } from "@/app/data/model/Preset"
-import { getPresets, savePreset } from "@/app/data/persist/PresetRepository"
-import { useRouter } from "next/navigation"
-import { usePresets } from "@/app/data/utils/presetUtils"
-import { ShareDialog } from "./ShareDialog"
-import { DEBUG } from "@/app/data/utils/debug"
-import Link from "next/link"
-import { JumpTo } from "./JumpTo"
-import { it } from "node:test"
-import { Group } from "@/app/data/model/Group"
 import { Combination } from "@/app/data/model/Combination"
+import { Group } from "@/app/data/model/Group"
+import { HistoryEntry } from "@/app/data/model/HistoryEntry"
+import { Preset } from "@/app/data/model/Preset"
+import { getListens } from "@/app/data/persist/Database"
+import { savePreset } from "@/app/data/persist/PresetRepository"
+import { applyGroupOperation, applyNonGroupOperations } from "@/app/data/transform/Operating"
+import { DEBUG } from "@/app/data/utils/debug"
+import { usePresets } from "@/app/data/utils/presetUtils"
+import { useRouter } from "next/navigation"
+import nightwindHelper from "nightwind/helper"
+import { ArrowCounterClockwise, ArrowLeft, CaretDoubleDown, DotsThreeVertical, FloppyDiskBack, Hash, Moon, PencilSimple, Play, Share, SquaresFour } from "phosphor-react-sc"
+import { useEffect, useMemo, useState } from "react"
+import { LazyList } from "../../common/LazyList"
+import { DataTable, DisplayOperation } from "./DataTable"
+import { JumpTo } from "./JumpTo"
+import { SaveDialog } from "./SaveDialog"
+import { ShareDialog } from "./ShareDialog"
+import { OperationType, OperationsSelector } from "./filters/OperationsSelector"
+import { EmptyData } from "./item/EmptyData"
 
 export function PresetPage({ initialPreset, isShared, customizeInitial }: { initialPreset: Preset, isShared: boolean, customizeInitial?: boolean }) {
     const router = useRouter()
@@ -190,39 +189,5 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
             : <DataTable groups={filtered} operations={customizedPreset.operations} header={header} scrollToItem={scrollToItem}/> 
             }
         </Container>
-    )
-}
-
-function EmptyData() {
-    return (
-        <div className="flex flex-col gap-6 p-6 rounded-3xl bg-white shadow-outset">
-            <div className="flex flex-col gap-4">
-                <MusicNotesPlus weight="duotone" className="text-neutral-500 text-3xl"/>
-                <div className="flex flex-col">
-                    <p className="font-serif font-semibold text-3xl tracking-tight">You haven’t imported your listens yet</p>
-                    <p className="text-neutral-500">To explore your listening history in Quantify, you need to request and download your extended listening history from Spotify. It takes ~2 weeks to receive your data.</p>
-                </div>
-            </div>
-            <div className="flex flex-col gap-4">
-                <a href="https://www.spotify.com/us/account/privacy/">
-                    <EmptyDataButton icon={<FileDashed/>} title="Don’t have your listening history?" description={<p>Request it from Spotify here. Be sure to request your <strong>extended</strong> listening history.</p>}/>
-                </a>
-                <Link href="/">
-                    <EmptyDataButton icon={<Upload/>} title="Already have your listening history?" description={<p>Import your .zip file to Quantify!</p>}/>
-                </Link>
-            </div>
-        </div>
-    )
-}
-function EmptyDataButton({ icon, title, description }: { icon: React.ReactNode, title: string, description: React.ReactNode }) {
-    return (
-        <div className="flex items-center gap-4 p-4 bg-green-50 border border-green-200 rounded-2xl text-green-700 cursor-pointer">
-            <div className="flex-shrink-0">{icon}</div>
-            <div className="text-green-900 flex-shrink w-full">
-                <p className="font-serif font-semibold text-2xl tracking-tight">{title}</p>
-                {description}
-            </div>
-            <ArrowRight className="flex-shrink-0" />
-        </div>
     )
 }
