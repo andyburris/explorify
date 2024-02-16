@@ -65,13 +65,14 @@ export function EditPresets({ presets, open, onOpenChange, onPresetOrderChange, 
 
 function EditPresetItem({ preset, id, index, onDelete }: { preset: Preset, id: string, index: number, onDelete: () => void }) {
     const { active, attributes, listeners, setNodeRef, transform, transition } = useSortable({id: id})
-    const style = { transform: CSS.Transform.toString(transform), transition }
+    const noScaleY = transform ? { ...transform, scaleY: 1 } : null
+    const style = { transform: CSS.Transform.toString(noScaleY), transition }
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     return (
         <div 
             ref={setNodeRef} 
-            className="flex items-center gap-3 pr-4"
+            className="flex items-center gap-3 pr-4 touch-none"
             style={style} 
             {...attributes} 
             >
@@ -87,7 +88,7 @@ function EditPresetItem({ preset, id, index, onDelete }: { preset: Preset, id: s
                         <p className="font-semibold">{preset.name}</p>
                         <p className="text-neutral-500 line-clamp-1">{preset.description}</p>
                     </div>
-                    <DotsSixVertical className="text-neutral-900 text-2xl"/>
+                    <DotsSixVertical className="text-neutral-900 text-2xl flex-shrink-0"/>
                 </div>
                 <ActionButton icon={<Trash/>} onClick={() => setDeleteDialogOpen(true)} className="flex-shrink-0 z-20" />
                 <CommonDialog title="Delete preset?" open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

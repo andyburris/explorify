@@ -188,7 +188,8 @@ interface GroupSortItemProps {
 }
 function GroupSortItem({ id, icon, name, isAscending, sortNames, isEnabled, canIncreasePriority, canDecreasePriority, onInvert }: GroupSortItemProps) {
     const { active, attributes, listeners, setNodeRef, transform, transition } = useSortable({id: id})
-    const style = { transform: CSS.Transform.toString(transform), transition }
+    const noScaleY = transform ? { ...transform, scaleY: 1 } : null
+    const style = { transform: CSS.Transform.toString(noScaleY), transition }
 
     const [ascendingName, descendingName] = sortNames
     return (
