@@ -11,7 +11,6 @@ import { TextField } from "../common/TextField";
 export function ManageData({ open, onOpenChange }: DialogProps) {
     const router = useRouter()
 
-    const [testDelay, setTestDelay] = useState(250)
     const [deleteInProgress, setDeleteInProgress] = useState(false)
     return (
         <CommonDialog
@@ -19,7 +18,6 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
             open={open}
             onOpenChange={onOpenChange}
         >
-            <TextField currentValue={testDelay.toString()} onChangeValue={v => setTestDelay(parseInt(v))} placeholder="Delay"/>
             <DataSection
                 title="Import new listens"
                 description="If you've exported new data from Spotify, you can reimport a new .zip file"
@@ -42,7 +40,7 @@ export function ManageData({ open, onOpenChange }: DialogProps) {
                         onClick={async () => {
                             setDeleteInProgress(true)
                             clearListens()
-                            .then(() => new Promise(resolve => setTimeout(resolve, testDelay)))
+                            .then(() => new Promise(resolve => setTimeout(resolve, 5000)))
                             .then(() => router.push("/"))
                         }}
                         />
