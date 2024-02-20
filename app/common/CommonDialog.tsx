@@ -24,7 +24,7 @@ export function CommonDialog({ title, open, onOpenChange, widgets, children }: C
                                     <p className="font-serif font-bold tracking-tight text-4xl flex-grow">{title}</p>
                                     {widgets}
                                 </div>
-                                <ActionButton className="shadow-none hover:bg-neutral-100 flex-shrink-0" onClick={() => onOpenChange(false)} icon={<X/>} />
+                                <ActionButton className="flex-shrink-0" onClick={() => onOpenChange(false)} icon={<X/>} />
                             </div>
                         </div>
                         {children}

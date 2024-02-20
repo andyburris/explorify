@@ -3,7 +3,7 @@ import { PickedIcon } from "./PickedIcon";
 
 export function Logo() {
     return (
-        <div className="w-8 h-8 flex items-center justify-center bg-green-600 text-white rounded-lg nightwind-prevent nightwind-prevent-block">
+        <div className="w-8 h-8 flex flex-shrink-0 items-center justify-center bg-green-600 text-white rounded-lg nightwind-prevent nightwind-prevent-block">
             <Binoculars weight="duotone" size="24px"/>
         </div>
     )
