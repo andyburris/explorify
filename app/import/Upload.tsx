@@ -29,7 +29,7 @@ export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: Hist
                 }
                 <Header 
                     icon={<Logo/>} 
-                    title="Quantize" 
+                    title="Quantify" 
                     description="Take a deep dive into your entire Spotify streaming history"
                 />
                 <div className="flex flex-col gap-3">

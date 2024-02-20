@@ -28,7 +28,7 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
         <Container>
             <Header
                 icon={<Logo/>}
-                title="Quantize"
+                title="Quantify"
                 // description="by Lyrical"
                 actions={
                     <div className="flex gap-3 flex-wrap">

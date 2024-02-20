@@ -23,7 +23,7 @@ export async function generateMetadata(
     }
    
     return {
-      title: `${preset.name} • Quantize`,
+      title: `${preset.name} • Quantify`,
       description: `${preset.description}`,
     }
   }  

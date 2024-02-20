@@ -16,7 +16,7 @@ const libreCaslonCondensed = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Quantize',
+  title: 'Quantify',
   description: 'Explore your Spotify extended streaming history',
 }
 
