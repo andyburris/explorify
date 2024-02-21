@@ -32,7 +32,10 @@ function toIndividuals(type: GroupType): GroupTypeIndividual[] {
 export function GroupOperationSelector({ currentOperation, onChangeOperation }: { currentOperation: GroupOperation, onChangeOperation: (newFilter: GroupOperation) => void }) {
     return (
         <div className="flex flex-col gap-6">
-            <OperationSection title="Group by">
+            <OperationSection 
+                title="Group by"
+                description={`You can create groups based on multiple criteria. A traditional date would be "Date of Month", "Month", and "Year", but you could also group solely by month to aggregate data from each month across years, for example.`}
+                >
                 <Combobox
                     options={[
                         { value: GroupTypeIndividual.Hour, label: "Hour", key: "Hour", icon: <Clock/> },
@@ -50,7 +53,10 @@ export function GroupOperationSelector({ currentOperation, onChangeOperation }: 
                     onSelectValues={n => onChangeOperation({ ...currentOperation, groupBy: fromIndividuals(n)})}
                 />
             </OperationSection>
-            <OperationSection title="Combine by">
+            <OperationSection 
+                title="Combine by"
+                description={`Combine the same song or songs by the same artist into one entry. You can either combine within each group, or across each group. You can also choose to have the entry that they combine into be the earliest or latest entry. For example, combining across groups into the earliest entry will show all listens for a given song in the group of the first time you listened to it.`}
+                >
                 <ResponsiveControl 
                     items={[
                         { value: CombineType.None, label: "None", key: "None", icon: <List/> },

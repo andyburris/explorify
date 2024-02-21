@@ -21,11 +21,12 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
                         key={item.title} 
                         onClick={item.onClick !== undefined ? () => item.onClick?.() : undefined}
                         disabled={item.onClick === undefined}
-                        asChild={item.linkPath !== undefined}
+                        // asChild={item.linkPath !== undefined}
                         className="outline-none focus:bg-neutral-100 rounded-xl"
                     >
                         { item.linkPath &&
                             <Link href={item.linkPath}><ItemContent item={item}/></Link>
+                            // <ItemContent item={item}/>
                         }
                         { item.linkPath === undefined &&
                             <ItemContent item={item}/>

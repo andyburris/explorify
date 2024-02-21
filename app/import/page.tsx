@@ -1,9 +1,9 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import { UploadPage } from "./Upload";
+import { ImportPage } from "./ImportPage";
 
 export default function ReuploadPage() {
     const router = useRouter()
-    return (<UploadPage hasExisting  onUpload={() => router.push("/")}/>)
+    return (<ImportPage hasExisting  onUpload={() => router.push("/")}/>)
 }

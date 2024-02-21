@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PickedIcon } from "../common/PickedIcon"
 import { Preset } from "../data/model/Preset"
 import { Play } from "phosphor-react-sc"
@@ -25,9 +25,17 @@ export function LandingPreview({ overlayContent, className }: { overlayContent: 
 export function PresetScreenPreview({  }: {  }) {
     const [currentPreset, setCurrentPreset] = useState(defaultPresets[0])
     const nextPreset = defaultPresets.filter(p => p.id != currentPreset.id)[Math.floor(Math.random() * (defaultPresets.length - 1))]
+    useEffect(() => {
+        const intervalID = setInterval(() =>  {
+            setCurrentPreset(() => nextPreset)
+        }, 1000);
+    
+        return () => clearInterval(intervalID);
+    }, [currentPreset]);
+    
 
     return (
-        <div className="flex flex-col gap-8 shadow-outset rounded-3xl p-6 pt-12">
+        <div className="flex flex-col gap-8 shadow-outset dark:bg-neutral-100 rounded-3xl p-6 pt-12">
             <div className="flex flex-col items-start gap-4">
                 <Switcher
                     current={<PickedIcon iconName={currentPreset.icon} weight="duotone" className="text-2xl text-green-700"/>}
@@ -69,16 +77,16 @@ function Switcher({ current, next, className, onSwitch }: { current: React.React
 function PreviewListItem({ index }: { index: number }) {
     return (
         <div className="flex items-center gap-3 w-full">
-            <div className="w-8 h-8 flex items-center justify-center bg-neutral-100 rounded-lg text-neutral-500 flex-shrink-0">
+            <div className="w-8 h-8 flex items-center justify-center bg-neutral-100 dark:bg-neutral-200 rounded-lg text-neutral-500 flex-shrink-0">
                 {index + 1}
             </div>
             <div className="flex flex-col gap-1 w-full">
-                <div className="h-4 rounded-full w-full max-w-64 bg-neutral-100"></div>
-                <div className="h-4 rounded-full w-full max-w-32 bg-neutral-100"></div>
+                <div className="h-4 rounded-full w-full max-w-64 bg-neutral-100 dark:bg-neutral-200"></div>
+                <div className="h-4 rounded-full w-full max-w-32 bg-neutral-100 dark:bg-neutral-200"></div>
             </div>
-            <div className="flex items-center gap-1 py-1 px-2 rounded-full bg-neutral-100">
-                <p className="text-neutral-400">123</p>
-                <Play className="text-lg text-neutral-400"/>
+            <div className="flex items-center gap-1 py-1 px-2 rounded-full bg-neutral-100 dark:bg-neutral-200">
+                <p className="text-neutral-500">123</p>
+                <Play className="text-lg text-neutral-500"/>
             </div>
         </div>
     )

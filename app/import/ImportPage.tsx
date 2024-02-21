@@ -15,7 +15,7 @@ import { DATABASE_NAME, LISTENS_STORE_NAME, getDatabase, saveListens } from "../
 import { InstructionCard } from "./InstructionCard"
 import { getPresets, saveDefaultPresets } from "../data/persist/PresetRepository"
 
-export function UploadPage({ onUpload, hasExisting }: { onUpload: (entries: HistoryEntry[], rememberHistory: boolean) => void, hasExisting: boolean }) {
+export function ImportPage({ onUpload, hasExisting }: { onUpload: (entries: HistoryEntry[], rememberHistory: boolean) => void, hasExisting: boolean }) {
     const [file, setFile] = useState<File | undefined>(undefined)
     const [isProcessing, setProcessing] = useState(false)
     const [isError, setError] = useState(false)

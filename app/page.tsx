@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { UploadPage } from './import/Upload'
+import { ImportPage } from './import/ImportPage'
 import { HistoryEntry } from './data/model/HistoryEntry';
 import { HomePage } from './home/HomePage';
 import { getListens } from './data/persist/Database';
@@ -19,7 +19,7 @@ export default function Home() {
     return (<LoadingPage/>)
   } else if(loadedEntries.length <= 0) {
     return (
-      <UploadPage hasExisting={false} onUpload={(entries, rememberHistory) => {
+      <ImportPage hasExisting={false} onUpload={(entries, rememberHistory) => {
         console.log(`uploaded ${entries.length} entries`)
         setSavedPresets(getPresets())
         setLoadedEntries(entries)

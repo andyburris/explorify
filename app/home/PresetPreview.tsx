@@ -22,7 +22,7 @@ export function PresetPreview({ preset, listens }: { preset: Preset, listens: Hi
     }, [])
 
     return (
-        <Link href={`/view/${preset.id}`} className="flex flex-col rounded-2xl shadow-outset bg-white overflow-hidden cursor-pointer">
+        <Link href={`/view/${preset.id}`} className="flex flex-col rounded-2xl shadow-outset bg-white dark:bg-neutral-100 overflow-hidden cursor-pointer">
             <div className="flex flex-col gap-3 p-4 bg-green-600 text-green-50 pt-12 justify-end flex-grow nightwind-prevent nightwind-prevent-block">
                 <PickedIcon iconName={preset.icon} size="24px"/>
                 <div className="flex flex-col">
@@ -33,11 +33,11 @@ export function PresetPreview({ preset, listens }: { preset: Preset, listens: Hi
             { previewItems == null
                 ? (
                     <div className="flex flex-col p-4 gap-3">
-                        <div className="w-full h-6 rounded-full bg-neutral-100"></div>
-                        <div className="w-full h-6 rounded-full bg-neutral-100"></div>
-                        <div className="w-full h-6 rounded-full bg-neutral-100"></div>
+                        <div className="w-full h-6 rounded-full bg-neutral-100 dark:bg-neutral-200"></div>
+                        <div className="w-full h-6 rounded-full bg-neutral-100 dark:bg-neutral-200"></div>
+                        <div className="w-full h-6 rounded-full bg-neutral-100 dark:bg-neutral-200"></div>
                         <div className="h-0">
-                            <div className="w-full h-6 rounded-full bg-neutral-100"></div>
+                            <div className="w-full h-6 rounded-full bg-neutral-100 dark:bg-neutral-200"></div>
                         </div>
                     </div>
                 ) : (

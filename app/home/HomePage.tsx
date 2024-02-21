@@ -1,4 +1,4 @@
-import { ArrowBendUpLeft, ArrowCounterClockwise, DotsThreeVertical, ListPlus, Moon, Pencil, Trash, TrashSimple, Upload } from "phosphor-react-sc";
+import { AirplaneLanding, ArrowBendUpLeft, ArrowCounterClockwise, DotsThreeVertical, ListPlus, Moon, Pencil, Trash, TrashSimple, Upload } from "phosphor-react-sc";
 import { Container } from "../common/Container";
 import { Header } from "../common/Header";
 import { Logo } from "../common/Logo";
@@ -36,7 +36,7 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                             <p>{`${listens.length.toLocaleString()} play${listens.length == 0 ? "" : "s"}`}</p>
                         </div>
                         <Dropdown
-                            trigger={<StaticButton text={undefined} icon={<DotsThreeVertical size="24px"/>}/>}
+                            trigger={<StaticButton icon={<DotsThreeVertical size="24px"/>}/>}
                             menuItems={[
                                 {
                                     icon: <Pencil size="24px"/>,
@@ -47,6 +47,11 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                                     icon: <Upload size="24px"/>,
                                     title: "Manage data",
                                     onClick: () => { setManageDataOpen(true) }
+                                },
+                                {
+                                    icon: <AirplaneLanding size="24px"/>,
+                                    title: "Landing",
+                                    linkPath: "/landing",
                                 },
                                 {
                                     icon: <Moon size="24px"/>,
