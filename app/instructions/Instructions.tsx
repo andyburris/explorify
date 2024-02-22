@@ -55,7 +55,7 @@ function InstructionItem({ index, last, title, text, link, }: { index: number, l
             </div>
             <div className={"flex flex-col justify-center w-full gap-3 min-h-14 " + (last ? "" : "pb-6")}>
                 <div className="flex flex-col gap-0.5 w-full text-neutral-600">
-                    <p className="font-semibold text-neutral-950">{title}</p>
+                    <p className="font-semibold text-neutral-900">{title}</p>
                     { text && text }
                 </div>
                 { link?.link && 

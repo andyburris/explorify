@@ -36,7 +36,7 @@ export function ShareDialog({ preset, open, onOpenChange }: { preset: Preset, op
                 {/* <p className="text-green-700">Link</p> */}
                 <p className="">
                     <span className="text-green-700">{domain}</span>
-                    <span className="text-green-950 font-semibold break-all">{hash}</span>
+                    <span className="text-green-900 font-semibold break-all">{hash}</span>
                 </p>
                 {/* <ActionButton hideShadow onClick={() => setIncludeDetails(!includeDetails)} icon={<Info/>} /> */}
             </div>
