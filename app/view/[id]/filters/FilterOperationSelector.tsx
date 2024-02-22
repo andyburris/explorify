@@ -3,8 +3,14 @@ import { ArrowsInLineVertical, ArrowsOutLineVertical, Calendar, CalendarBlank, C
 import { OperationSection, ResponsiveControl } from "./OperationsSelector";
 import { TextField } from "@/app/common/TextField";
 import { Combobox } from "@/app/common/components/ui/combobox";
+import { useCallback, useEffect, useState } from "react";
 
 export function FilterOperationSelector({ currentOperation, onChangeOperation }: { currentOperation: FilterOperation, onChangeOperation: (newFilter: FilterOperation) => void }) {
+    const [searchTerm, setSearchTerm] = useState(currentOperation.searchTerm)
+    const [minPlaysTerm, setMinPlaysTerm] = useState(currentOperation.minimumGroupPlays == 0 ? "" : `${currentOperation.minimumGroupPlays}`)
+    useEffect(() => onChangeOperation({ ...currentOperation, searchTerm: searchTerm}), [searchTerm])
+    useEffect(() => onChangeOperation({ ...currentOperation, minimumGroupPlays: Number.isNaN(parseInt(minPlaysTerm)) ? currentOperation.minimumGroupPlays : parseInt(minPlaysTerm)}))
+  
     return (
         <div className="flex flex-col gap-6">
             <OperationSection title="Filter skips by" description="Spotify counts skips as songs you played for less than 30 seconds">
@@ -21,15 +27,19 @@ export function FilterOperationSelector({ currentOperation, onChangeOperation }:
             <OperationSection title="Minimum group plays" description="Hide groups with less than the given amount of plays (not including plays filtered out by skips and search).">
                 <TextField 
                     placeholder="0" 
-                    currentValue={currentOperation.minimumGroupPlays > 0 ? `${currentOperation.minimumGroupPlays}` : ""}
-                    onChangeValue={v => onChangeOperation({ ...currentOperation, minimumGroupPlays: parseInt(v) ?? currentOperation.minimumGroupPlays}) }    
+                    currentValue={minPlaysTerm}
+                    onChangeValue={v => {
+                        const asInt = parseInt(v)
+                        const isValid = !Number.isNaN(asInt) || v == ""
+                        setMinPlaysTerm(isValid ? v : minPlaysTerm)
+                     } }    
                 />
             </OperationSection>
             <OperationSection title="Search by">
                 <TextField 
                     placeholder="Search..." 
-                    currentValue={currentOperation.searchTerm}
-                    onChangeValue={v => onChangeOperation({ ...currentOperation, searchTerm: v}) }    
+                    currentValue={searchTerm}
+                    onChangeValue={v => setSearchTerm(v) }    
                 />
                 <ResponsiveControl 
                     items={[
