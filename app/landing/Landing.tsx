@@ -68,7 +68,7 @@ export function LandingPage() {
                         illustration={<div className="flex flex-col items-center justify-center h-full p-3 gap-3">
                             <div className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-200 group-hover:bg-green-50 border border-neutral-200 group-hover:border-green-100 transition-colors">
                                 <div className="p-4 rounded-full bg-neutral-200 dark:bg-neutral-300 group-hover:bg-green-100 border border-neutral-300 group-hover:border-green-200 transition-colors">
-                                    <StaticButton icon={<Upload/>} text="Import" className="bg-neutral-500 text-neutral-50 group-hover:bg-green-600 group-hover:text-green-50" />
+                                    <StaticButton icon={<Upload/>} text="Import" className="!bg-neutral-600 !text-neutral-50 group-hover:!bg-green-600 group-hover:!text-green-50" />
                                 </div>
                             </div>
                         </div>}
