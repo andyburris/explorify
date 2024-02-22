@@ -1,17 +1,14 @@
-"use client"
-
-import { ArrowRight, ArrowsOutLineHorizontal, ArrowsOutLineVertical, Calendar, CalendarBlank, Clock, Globe, List, ListNumbers, MagnifyingGlass, MusicNote, Percent, Play, SkipForward, SortAscending, Upload, User } from "phosphor-react-sc";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, ArrowsOutLineVertical, Calendar, CalendarBlank, Clock, Globe, List, ListNumbers, MagnifyingGlass, MusicNote, Percent, Play, SkipForward, SortAscending, Upload, User } from "phosphor-react-sc";
+import { CalloutCard } from "../common/CalloutCard";
 import { Container } from "../common/Container";
 import { Logo } from "../common/Logo";
-import { Button, LinkButton, StaticButton } from "../common/button/Button";
-import { LandingPreview, PresetScreenPreview } from "./LandingPreview";
-import { defaultPresets } from "../data/Defaults";
-import Link from "next/link";
-import { LandingCard } from "./LandingCard";
-import Image from "next/image";
-import { CalloutCard } from "../common/CalloutCard";
 import { PickedIcon } from "../common/PickedIcon";
-import { Instructions } from "../instructions/Instructions";
+import { LinkButton, StaticButton } from "../common/button/Button";
+import { defaultPresets } from "../data/Defaults";
+import { LandingCard } from "./LandingCard";
+import { LandingPreview } from "./LandingPreview";
 
 export function LandingPage() {
     return (

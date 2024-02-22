@@ -1,9 +1,8 @@
-import { ArrowLeft, ArrowRight, ListNumbers, Path, Upload } from "phosphor-react-sc";
+import { ArrowLeft, ListNumbers } from "phosphor-react-sc";
 import { Container } from "../common/Container";
-import { LinkButton } from "../common/button/Button";
 import { Header } from "../common/Header";
 import { IconLogoStatic } from "../common/Logo";
-import { CalloutCard } from "../common/CalloutCard";
+import { LinkButton } from "../common/button/Button";
 import { Instructions } from "./Instructions";
 
 export default function InstructionsPage() {

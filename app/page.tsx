@@ -1,30 +1,13 @@
-"use client"
-
-import { useEffect, useState } from 'react'
-import { ImportPage } from './import/ImportPage'
-import { HistoryEntry } from './data/model/HistoryEntry';
-import { HomePage } from './home/HomePage';
-import { getListens, hasListens } from './data/persist/Database';
-import { LoadingPage } from './home/LoadingPage';
-import { getPresets, saveDefaultPresets } from './data/persist/PresetRepository';
-import { Preset } from './data/model/Preset';
-import { usePresetState, usePresets } from './data/utils/presetUtils';
+import { cookies } from "next/headers"
 import { LandingPage } from './landing/Landing';
+import { HomePageLayout } from "./home/HomePageLayout";
+import { HAS_LISTENS_NAME } from "./data/persist/Database";
 
-export default function Home() {
-  const hasEntries = hasListens()
-  const [loadedEntries, setLoadedEntries] = useState<HistoryEntry[] | undefined>();
-  useEffect(() => { getListens().then(entries => setLoadedEntries(entries))}, [])
-  const savedPresets = usePresets()
+export default function MainPage() {
+  const hasEntries = cookies().has(HAS_LISTENS_NAME) && cookies().get(HAS_LISTENS_NAME)?.value == "1"
+  console.log(`hasEntries = ${hasEntries}, allCookies = ${cookies().getAll()}`)
 
-  if(!hasEntries) {
-    return <LandingPage/>
-  } else if (loadedEntries === undefined || savedPresets === undefined) {
-    return (<LoadingPage/>)
-  } else {
-    return (
-      <HomePage listens={loadedEntries} presets={savedPresets} />
-    )
-  }
-
+  return (hasEntries)
+    ? <HomePageLayout/>
+    : <LandingPage/>
 }

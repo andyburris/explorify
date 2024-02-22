@@ -3,6 +3,7 @@ import { HistoryEntry } from '../model/HistoryEntry';
 
 export const DATABASE_NAME = "spotify-data-explorer"
 export const LISTENS_STORE_NAME = "listens"
+export const HAS_LISTENS_NAME = "hasListens"
 
 export function getDatabase() {
     const start = Date.now()
@@ -34,7 +35,6 @@ export function getDatabase() {
     })
 }
 
-export function hasListens(): boolean { return localStorage["entriesLoaded"] ?? false }
 export function getListens() {
     const start = Date.now()
     return getDatabase()
@@ -59,7 +59,7 @@ export function saveListens(listens: HistoryEntry[]) {
             transaction.commit()
         })
         .then(_ => {
-            localStorage["entriesLoaded"] = true
+            document.cookie = `${HAS_LISTENS_NAME}=1`
             console.log(`saving entries took ${(Date.now() - start)}ms`)
         })
 }
@@ -72,7 +72,7 @@ export async function clearListens() {
             return db
         })
         .then(_ => {
-            localStorage.removeItem("entriesLoaded")
+            document.cookie = `${HAS_LISTENS_NAME}=0`
             console.log(`clear entries took ${(Date.now() - start)}ms`)
         })
 }
