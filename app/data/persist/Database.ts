@@ -34,6 +34,7 @@ export function getDatabase() {
     })
 }
 
+export function hasListens(): boolean { return localStorage["entriesLoaded"] ?? false }
 export function getListens() {
     const start = Date.now()
     return getDatabase()
@@ -58,6 +59,7 @@ export function saveListens(listens: HistoryEntry[]) {
             transaction.commit()
         })
         .then(_ => {
+            localStorage["entriesLoaded"] = true
             console.log(`saving entries took ${(Date.now() - start)}ms`)
         })
 }
@@ -70,6 +72,7 @@ export async function clearListens() {
             return db
         })
         .then(_ => {
+            localStorage.removeItem("entriesLoaded")
             console.log(`clear entries took ${(Date.now() - start)}ms`)
         })
 }

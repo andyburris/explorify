@@ -33,16 +33,13 @@ export function DataTable({ groups, operations, header, scrollToItem }: { groups
 
   let scrollToIndex = undefined
   if(scrollToItem !== undefined) {
-    console.log(`finding index for scrollToItem = ${scrollToItem}`)
     if(scrollToItem instanceof Group) {
       scrollToIndex = flattened.findIndex(li => (li instanceof GroupData) && li.group == scrollToItem)
-      console.log(`found index = ${scrollToIndex}`)
     } else {
       const combinationParentGroup = groups.find(g => g.combinations.includes(scrollToItem))
       if(combinationParentGroup) {
         if(!expandedGroups.includes(combinationParentGroup)) setExpandedGroups([...expandedGroups, combinationParentGroup])
         scrollToIndex = flattened.findIndex(li => (li instanceof IndexedCombination) && li.combination == scrollToItem)
-        console.log(`found index = ${scrollToIndex}`)
       }
     }
   }

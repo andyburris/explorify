@@ -4,32 +4,26 @@ import { useEffect, useState } from 'react'
 import { ImportPage } from './import/ImportPage'
 import { HistoryEntry } from './data/model/HistoryEntry';
 import { HomePage } from './home/HomePage';
-import { getListens } from './data/persist/Database';
+import { getListens, hasListens } from './data/persist/Database';
 import { LoadingPage } from './home/LoadingPage';
 import { getPresets, saveDefaultPresets } from './data/persist/PresetRepository';
 import { Preset } from './data/model/Preset';
 import { usePresetState, usePresets } from './data/utils/presetUtils';
+import { LandingPage } from './landing/Landing';
 
 export default function Home() {
+  const hasEntries = hasListens()
   const [loadedEntries, setLoadedEntries] = useState<HistoryEntry[] | undefined>();
   useEffect(() => { getListens().then(entries => setLoadedEntries(entries))}, [])
-  const [savedPresets, setSavedPresets] = usePresetState()
+  const savedPresets = usePresets()
 
-  if (loadedEntries === undefined || savedPresets === undefined) {
+  if(!hasEntries) {
+    return <LandingPage/>
+  } else if (loadedEntries === undefined || savedPresets === undefined) {
     return (<LoadingPage/>)
-  } else if(loadedEntries.length <= 0) {
-    return (
-      <ImportPage hasExisting={false} onUpload={(entries, rememberHistory) => {
-        console.log(`uploaded ${entries.length} entries`)
-        setSavedPresets(getPresets())
-        setLoadedEntries(entries)
-      }}/>
-    )
   } else {
     return (
-      <HomePage listens={loadedEntries} presets={savedPresets} onClear={() => { 
-        // clearListens()
-      }}/>
+      <HomePage listens={loadedEntries} presets={savedPresets} />
     )
   }
 

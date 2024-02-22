@@ -9,6 +9,14 @@ export function Logo() {
     )
 }
 
+export function IconLogoStatic({ icon }: { icon: React.ReactNode }) {
+    return (
+        <div className="w-8 h-8 flex items-center justify-center bg-green-600 text-white rounded-lg text-2xl nightwind-prevent nightwind-prevent-block">
+            {icon}
+        </div>
+    )
+}
+
 export function IconLogo({ iconName }: { iconName: string }) {
     return (
         <div className="w-8 h-8 flex items-center justify-center bg-green-600 text-white rounded-lg text-2xl nightwind-prevent nightwind-prevent-block">

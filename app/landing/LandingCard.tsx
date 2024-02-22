@@ -16,6 +16,7 @@ export function LandingCard(
             <div className="relative overflow-hidden h-full">
                 {illustration}
                 <p className="absolute bottom-1 left-6 z-20 font-serif text-2xl font-semibold">{index + 1}.</p> 
+                { (hideGradient != true) && <div className="absolute bottom-0 left-0 w-full h-[20%] backdrop-blur-md [mask:linear-gradient(transparent,white_99%)]"></div> }
                 { (hideGradient != true) && <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-white dark:from-neutral-100 to-transparent"></div> }
             </div>
             <div className="flex flex-col p-6 pt-1 gap-4">

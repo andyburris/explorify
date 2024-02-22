@@ -5,5 +5,5 @@ import { ImportPage } from "./ImportPage";
 
 export default function ReuploadPage() {
     const router = useRouter()
-    return (<ImportPage hasExisting  onUpload={() => router.push("/")}/>)
+    return (<ImportPage onUpload={() => router.push("/")}/>)
 }

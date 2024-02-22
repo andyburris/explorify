@@ -18,7 +18,7 @@ import { ManageData } from "./ManageData";
 import { DEBUG } from "../data/utils/debug";
 import { EditPresets } from "./EditPresets";
 
-export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[], presets: Preset[], onClear: () => void }) {
+export function HomePage({ listens, presets }: { listens: HistoryEntry[], presets: Preset[] }) {
     const router = useRouter()
     
     const [orderedPresets, setOrderedPresets] = useState(presets)
@@ -47,11 +47,6 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
                                     icon: <Upload size="24px"/>,
                                     title: "Manage data",
                                     onClick: () => { setManageDataOpen(true) }
-                                },
-                                {
-                                    icon: <AirplaneLanding size="24px"/>,
-                                    title: "Landing",
-                                    linkPath: "/landing",
                                 },
                                 {
                                     icon: <Moon size="24px"/>,
@@ -86,7 +81,7 @@ export function HomePage({ listens, presets, onClear }: { listens: HistoryEntry[
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8">
                 {orderedPresets.map((preset) => <PresetPreview key={preset.name} preset={preset} listens={listens} />)}
                 <Link 
-                    className="flex flex-col p-6 gap-2 min-h-[256px] justify-center items-center bg-neutral-50 border border-neutral-200 text-neutral-500 rounded-2xl" 
+                    className="flex flex-col p-6 gap-2 min-h-[256px] justify-center items-center bg-neutral-50 dark:bg-neutral-100 border border-neutral-200 text-neutral-500 rounded-2xl" 
                     href="/customize"
                     scroll={true}
                 >
