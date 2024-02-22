@@ -24,7 +24,7 @@ const config: Config = {
         white: "neutral.900",
         neutral: {
           50: "neutral.900",
-          500: "neutral.300"
+          500: "neutral.400"
         },
         // green: {
         //   50: "green.50",

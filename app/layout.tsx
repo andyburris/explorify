@@ -13,6 +13,7 @@ const libreCaslonCondensed = localFont({
   src: './theme/fonts/LibreCaslonCondensed.ttf',
   display: 'swap',
   variable: "--libre-caslon-condensed",
+  weight: "100 900",
 })
 
 export const metadata: Metadata = {
