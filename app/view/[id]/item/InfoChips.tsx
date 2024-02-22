@@ -34,7 +34,7 @@ export function InfoContent({ combinationOrGroup, infoType }: { combinationOrGro
         case InfoType.Plays: 
             return <div className="flex gap-0.5 items-center">
                 <p>
-                    <span className="">{combinationOrGroup.visiblePlays}</span>
+                    <span className="">{combinationOrGroup.visiblePlays.toLocaleString()}</span>
                     <span className="text-neutral-500 max-sm:hidden">{combinationOrGroup.visiblePlays == 1 ? " play" : " plays"}</span>
                 </p>
                 <Play className="sm:hidden" size="16px" weight="bold"/>

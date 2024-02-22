@@ -55,7 +55,7 @@ export enum SkipFilterType { All, NoSkips, OnlySkips }
 export enum SearchType { All, SongName, ArtistName, AlbumName }
 export interface FilterOperation {
     filterSkipsBy: SkipFilterType,
-    minimumPlays: number,
+    minimumGroupPlays: number,
     searchTerm: string,
     searchBy: SearchType,
 }

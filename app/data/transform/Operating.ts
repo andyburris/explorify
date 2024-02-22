@@ -5,43 +5,26 @@ import { Combination, ArtistCombination, TrackCombination } from "../model/Combi
 import { applySort } from "./Sorting";
 import { Listen, ViewState } from "../model/Listen";
 
-function toGroupKey(listen: HistoryEntry, type: GroupType): GroupKey {
-    return new GroupKey(
-        type.hour ? listen.timestamp.getHours() : null,
-        type.dayOfWeek ? listen.timestamp.getDay() : null,
-        type.date ? listen.timestamp.getDate() : null,
-        type.month ? listen.timestamp.getMonth() : null,
-        type.year ? listen.timestamp.getFullYear() : null,
-        type.artist ? listen.artistName : null,
-        type.song ? listen.trackName : null,
-        type.album ? listen.albumName : null,
-    )
+const DIVIDER = "᭺"
+
+function toListen(entry: HistoryEntry): Listen { return { 
+    ...entry, 
+    hiddenSkip: false, 
+    hiddenSearched: false, 
+    trackName: entry.trackName.replaceAll(DIVIDER, ""),
+    artistName: entry.artistName.replaceAll(DIVIDER, ""),
+    albumName: entry.albumName.replaceAll(DIVIDER, ""),
+ } }
+export function applyOperations(entries: HistoryEntry[], operations: Operations): Group[] {
+    const listens = entries.map(toListen)
+    applyFilters(listens, operations.filter)
+    // const groups = groupItems(listens, operations.group)
+    const groups = groupAndCombineItems(listens, operations.group)
+    applyPercents(groups, operations.info) 
+    const filteredHidden = filterHidden(groups, operations.filter.minimumGroupPlays)
+    applySort(filteredHidden, operations.sort, operations.info)
+    return filteredHidden
 }
-
-export function applyOperations(listens: HistoryEntry[], operations: Operations): Group[] {
-    return applyNonGroupOperations(applyGroupOperation(listens, operations.group), operations)
-}
-
-export function applyGroupOperation(listens: HistoryEntry[], groupOperation: GroupOperation): Group[] {
-    // const filtered = filterValidItems(listens, operations.filter)
-    return groupItems(listens, groupOperation) 
-}
-
-export function applyNonGroupOperations(groups: Group[], operations: Operations): Group[] {
-    applyFiltersAndPercents(groups, operations.filter, operations.info)
-    const filteredMinPlays = groups.filter(g => g.visiblePlays > operations.filter.minimumPlays)
-    applySort(filteredMinPlays, operations.sort, operations.info)
-    // const filteredRanks = filterHiddenRanks(groups, operations.filter)
-    return filteredMinPlays
-}
-
-// function filterValidItems(items: HistoryEntry[], filterOperation: FilterOperation): HistoryEntry[] {
-//     if(!filterOperation.hideFilteredPlays) return items 
-
-//     const filteredSkips = items.filter(he => filterSkip(he, filterOperation))
-//     const filteredSearch = filteredSkips.filter(he => filterSearch(he, filterOperation))
-//     return filteredSearch
-// }
 
 function filterSkip(listen: HistoryEntry, filterOperation: FilterOperation): boolean {
     switch(filterOperation.filterSkipsBy) {
@@ -59,22 +42,18 @@ function filterSearch(listen: HistoryEntry, operation: FilterOperation) : boolea
     }
 }
 
-function applyFiltersAndPercents(groups: Group[], operation: FilterOperation, infoOperation: InfoOperation) {
+function applyFilters(listens: Listen[], operation: FilterOperation) {
+    listens.forEach(l => {
+        l.hiddenSearched = !filterSearch(l, operation)
+        l.hiddenSkip = !filterSkip(l, operation)
+    })
+}
+
+function applyPercents(groups: Group[], infoOperation: InfoOperation) {
     groups.forEach(g => {
         g.combinations.forEach(c => {
-            c.listens.forEach(l => {
-                // if(l.viewState == ViewState.Invalid) return
-                // const hideSearch = (!operation.excludeSearchFromTotal) ? !filterSearch(l, operation) : false
-                // const hideSkip = (!operation.excludeSkipsFromTotal) ? !filterSkip(l, operation) : false
-                // l.viewState = (hideSearch || hideSkip) ? ViewState.Hidden : ViewState.Visible
-                l.hiddenSearched = !filterSearch(l, operation)
-                l.hiddenSkip = !filterSkip(l, operation)
-            })
-            c.recalculateVisible()
             c.recalculateDenominator(infoOperation.primaryPercent)
-            // c.hiddenMinListens = c.visiblePlays < operation.minimumPlays
         })   
-        g.recalculateVisible()
         g.recalculateDenominators()
     })
 
@@ -84,50 +63,81 @@ function applyFiltersAndPercents(groups: Group[], operation: FilterOperation, in
     groups.forEach(g => g.recalculatePercents(infoOperation.primaryPercent, totalPlays, totalPlaytime))
 }
 
-function filterHiddenRanks(groups: Group[], operation: FilterOperation): Group[]{
-    return groups.map(g => {
-        // g.combinations = g.combinations.map(c => {
-        //     c.listens = c.listens.filter(l => filterSearch(l, operation))
-        //     return c
-        // })
-        // g.combinations = g.combinations.filter(c => c.listens.length > 0)
-        return g
-    }).filter(g => g.visiblePlays >= operation.minimumPlays)
-}
-
-function groupItems(items: HistoryEntry[], groupOperation: GroupOperation): Group[] {
-    const groupable = (groupOperation.combineAcrossGroups) ? combineItems(items, groupOperation) : items
-
-    let groupMap: Map<string, HistoryEntry[] | Combination[]> = groupable.reduce((groups, entry) => {
-        const listen = ("timestamp" in entry ? entry as HistoryEntry : (entry as Combination).listens[0])
-        const key = toGroupKey(listen, groupOperation.groupBy)
-        if(groups.has(key.hashCode())) {
-            groups.get(key.hashCode()).push(entry)
-        } else {
-            groups.set(key.hashCode(), [entry])
-        }
-        return groups
-    }, new Map())
-     
-    return Array.from(groupMap.entries())
-        .map(([key, groupables]) => {
-            const combinations: Combination[] = ("timestamp" in groupables[0]) ? combineItems(groupables as HistoryEntry[], groupOperation) : groupables as Combination[]
-            return new Group(groupOperation.groupBy, groupKeyFromHashCode(key), combinations)
-        })
-}
-
-function toListen(entry: HistoryEntry): Listen { return { ...entry, hiddenSkip: false, hiddenSearched: false } }
-function combineItems(items: HistoryEntry[], groupOperation: GroupOperation): Combination[] {
-    const combinationMap: Map<string, HistoryEntry[]> = items.reduce((groups, entry) => {
-        const key = (groupOperation.combineBy == CombineType.None) ? entry.id : (groupOperation.combineBy == CombineType.SameArtist) ? entry.artistName.toLowerCase() : `${entry.trackName} - ${entry.artistName}`.toLowerCase()
-        if(groups.has(key)) groups.get(key).push(entry); else groups.set(key, [entry])
-        return groups
-    }, new Map())
-    return Array.from(combinationMap).map(([key, entries]) => {
-        entries.sort((a, b) => (groupOperation.combineInto == CombineInto.EarliestPlay) ? a.timestamp.getTime() - b.timestamp.getTime() : b.timestamp.getTime() - a.timestamp.getTime())
-        if(groupOperation.combineBy == CombineType.SameArtist) return new ArtistCombination(entries[0].artistName, entries.map(toListen))
-        
-        const firstListen = entries[0]
-        return new TrackCombination(firstListen.trackName, firstListen.artistName, firstListen.albumName, firstListen.uri, entries.map(toListen))
+function filterHidden(groups: Group[], minGroupPlays: number): Group[] {
+    return groups.filter(g => {
+        g.combinations = g.combinations.filter(c => c.visiblePlays > 0)
+        return (g.visiblePlays >= minGroupPlays) && (g.combinations.length > 0)
     })
+}
+
+function toGroupKey(listen: HistoryEntry, type: GroupType): GroupKey {
+    return new GroupKey(
+        type.hour ? listen.timestamp.getHours() : null,
+        type.dayOfWeek ? listen.timestamp.getDay() : null,
+        type.date ? listen.timestamp.getDate() : null,
+        type.month ? listen.timestamp.getMonth() : null,
+        type.year ? listen.timestamp.getFullYear() : null,
+        type.artist ? listen.artistName : null,
+        type.song ? listen.trackName : null,
+        type.album ? listen.albumName : null,
+    )
+}
+function toCombinationKey(listen: Listen, groupOperation: GroupOperation): string {
+    const key = (groupOperation.combineBy == CombineType.None) ? listen.id : (groupOperation.combineBy == CombineType.SameArtist) ? listen.artistName.toLowerCase() : `${listen.trackName} - ${listen.artistName}`.toLowerCase()
+    return key
+}
+
+function groupAndCombineItems(listens: Listen[], groupOperation: GroupOperation): Group[] {
+    const groups: Map<string, Combination[]> = new Map()
+    if(groupOperation.combineAcrossGroups) {
+        const combinations: Map<string, Listen[]> = new Map()
+        listens.forEach(listen => {
+            const combinationKey = toCombinationKey(listen, groupOperation)
+            if(combinations.has(combinationKey)) {
+                combinations.get(combinationKey)!.push(listen)
+            } else {
+                combinations.set(combinationKey, [listen])
+            }
+        })
+
+        combinations.forEach((listens, key) => {
+            const firstListen = groupOperation.combineInto == CombineInto.EarliestPlay
+                ? listens.reduce((acc, l) => (!l.hiddenSearched && !l.hiddenSkip) && (l.timestamp.getTime() < acc.timestamp.getTime()) ? l : acc, listens[0])
+                : listens.reduce((acc, l) => (!l.hiddenSearched && !l.hiddenSkip) && (l.timestamp.getTime() > acc.timestamp.getTime()) ? l : acc, listens[0])
+            const groupKey = toGroupKey(firstListen, groupOperation.groupBy).hashCode
+            const combination = (groupOperation.combineBy == CombineType.SameArtist) 
+                ? new ArtistCombination(firstListen.artistName, listens)
+                : new TrackCombination(firstListen.trackName, firstListen.artistName, firstListen.albumName, firstListen.uri, listens)
+            if(groups.has(groupKey)) {
+                groups.get(groupKey)!.push(combination)
+            } else {
+                groups.set(groupKey, [combination])
+            }
+        })
+    } else {
+        const combinationAndGroupMap: Map<string, Listen[]> = new Map()
+        listens.forEach(listen => {
+            const groupKey = toGroupKey(listen, groupOperation.groupBy)
+            const combinationKey = toCombinationKey(listen, groupOperation)
+            const bothKey = `${groupKey.hashCode}${DIVIDER}${combinationKey}`
+            if(combinationAndGroupMap.has(bothKey)) {
+                combinationAndGroupMap.get(bothKey)!.push(listen)
+            } else {
+                combinationAndGroupMap.set(bothKey, [listen])
+            }
+        })    
+        combinationAndGroupMap.forEach((listens, key) => {
+            const listen = listens[0]
+            const combination = (groupOperation.combineBy == CombineType.SameArtist) 
+                ? new ArtistCombination(listen.artistName, listens)
+                : new TrackCombination(listen.trackName, listen.artistName, listen.albumName, listen.uri, listens)
+            const groupKey = key.substring(0, key.indexOf(DIVIDER))
+            if(groups.has(groupKey)) {
+                groups.get(groupKey)!.push(combination)
+            } else {
+                groups.set(groupKey, [combination])
+            }
+        })
+    }
+    return Array.from(groups.entries()).map(([key, combinations]) => new Group(groupOperation.groupBy, groupKeyFromHashCode(key), combinations))
 }

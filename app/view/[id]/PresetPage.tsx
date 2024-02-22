@@ -14,12 +14,12 @@ import { HistoryEntry } from "@/app/data/model/HistoryEntry"
 import { Preset } from "@/app/data/model/Preset"
 import { getListens } from "@/app/data/persist/Database"
 import { savePreset } from "@/app/data/persist/PresetRepository"
-import { applyGroupOperation, applyNonGroupOperations } from "@/app/data/transform/Operating"
+import { applyOperations } from "@/app/data/transform/Operating"
 import { DEBUG } from "@/app/data/utils/debug"
 import { usePresets } from "@/app/data/utils/presetUtils"
 import { useRouter } from "next/navigation"
 import nightwindHelper from "nightwind/helper"
-import { ArrowCounterClockwise, ArrowLeft, CaretDoubleDown, DotsThreeVertical, FloppyDiskBack, Hash, Moon, PencilSimple, Play, Share, SquaresFour } from "phosphor-react-sc"
+import { ArrowCounterClockwise, ArrowLeft, CaretDoubleDown, DotsThreeVertical, FloppyDiskBack, Hash, Moon, PencilSimple, Play, Share, SquaresFour, X } from "phosphor-react-sc"
 import { useEffect, useMemo, useState } from "react"
 import { LazyList } from "../../common/LazyList"
 import { DataTable, DisplayOperation } from "./DataTable"
@@ -37,8 +37,9 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
     useEffect(() => { getListens().then(entries => { setLoadedEntries(entries) }) }, [])
 
     const [customizedPreset, setCustomizedPreset] = useState(JSON.parse(JSON.stringify(initialPreset)))
-    const grouped = useMemo(() => (loadedEntries === undefined) ? undefined : applyGroupOperation(loadedEntries, customizedPreset.operations.group), [loadedEntries, customizedPreset.operations.group]) 
-    const filtered = useMemo(() => (grouped === undefined) ? undefined : applyNonGroupOperations([...grouped], customizedPreset.operations), [grouped, customizedPreset.operations]) 
+    const filtered = useMemo(() => (loadedEntries === undefined) ? undefined : applyOperations(loadedEntries, customizedPreset.operations), [loadedEntries, customizedPreset.operations]) 
+    
+    
     const overwriting = usePresets()?.find(p => p.id == customizedPreset.id)
     const hasChanged = JSON.stringify(initialPreset) != JSON.stringify(customizedPreset)
     const isValid = (customizedPreset.name.trim().length != 0 && customizedPreset.description.trim().length != 0 && customizedPreset.icon.trim().length != 0 && customizedPreset.id.trim().length != 0)
@@ -71,8 +72,12 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
                                         setCustomizing(false)
                                     } else { setCustomizing(true) }
                                 }}
-                                text={isCustomizing ? "Reset" : "Customize"} 
-                                icon={isCustomizing ? <ArrowCounterClockwise/> : <PencilSimple/>}
+                                text={isCustomizing 
+                                    ? (hasChanged ? "Reset" : "Close")
+                                    : "Customize"} 
+                                icon={isCustomizing 
+                                    ? (hasChanged ? <ArrowCounterClockwise/> : <X/>)
+                                    : <PencilSimple/>}
                             />
 
                             { (hasChanged) && 

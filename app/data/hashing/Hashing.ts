@@ -88,7 +88,7 @@ export function hashOperations(operations: Operations, inBinary?: boolean): stri
     const asBigint = segmentsToHashBigint(segments)
     if(inBinary == true) return asBigint.toString(2).padStart(numberOfBits, '0')
     const hashString = version + asBigint.toString(36).padStart(numberOfBits / 5, '0')
-    const minString = `m${operations.filter.minimumPlays}`
+    const minString = `m${operations.filter.minimumGroupPlays}`
     if(DEBUG && JSON.stringify(operations) != JSON.stringify(parseHash(hashString))) throw Error(`Incorrect hashing/unhashing algorithm: operations = ${JSON.stringify(operations, null, 2)}, unhashed = ${JSON.stringify(parseHash(hashString), null, 2)}`)
     return hashString + minString
 }
@@ -145,7 +145,7 @@ export function parseHash(hash: string): Operations {
     applyHashBigintToSegments(hashNumber, segments)
 
     const min = parseInt(hash.substring(minSeparatorIndex + 1))
-    operations.filter.minimumPlays = min
+    operations.filter.minimumGroupPlays = min
     
     return operations
 }

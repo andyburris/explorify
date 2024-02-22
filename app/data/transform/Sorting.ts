@@ -5,6 +5,7 @@ import { SortOperation, ItemSortType, GroupSortOrder, GroupSortOrderItem, GroupT
 export function applySort(groups: Group[], sortOperation: SortOperation, infoOperation: InfoOperation) {
     sortGroups(groups, sortOperation.sortGroupsBy, infoOperation)
     groups.forEach((g, i) => {
+        g.combinations.forEach(c => c.listens.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime()))
         g.combinations.sort((a, b) => {
             switch(sortOperation.sortItemsBy) {
                 case ItemSortType.Date: return (sortOperation.sortItemsAscending) ? a.listens[0].timestamp.getTime() - b.listens[0].timestamp.getTime() : b.listens[0].timestamp.getTime() - a.listens[0].timestamp.getTime()

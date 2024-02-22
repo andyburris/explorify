@@ -49,7 +49,7 @@ export function ListenItem({ listen, isFirst, isLast, previewSongInfo }: { liste
                         <InfoItem text={listen.trackName} icon={<MusicNote/>}/>
                         <InfoItem description="by" text={listen.artistName} icon={<User/>}/>
                         <InfoItem description="on" text={listen.albumName} icon={<VinylRecord/>}/>
-                        <InfoItem description="played for" text={millisToMinsSecs(listen.millisecondsPlayed)} icon={<Hourglass/>}/>
+                        <InfoItem description="played for" text={millisToMinsSecs(listen.millisecondsPlayed, false, true)} icon={<Hourglass/>}/>
                         <InfoItem description="started because:" text={startReasonInfo(listen.startReason)} icon={<Play/>}/>
                         <InfoItem description="ended because:" text={endReasonInfo(listen.endReason)} icon={<Stop/>}/>
                         <InfoItem text={listen.offline ? "Offline" : "Online"} icon={listen.offline ? <CloudSlash/> : <Cloud/>}/>
@@ -75,9 +75,10 @@ function InfoItem({ description, text, icon, className }: { description?: string
     )
 }
 
-export function millisToMinsSecs(milliseconds: number, compact?: boolean) {
+export function millisToMinsSecs(milliseconds: number, compact?: boolean, includeMs?: boolean) {
     // if(compact) return millisToMinsSecsColon(milliseconds)
 
+    const remainingMs = milliseconds % 1000
     const seconds = milliseconds / 1000
     const roundedSeconds = Math.round(seconds)
     const minutes = Math.floor(roundedSeconds / 60)
@@ -90,22 +91,16 @@ export function millisToMinsSecs(milliseconds: number, compact?: boolean) {
             ? `${hours}h${remainingMinutes.toString().padStart(2, '0')}m`
             : `${minutes}m ${remainingSeconds.toString().padStart(2, '0')}s`
     } else {
-        return (hours > 0) 
-            ? `${hours}h ${remainingMinutes.toString()}m ${remainingSeconds.toString().padStart(2, '0')}s`
-            : `${minutes}m ${remainingSeconds.toString().padStart(2, '0')}s`
+        if(includeMs) {
+            return (hours > 0) 
+                ? `${hours}h ${remainingMinutes.toString()}m ${remainingSeconds.toString().padStart(2, '0')}s ${remainingMs}ms`
+                : `${minutes}m ${remainingSeconds.toString().padStart(2, '0')}s ${remainingMs}ms`
+        } else {
+            return (hours > 0) 
+                ? `${hours}h ${remainingMinutes.toString()}m ${remainingSeconds.toString().padStart(2, '0')}s`
+                : `${minutes}m ${remainingSeconds.toString().padStart(2, '0')}s`
+        }
     }
-}
-
-function millisToMinsSecsColon(milliseconds: number) {
-    const seconds = milliseconds / 1000
-    const roundedSeconds = Math.round(seconds)
-    const minutes = Math.floor(roundedSeconds / 60)
-    const remainingSeconds = roundedSeconds % 60
-    const hours = Math.floor(roundedSeconds / (60 * 60))
-    const remainingMinutes = minutes % 60
-    return (hours > 0) 
-        ? `${hours}:${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
-        : `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
 }
 
 function startReasonInfo(startReason: StartReason): string {

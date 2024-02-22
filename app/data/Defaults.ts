@@ -64,7 +64,7 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                minimumPlays: 0,
+                minimumGroupPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
             },
@@ -102,7 +102,7 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                minimumPlays: 0,
+                minimumGroupPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
             },
@@ -139,7 +139,7 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                minimumPlays: 0,
+                minimumGroupPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
             },
@@ -177,7 +177,7 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.OnlySkips,
-                minimumPlays: 10,
+                minimumGroupPlays: 10,
                 searchTerm: "",
                 searchBy: SearchType.All,
             },
@@ -232,7 +232,7 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                minimumPlays: 15,
+                minimumGroupPlays: 15,
                 searchTerm: "",
                 searchBy: SearchType.All,
             },
@@ -287,7 +287,7 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.All,
-                minimumPlays: 0,
+                minimumGroupPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
             },
@@ -298,7 +298,7 @@ export const defaultPresets: Preset[] = [
             },
             info: {
                 primaryInfo: InfoType.Date,
-                secondaryInfo: null,
+                secondaryInfo: InfoType.Playtime,
                 primaryPercent: defaultPercentInfo,
             },
             viewOptions: {
@@ -325,7 +325,7 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                minimumPlays: 0,
+                minimumGroupPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
             },
@@ -363,7 +363,7 @@ export const defaultPresets: Preset[] = [
             },
             filter: {
                 filterSkipsBy: SkipFilterType.NoSkips,
-                minimumPlays: 0,
+                minimumGroupPlays: 0,
                 searchTerm: "",
                 searchBy: SearchType.All,
             },

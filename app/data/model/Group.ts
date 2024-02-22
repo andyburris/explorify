@@ -3,6 +3,7 @@ import { Combination } from "./Combination";
 import { GroupType, PercentDenominator, PercentGrouping, PercentInfo, PercentOf } from "./Operations";
 
 export class GroupKey {
+    public hashCode: string
     public constructor(
         public hour: number | null,
         public dayOfWeek: number | null,
@@ -12,9 +13,11 @@ export class GroupKey {
         public artist: string | null,
         public song: string | null,
         public album: string | null,
-    ) {}
+    ) {
+        this.hashCode = this.calculateHashCode()
+    }
 
-    hashCode(): string { return ""
+    calculateHashCode(): string { return ""
         + (this.hour != null ? `*h${this.hour}` : "*h")
         + (this.dayOfWeek != null ? `*w${this.dayOfWeek}` : "*w")
         + (this.date != null ? `*d${this.date}` : "*d")
@@ -61,12 +64,11 @@ export class Group {
     ){
         this.plays = this.combinations.reduce((acc, c) => acc + c.plays, 0)
         this.playtime = this.combinations.reduce((acc, c) => acc + c.playtime, 0)
-    }
 
-    recalculateVisible() {
         this.visiblePlays = this.combinations.reduce((acc, c) => acc + c.visiblePlays, 0)
         this.visiblePlaytime = this.combinations.reduce((acc, c) => acc + c.visiblePlaytime, 0)
     }
+
     recalculateDenominators() {
         this.playsDenominator = this.combinations.reduce((acc, c) => acc + c.denominatorListens.length, 0)
         this.playtimeDenominator = this.combinations.reduce((acc, c) => acc + c.denominatorListens.reduce((acc, l) => acc + l.millisecondsPlayed, 0), 0)

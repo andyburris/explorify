@@ -21,8 +21,8 @@ export function FilterOperationSelector({ currentOperation, onChangeOperation }:
             <OperationSection title="Minimum group plays" description="Hide groups with less than the given amount of plays (not including plays filtered out by skips and search).">
                 <TextField 
                     placeholder="0" 
-                    currentValue={currentOperation.minimumPlays > 0 ? `${currentOperation.minimumPlays}` : ""}
-                    onChangeValue={v => onChangeOperation({ ...currentOperation, minimumPlays: parseInt(v) ?? currentOperation.minimumPlays}) }    
+                    currentValue={currentOperation.minimumGroupPlays > 0 ? `${currentOperation.minimumGroupPlays}` : ""}
+                    onChangeValue={v => onChangeOperation({ ...currentOperation, minimumGroupPlays: parseInt(v) ?? currentOperation.minimumGroupPlays}) }    
                 />
             </OperationSection>
             <OperationSection title="Search by">

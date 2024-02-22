@@ -29,12 +29,11 @@ export class TrackCombination implements Combination {
     ) {
         this.plays = this.listens.length
         this.playtime = this.listens.reduce((acc, l) => acc + l.millisecondsPlayed, 0)
-    }
 
-    recalculateVisible() {
         this.visiblePlays = this.listens.filter(l => !l.hiddenSkip && !l.hiddenSearched).length
         this.visiblePlaytime = this.listens.filter(l => !l.hiddenSkip && !l.hiddenSearched).reduce((acc, l) => acc + l.millisecondsPlayed, 0)
     }
+
     recalculateDenominator(percentInfo: PercentInfo) {
         switch(percentInfo.denominator) {
             case PercentDenominator.All: this.denominatorListens = this.listens; break;
@@ -90,12 +89,11 @@ export class ArtistCombination implements Combination {
     ) {
         this.plays = this.listens.length
         this.playtime = this.listens.reduce((acc, l) => acc + l.millisecondsPlayed, 0)
-    }
 
-    recalculateVisible() {
         this.visiblePlays = this.listens.filter(l => !l.hiddenSkip && !l.hiddenSearched).length
         this.visiblePlaytime = this.listens.filter(l => !l.hiddenSkip && !l.hiddenSearched).reduce((acc, l) => acc + l.millisecondsPlayed, 0)
     }
+
     recalculateDenominator(percentInfo: PercentInfo) {
         switch(percentInfo.denominator) {
             case PercentDenominator.All: this.denominatorListens = this.listens; break;
@@ -131,7 +129,6 @@ export interface Combination {
     numerator: number,
     denominator: number,
     percent: number,
-    recalculateVisible: () => void,
     recalculateDenominator: (percentInfo: PercentInfo) => void,
     recalculatePercents: (percentInfo: PercentInfo, totalPlays: number, totalPlaytime: number, groupPlays: number, groupPlaytime: number) => void,
 }
