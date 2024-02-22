@@ -16,7 +16,7 @@ export async function generateMetadata(
   ): Promise<Metadata> {   
     const preset: Preset = { 
         id: "", 
-        name: searchParams["t"] ? Base64.decode(searchParams["t"]!) : "Shared preset", 
+        name: searchParams["t"] ? Base64.decode(searchParams["t"]!) : "Shared View", 
         description: searchParams["d"] ? Base64.decode(searchParams["d"]!) : `You probably got this link from someone. Customize to make it your own and save it!`, 
         icon: searchParams["i"] ? pickableIcons[Number.parseInt(searchParams["i"]!, 36)].name : "share",
         operations: parseHash(params.hash)
@@ -31,7 +31,7 @@ export async function generateMetadata(
 export default function SharedPage({ params, searchParams }: Props) {
     const preset: Preset = { 
         id: "", 
-        name: searchParams["t"] ? Base64.decode(searchParams["t"]!) : "Shared preset", 
+        name: searchParams["t"] ? Base64.decode(searchParams["t"]!) : "Shared View", 
         description: searchParams["d"] ? Base64.decode(searchParams["d"]!) : `You probably got this link from someone. Customize to make it your own and save it!`, 
         icon: searchParams["i"] ? pickableIcons[Number.parseInt(searchParams["i"]!, 36)].name : "share",
         operations: parseHash(params.hash)

@@ -79,7 +79,7 @@ export function LandingPage() {
                         />
                 </Link>
                 <LandingCard
-                    title="Explore preset views"
+                    title="Explore default views"
                     text="See everything from your top albums to the days you discovered the most music. All with precise play counts, timestamps, and more."
                     illustration={<div className="flex flex-col h-full p-2 gap-2">
                         { Array.from({ length: 4 }, (_, i) => {

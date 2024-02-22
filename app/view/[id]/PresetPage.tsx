@@ -114,7 +114,7 @@ export function PresetPage({ initialPreset, isShared, customizeInitial }: { init
                                     },
                                     {
                                         icon: <Share/>,
-                                        title: "Share preset",
+                                        title: "Share view",
                                         onClick: () => setShareDialogOpen(true),
                                     },
                                     {

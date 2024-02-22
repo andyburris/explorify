@@ -30,7 +30,7 @@ export function ShareDialog({ preset, open, onOpenChange }: { preset: Preset, op
         <CommonDialog
             open={open}
             onOpenChange={onOpenChange}
-            title="Share preset"
+            title="Share View"
         >
             <div className="flex p-4 gap-4 rounded-2xl bg-green-50 border border-green-200">
                 {/* <p className="text-green-700">Link</p> */}
@@ -55,7 +55,7 @@ export function ShareDialog({ preset, open, onOpenChange }: { preset: Preset, op
                 <p className="font-serif font-semibold text-2xl tracking-tight">Options</p>
                 <ToggleSection
                     title="Don't include details"
-                    description="Drop details like the preset title and description from the URL, only keeping the actual filters. Makes the URL shorter (and more mysterious) for whoever you're sending it to."
+                    description="Drop details like the view title and description from the URL, only keeping the actual filters. Makes the URL shorter (and more mysterious) for whoever you're sending it to."
                     checked={!includeDetails}
                     onCheckedChange={(updated) => {
                         setIncludeDetails(!updated)

@@ -145,10 +145,12 @@ export function ViewOptionsSelector({ currentOperations, onChangeViewOptions, on
                     onSelect={(n) => onChangeViewOptions({ ...currentViewOptions, showGroupSum: n})}
                 />
             </OperationSection>
-            <OperationSection title="Preview info">
+            <OperationSection 
+                title="Preview"
+                description="Controls whether the first four groups or first four items are shown on the card previews on the home screen">
                 <ResponsiveControl 
                     items={[
-                        { value: false, label: "Songs", key: "Songs", icon: <List/> },
+                        { value: false, label: "Items", key: "Items", icon: <List/> },
                         { value: true, label: "Groups", key: "Groups", icon: <Calendar/> },
                     ]} 
                     selectedItem={currentViewOptions.previewGroups}

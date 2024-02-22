@@ -40,7 +40,7 @@ export function HomePage({ listens, presets }: { listens: HistoryEntry[], preset
                             menuItems={[
                                 {
                                     icon: <Pencil size="24px"/>,
-                                    title: "Edit presets",
+                                    title: "Edit views",
                                     onClick: () => { setEditPresetsOpen(true) },
                                 },
                                 {

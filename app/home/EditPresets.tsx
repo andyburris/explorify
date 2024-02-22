@@ -26,7 +26,7 @@ export function EditPresets({ presets, open, onOpenChange, onPresetOrderChange, 
 
     return (
         <CommonDialog
-            title="Edit presets"
+            title="Edit Views"
             open={open}
             onOpenChange={onOpenChange}
             widgets={<ActionButton text="Reset" icon={<ArrowCounterClockwise/>} onClick={() => setResetDialogOpen(true)}/>}
@@ -34,9 +34,9 @@ export function EditPresets({ presets, open, onOpenChange, onPresetOrderChange, 
             <CommonDialog
                 open={resetDialogOpen}
                 onOpenChange={setResetDialogOpen}
-                title="Reset to default presets"
+                title="Reset to default views"
                 >
-                <p>This will reset all presets to the website defaults. Any custom presets you have, or defaults that you've edited will be <strong>permanently deleted</strong>. You can copy their links beforehand to preserve them.</p>
+                <p>This will reset all views to the website defaults. Any custom views you have, or defaults that you've edited will be <strong>permanently deleted</strong>. You can copy their links beforehand to preserve them.</p>
                 <ActionButton icon={<ArrowCounterClockwise/>} text="Confirm reset" onClick={() => { onResetPresets(); setResetDialogOpen(false); onOpenChange(false) }}/>
             </CommonDialog>
             <div className="flex flex-col -mx-3 -my-1">

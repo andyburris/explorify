@@ -18,7 +18,7 @@ export function SaveDialog({ open, preset, listens, onOpenChange, onSave }: {ope
     const overwriting = savedPresets.find(p => p.id == preset.id)
     return (
         <CommonDialog 
-            title="Save Preset" 
+            title="Save View" 
             open={open}
             onOpenChange={onOpenChange}
             widgets={<ActionButton enabled={isValid} onClick={() => onSave(preset)} text="Save" icon={<FloppyDiskBack/>} />}>
