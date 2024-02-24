@@ -1,5 +1,5 @@
 import { CombineInto, CombineType, FilterOperation, GroupOperation, SearchType, SkipFilterType } from "@/app/data/model/Operations";
-import { ArrowsInLineVertical, ArrowsOutLineVertical, Calendar, CalendarBlank, Clock, ClockCounterClockwise, Disc, List, ListDashes, ListNumbers, MusicNote, SortAscending, SortDescending, User, Users } from "phosphor-react-sc";
+import { ArrowsInLineVertical, ArrowsOutLineVertical, Calendar, CalendarBlank, Clock, ClockCounterClockwise, Disc, List, ListDashes, ListNumbers, MusicNote, Play, SkipForward, SortAscending, SortDescending, User, Users } from "phosphor-react-sc";
 import { OperationSection, ResponsiveControl } from "./OperationsSelector";
 import { TextField } from "@/app/common/TextField";
 import { Combobox } from "@/app/common/components/ui/combobox";
@@ -17,8 +17,8 @@ export function FilterOperationSelector({ currentOperation, onChangeOperation }:
                 <ResponsiveControl 
                     items={[
                         { value: SkipFilterType.All, label: "All", key: "All", icon: <List/> },
-                        { value: SkipFilterType.NoSkips, label: "No skips", key: "No skips", icon: <Clock/> },
-                        { value: SkipFilterType.OnlySkips, label: "Only skips", key: "Only skips", icon: <CalendarBlank/> },
+                        { value: SkipFilterType.NoSkips, label: "No skips", key: "No skips", icon: <Play/> },
+                        { value: SkipFilterType.OnlySkips, label: "Only skips", key: "Only skips", icon: <SkipForward/> },
                     ]} 
                     selectedItem={currentOperation.filterSkipsBy}
                     onSelect={(n) => onChangeOperation({ ...currentOperation, filterSkipsBy: n})}
