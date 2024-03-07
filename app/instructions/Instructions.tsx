@@ -35,7 +35,7 @@ export function Instructions() {
                 />
             <InstructionItem
                 index={4}
-                title="Come back to Quantify, import your .zip file, and start exploring!"
+                title="Come back to Explorify, import your .zip file, and start exploring!"
                 link={{ title: "Import", linkPath: "/import", icon: (cn) => <Upload className={cn}/> }}
                 last
                 />

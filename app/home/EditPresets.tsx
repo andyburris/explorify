@@ -91,8 +91,8 @@ function EditPresetItem({ preset, id, index, onDelete }: { preset: Preset, id: s
                     <DotsSixVertical className="text-neutral-900 text-2xl flex-shrink-0"/>
                 </div>
                 <ActionButton icon={<Trash/>} onClick={() => setDeleteDialogOpen(true)} className="flex-shrink-0 z-20" />
-                <CommonDialog title="Delete preset?" open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                    <p>This will permanently delete <span className="font-semibold">{preset.name}</span>, and cannot be recovered. You can share the URL before deleting if you want to preserve it.</p>
+                <CommonDialog title="Delete View?" open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                    <p>This will permanently delete <span className="font-semibold">{preset.name}</span>, and cannot be undone. You can share the URL before deleting if you want to preserve it.</p>
                     <ActionButton text="Confirm delete" icon={<Trash/>} onClick={() => { onDelete(); setDeleteDialogOpen(false) }}/>
                 </CommonDialog>
         </div>

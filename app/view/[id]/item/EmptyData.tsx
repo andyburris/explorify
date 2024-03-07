@@ -9,7 +9,7 @@ export function EmptyData() {
                 <MusicNotesPlus weight="duotone" className="text-neutral-500 text-3xl"/>
                 <div className="flex flex-col">
                     <p className="font-serif font-semibold text-3xl tracking-tight">You haven’t imported your listens yet</p>
-                    <p className="text-neutral-500">To explore your listening history in Quantify, you need to request and download your extended listening history from Spotify. It takes ~2 weeks to receive your data.</p>
+                    <p className="text-neutral-500">To explore your listening history in Explorify, you need to request and download your extended listening history from Spotify. It takes ~2 weeks to receive your data.</p>
                 </div>
             </div>
             <div className="flex flex-col gap-4">
@@ -26,7 +26,7 @@ export function EmptyData() {
                         leftIcon={cn => <Upload className={cn}/>} 
                         rightIcon={<ArrowRight/>} 
                         title="Already have your listening history?" 
-                        text="Import your .zip file to Quantify!"
+                        text="Import your .zip file to Explorify!"
                         />
                 </Link>
             </div>

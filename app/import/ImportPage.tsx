@@ -30,7 +30,7 @@ export function ImportPage({ onUpload }: { onUpload: (entries: HistoryEntry[]) =
                 <Header 
                     icon={<IconLogoStatic icon={<Upload weight="duotone"/>}/>} 
                     title="Import" 
-                    description="Quantify runs on the .zip file of your extended streaming history you got from Spotify. Import it here and start exploring!"
+                    description="Explorify runs on the .zip file of your extended streaming history you got from Spotify. Import it here and start exploring!"
                 />
                 <div className="flex flex-col gap-3">
                     <input type="file" id="file-import" className="hidden" onChange={(e) => setFile(e.target.files?.[0])}/>
@@ -49,7 +49,7 @@ export function ImportPage({ onUpload }: { onUpload: (entries: HistoryEntry[]) =
                  <Link href="/instructions">
                     <CalloutCard
                         title="Don’t have your streaming history yet?"
-                        text="To use Quantify, you need to export your streaming history from Spotify—we’ll walk you through it"
+                        text="To use Explorify, you need to export your streaming history from Spotify—we’ll walk you through it"
                         leftIcon={cn => <FileDotted className={cn}/>}
                         rightIcon={<ArrowRight/>}
                         />

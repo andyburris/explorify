@@ -15,14 +15,14 @@ export function LandingPage() {
         <Container>
             <div className="flex items-center gap-3 py-4">
                 <Logo/>
-                <h2 className="font-serif tracking-tight text-3xl font-semibold w-full">Quantify</h2>
+                <h2 className="font-serif tracking-tight text-3xl font-semibold w-full">Explorify</h2>
                 <LinkButton icon={<Upload/>} text="Import" linkPath="/import" className="flex-shrink-0"/>
             </div>
             <LandingPreview
                 overlayContent={
                     <div className="flex flex-col gap-2 px-4 py-4">
                         <h1 className="font-serif font-semibold tracking-tight text-5xl/[50px] max-w-96 text-balance">Change how you view your music</h1>
-                        <p className="text-neutral-600">Quantify lets you explore everything you want to know about your streaming history, down to the last listen.</p>
+                        <p className="text-neutral-600">Explorify shows you everything you want to know about your streaming history, down to the last listen.</p>
                     </div>
                 }/>
             <Link href="/import">
@@ -35,7 +35,7 @@ export function LandingPage() {
             </Link>
             <div className="flex flex-col p-4 gap-1">
                 <h2 className="font-serif tracking-tight text-3xl font-semibold w-full">How it works</h2>
-                <p className="text-neutral-600">Spotify lets you export a record of <span className="font-semibold">every time you've streamed a song</span>. It’s incredibly cool. But it’s a long, hard to understand file—that’s what Quantify helps with.</p>
+                <p className="text-neutral-600">Spotify lets you export a record of <span className="font-semibold">every time you've streamed a song</span>. It’s incredibly cool. But it’s a long, hard to understand file—that’s what Explorify helps with.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Link href="/instructions">
@@ -63,7 +63,7 @@ export function LandingPage() {
                 </Link>
                 <Link href="/import">
                     <LandingCard
-                        title="Import your history to Quantify"
+                        title="Import your history to Explorify"
                         text="Your data stays on your device and is never uploaded to any servers."
                         illustration={<div className="flex flex-col items-center justify-center h-full p-3 gap-3">
                             <div className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-200 group-hover:bg-green-50 border border-neutral-200 group-hover:border-green-100 transition-colors">
@@ -103,7 +103,7 @@ export function LandingPage() {
                     />
                 <LandingCard
                     title="Create your own views"
-                    text="With Quantify’s customizable grouping, filtering, and sorting options, you can easily answer any question you have about your listening."
+                    text="With Explorify’s customizable grouping, filtering, and sorting options, you can easily answer any question you have about your listening."
                     illustration={<div className="flex flex-col h-full p-2 gap-2">
                         <div className="flex gap-2 w-full">
                             <FilterChip icon={<Clock/>} text="Group by hour"/>
