@@ -3,7 +3,7 @@ import { HistoryEntry, RawHistoryEntry, rawToHistoryEntry } from "./model/Histor
 
 // setOptions({workerURL: 'path/to/unzipit-worker.module.js'});
 
-export async function parseFile(file: File): Promise<Array<HistoryEntry>> {
+export async function parseFile(file: File): Promise<HistoryEntry[]> {
     const {entries} = await unzip(file);
     const relevantFiles = Object.entries(entries).filter(([filename, entry]) => filename.endsWith(".json") && filename.includes("Audio")) 
 
