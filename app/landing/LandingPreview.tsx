@@ -35,7 +35,7 @@ export function PresetScreenPreview({  }: {  }) {
     
 
     return (
-        <div className="flex flex-col gap-8 shadow-outset dark:bg-neutral-100 rounded-3xl p-6 pt-12">
+        <div className="flex flex-col gap-8 shadow-outset dark:shadow-outsetDark dark:bg-neutral-100 rounded-3xl p-6 pt-12">
             <div className="flex flex-col items-start gap-4">
                 <Switcher
                     current={<PickedIcon iconName={currentPreset.icon} weight="duotone" className="text-2xl text-green-700"/>}

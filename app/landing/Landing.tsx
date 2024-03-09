@@ -47,7 +47,7 @@ export function LandingPage() {
                                 <Globe className="text-neutral-400 group-hover:text-green-600 text-base transition-colors"/>
                                 <p className="text-neutral-500 group-hover:text-green-700 text-base transition-colors">spotify.com</p>
                             </div>
-                            <div className="bg-[#121212] p-3 rounded-t-xl shadow-outset relative after:absolute after:-inset-0.5 after:-z-10 after:bg-gradient-to-r after:from-green-400 after:to-green-600 after:blur-sm after:rounded-t-2xl after:opacity-0 group-hover:after:opacity-70 after:transition-all">
+                            <div className="bg-[#121212] p-3 rounded-t-xl shadow-outset dark:shadow-outsetDark relative after:absolute after:-inset-0.5 after:-z-10 after:bg-gradient-to-r after:from-green-400 after:to-green-600 after:blur-sm after:rounded-t-2xl after:opacity-0 group-hover:after:opacity-70 after:transition-all">
                                 <Image 
                                     src="/SpotifyPrivacyPageCropped.png"
                                     width={200}

@@ -15,7 +15,7 @@ export function Dropdown({ trigger, menuItems }: { trigger: React.ReactNode, men
             {trigger}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
-            <DropdownMenu.Content className="bg-white shadow-outset p-1 rounded-2xl w-64 overflow-hidden" align='end' sideOffset={8}>
+            <DropdownMenu.Content className="bg-white shadow-outset dark:shadow-outsetDark p-1 rounded-2xl w-64 overflow-hidden" align='end' sideOffset={8}>
                 {menuItems.filter(i => i.hide != true).map((item) => 
                     <DropdownMenu.Item 
                         key={item.title} 

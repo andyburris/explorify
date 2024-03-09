@@ -23,7 +23,7 @@ export function OperationsSelector({ currentPreset, onChangePreset, currentTab, 
     const currentOperations = currentPreset.operations
     const onChangeOperations = (operations: Operations) => onChangePreset({ ...currentPreset, operations: operations})
     return (
-        <div className="flex flex-col rounded-2xl shadow-outset mt-4 overflow-hidden">
+        <div className="flex flex-col rounded-2xl shadow-outset dark:shadow-outsetDark mt-4 overflow-hidden">
             <p className="text-neutral-500 font-semibold px-4 pt-4 pb-2">Customize</p>
             <Tabs.Root value={currentTab} onValueChange={t => onChangeTab(t as OperationType)}>
                 <Tabs.List className="flex w-full border-b border-neutral-300 overflow-x-scroll pb-[1px]">

@@ -12,7 +12,7 @@ export function LandingCard(
     { title, text, illustration, hideGradient, index, buttonText, className }: LandingCardProps
 ) {
     return (
-        <div className={"flex flex-col rounded-2xl group shadow-outset dark:bg-neutral-100 " + (className ? className : "")}>
+        <div className={"flex flex-col rounded-2xl group shadow-outset dark:shadow-outsetDark dark:bg-neutral-100 " + (className ? className : "")}>
             <div className="relative overflow-hidden h-full">
                 {illustration}
                 <p className="absolute bottom-1 left-6 z-20 font-serif text-2xl font-semibold">{index + 1}.</p> 

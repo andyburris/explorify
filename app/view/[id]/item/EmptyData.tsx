@@ -4,7 +4,7 @@ import { ArrowRight, FileDashed, MusicNotesPlus, Upload } from "phosphor-react-s
 
 export function EmptyData() {
     return (
-        <div className="flex flex-col gap-6 p-6 rounded-3xl bg-white shadow-outset">
+        <div className="flex flex-col gap-6 p-6 rounded-3xl bg-white shadow-outset dark:shadow-outsetDark">
             <div className="flex flex-col gap-4">
                 <MusicNotesPlus weight="duotone" className="text-neutral-500 text-3xl"/>
                 <div className="flex flex-col">
