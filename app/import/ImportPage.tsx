@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, ArrowRight, FileArchive, FileDotted, FileZip, Info, Spinner, Upload, Warning } from "phosphor-react-sc"
+import { ArrowLeft, ArrowRight, FileArchive, FileDotted, FileZip, Info, List, Spinner, Upload, Warning } from "phosphor-react-sc"
 import { Button, LinkButton } from "../common/button/Button"
 import { Container } from "../common/Container"
 import { IconLogo, IconLogoStatic, Logo } from "../common/Logo"
@@ -16,7 +16,7 @@ import { InstructionCard } from "./InstructionCard"
 import { getPresets, saveDefaultPresets } from "../data/persist/PresetRepository"
 import { CalloutCard } from "../common/CalloutCard"
 import Link from "next/link"
-import { generateMockData } from "../data/mock/mock"
+import { SHOW_MOCK, generateMockData } from "../data/mock/mock"
 
 export function ImportPage({ onUpload }: { onUpload: (entries: HistoryEntry[]) => void }) {
     const [file, setFile] = useState<File | undefined>(undefined)
@@ -55,37 +55,39 @@ export function ImportPage({ onUpload }: { onUpload: (entries: HistoryEntry[]) =
                         rightIcon={<ArrowRight/>}
                         />
                 </Link>
-                <ActionButton 
-                text={ isProcessing ? "Mocking" : "Mock" }
-                icon={isProcessing ? <Spinner className="animate-spin"/> : <Upload/>} 
-                className="w-fit"
-                enabled={!isProcessing && file !== undefined}
-                onClick={() => {
-                    if(file !== undefined && isProcessing == false) {
-                        console.log("processing mocks")
-                        setProcessing(true)
-                        parseFile(file)
-                            .then(entries => {
-                                if(entries.length <= 0) throw Error("nothing loaded")
-                                generateMockData(entries)
+                { SHOW_MOCK &&
+                    <ActionButton 
+                    text={ isProcessing ? "Mocking" : "Mock" }
+                    icon={isProcessing ? <Spinner className="animate-spin"/> : <List/>} 
+                    className="w-fit"
+                    enabled={!isProcessing && file !== undefined}
+                    onClick={() => {
+                        if(file !== undefined && isProcessing == false) {
+                            console.log("processing mocks")
+                            setProcessing(true)
+                            parseFile(file)
                                 .then(entries => {
                                     if(entries.length <= 0) throw Error("nothing loaded")
-                                    saveListens(entries).then(() => {
-                                        if(getPresets().length <= 0) { 
-                                            saveDefaultPresets()
-                                        }
-                                        onUpload(entries)
+                                    generateMockData(entries)
+                                    .then(entries => {
+                                        if(entries.length <= 0) throw Error("nothing loaded")
+                                        saveListens(entries).then(() => {
+                                            if(getPresets().length <= 0) { 
+                                                saveDefaultPresets()
+                                            }
+                                            onUpload(entries)
+                                        })
                                     })
+                                    .then(_ => setProcessing(false))
                                 })
-                                .then(_ => setProcessing(false))
-                            })
-                            .catch(e => {
-                                setError(true)
-                                setProcessing(false)
-                                console.log(e)
-                            })
-                    }
-                }} />
+                                .catch(e => {
+                                    setError(true)
+                                    setProcessing(false)
+                                    console.log(e)
+                                })
+                        }
+                    }} />
+                }
                 <ActionButton 
                 text={ isProcessing ? "Processing" : "Process" }
                 icon={isProcessing ? <Spinner className="animate-spin"/> : <Upload/>} 
