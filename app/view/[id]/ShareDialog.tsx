@@ -13,7 +13,7 @@ const SHARE_INCLUDE_DETAILS_KEY = "shareIncludeDetails"
 
 export function ShareDialog({ preset, open, onOpenChange }: { preset: Preset, open: boolean, onOpenChange: (open: boolean) => void, }) {
     // const hash = hashOperations(customizedPreset.operations)
-    const hostname = process.env.NODE_ENV == 'production' ? "https://quantize.netlify.app" : "https://localhost:3000"
+    const hostname = process.env.NODE_ENV == 'production' ? "https://explorify.link" : "https://localhost:3000"
     const domain =  `${hostname}/customize/`
     const [includeDetails, setIncludeDetails] = useState(Boolean(localStorage.getItem(SHARE_INCLUDE_DETAILS_KEY) ?? true))
     const [includeSearchTerm, setIncludeSearchTerm] = useState(false)

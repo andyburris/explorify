@@ -15,7 +15,7 @@ export default function InstructionsPage() {
                 <Header 
                     icon={<IconLogoStatic icon={<ListNumbers weight="duotone"/>}/>} 
                     title="Instructions" 
-                    description="Spotify lets you export a file that records every time you've streamed a song. In order to use Quantify, you need that file. The export process is a little complicated, but these instructions will walk you through it, and get you exploring your listening as soon as possible!"
+                    description="Spotify lets you export a file that records every time you've streamed a song. In order to use Explorify, you need that file. The export process is a little complicated, but these instructions will walk you through it, and get you exploring your listening as soon as possible!"
                 />
                 <Instructions/>
             </div>

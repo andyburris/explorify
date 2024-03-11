@@ -23,7 +23,7 @@ export function Instructions() {
                 />
             <InstructionItem
                 index={2}
-                title="Wait ~2 weeks for Spotify to collect and send you your extended history"
+                title="Wait ~3 weeks for Spotify to collect and send you your extended history"
                 text={<p>Best we can figure, it takes them this long becasue they need to scrape through their archived databases to get all that information. It's a while to wait, but it’s worth it</p>}
                 />
             <InstructionItem
@@ -35,7 +35,7 @@ export function Instructions() {
                 />
             <InstructionItem
                 index={4}
-                title="Come back to Quantify, import your .zip file, and start exploring!"
+                title="Come back to Explorify, import your .zip file, and start exploring!"
                 link={{ title: "Import", linkPath: "/import", icon: (cn) => <Upload className={cn}/> }}
                 last
                 />

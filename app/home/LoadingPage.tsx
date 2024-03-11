@@ -16,7 +16,7 @@ export function LoadingPage() {
         <Container>
             <Header
                 icon={<Logo/>}
-                title="Quantify"
+                title="Explorify"
                 // description="by Lyrical"
                 actions={
                     <div className="flex gap-3">

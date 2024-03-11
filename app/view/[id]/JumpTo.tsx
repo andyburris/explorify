@@ -23,7 +23,7 @@ export function JumpTo({ searchTerm, groups, displayOperation, onSearchTermChang
     const shownItems = filteredItems.slice(0, 15)
     
     return (
-        <Command shouldFilter={false} className="flex flex-col shadow-outset bg-white rounded-2xl overflow-hidden">
+        <Command shouldFilter={false} className="flex flex-col shadow-outset dark:shadow-outsetDark bg-white rounded-2xl overflow-hidden">
             <div className="flex gap-2 pr-2 items-center">
                 <CommandInput 
                     placeholder="Jump to..." 

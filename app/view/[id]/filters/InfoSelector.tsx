@@ -5,7 +5,7 @@ import { pickableIcons } from "@/app/common/PickedIcon";
 import { Combobox } from "@/app/common/components/ui/combobox";
 
 export function InfoSelector({ preset, onChangePreset }: { preset: Preset, onChangePreset: (preset: Preset) => void }) {
-    const hostname = process.env.NODE_ENV == 'production' ? "https://quantize.netlify.app" : "https://localhost:3000"
+    const hostname = process.env.NODE_ENV == 'production' ? "https://explorify.link" : "https://localhost:3000"
     return (
         <div className="flex flex-col gap-6">
             <OperationSection title="Name">
