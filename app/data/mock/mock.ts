@@ -1,7 +1,12 @@
 import { RecommendationsResponse, SpotifyApi, Track } from '@spotify/web-api-ts-sdk';
 import { HistoryEntry } from "../model/HistoryEntry";
 
-export const SHOW_MOCK = false
+export const SHOW_MOCK = true
+const genres = [
+    "indie", 
+    "indie-pop",
+    // "pop",
+]
 
 const id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID!
 const secret = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET!
@@ -57,7 +62,7 @@ export async function generateMockData(historyEntries: HistoryEntry[]): Promise<
         await new Promise(r => setTimeout(r, Math.random() * 1000))
         return api.recommendations.get({
             limit: 90,
-            seed_genres: ["indie", "pop"],
+            seed_genres: genres,
             min_popularity: minPop,
             max_popularity: maxPop,
         }).then(recs => {

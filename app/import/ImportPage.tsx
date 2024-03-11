@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, ArrowRight, FileArchive, FileDotted, FileZip, Info, List, Spinner, Upload, Warning } from "phosphor-react-sc"
+import { ArrowLeft, ArrowRight, FileArchive, FileDotted, FileZip, Info, List, Spinner, Swap, Upload, Warning } from "phosphor-react-sc"
 import { Button, LinkButton } from "../common/button/Button"
 import { Container } from "../common/Container"
 import { IconLogo, IconLogoStatic, Logo } from "../common/Logo"
@@ -57,8 +57,8 @@ export function ImportPage({ onUpload }: { onUpload: (entries: HistoryEntry[]) =
                 </Link>
                 { SHOW_MOCK &&
                     <ActionButton 
-                    text={ isProcessing ? "Mocking" : "Mock" }
-                    icon={isProcessing ? <Spinner className="animate-spin"/> : <List/>} 
+                    text={ isProcessing ? "Generating mock data" : "Generate mock data" }
+                    icon={isProcessing ? <Spinner className="animate-spin"/> : <Swap/>} 
                     className="w-fit"
                     enabled={!isProcessing && file !== undefined}
                     onClick={() => {
