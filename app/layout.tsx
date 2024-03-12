@@ -31,6 +31,8 @@ export default function RootLayout({
       <head>
         <Favicon />
         <script dangerouslySetInnerHTML={{ __html: nightwind.init() }} />
+        <meta name="theme-color" content="#FFFFFF" media='(prefers-color-scheme: light)' />
+        <meta name="theme-color" content="#171717" media="(prefers-color-scheme: dark)"/>
       </head>
       <body className={`text-lg/6 font-sans text-neutral-900 bg-white dark:bg-neutral-50`}>{children}</body>
     </html>

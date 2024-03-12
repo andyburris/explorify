@@ -9,7 +9,6 @@ export function Favicon() {
             <link rel="shortcut icon" href="/favicons/favicon.ico"/>
             <meta name="msapplication-TileColor" content="#da532c"/>
             <meta name="msapplication-config" content="/favicons/browserconfig.xml"/>
-            <meta name="theme-color" content="#ffffff"/>
         </>
     )
 }
